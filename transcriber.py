@@ -225,7 +225,6 @@ def transcribe_audio(api_key, audio_path, model_name="models/gemini-1.5-flash", 
             {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_NONE"},
         ]
 
-        # Updated system instruction for continuous transcription
         system_instruction = """You are a professional subtitle creator. Generate a valid SRT file content for the audio provided.
         The audio may be split into multiple parts. You must treat them as a single continuous audio stream.
         
@@ -234,7 +233,10 @@ def transcribe_audio(api_key, audio_path, model_name="models/gemini-1.5-flash", 
         2. TIMESTAMPS: 
            - Start timestamps strictly from 00:00:00,000 relative to the beginning of the FIRST audio file.
            - Ensure specific continuity across file boundaries. DO NOT reset the timestamp to 00:00:00 for subsequent files. The timestamp for the start of the second file should follow immediately after the end of the first file.
-        3. SEGMENTATION: Keep subtitles concise. Break long sentences into multiple subtitle blocks. Maximum 15 words per block.
+        3. SEGMENTATION RULES (CRITICAL):
+           - Default: Create a new subtitle block for every sentence (split by punctuation).
+           - Merge Condition: If two or more consecutive short sentences/phrases have a combined length of 15 characters or less, you MUST put them in the same subtitle block (same timestamp).
+           - Split Condition: If a merged line would exceed 10 characters, start a new subtitle block.
         4. Do not include any markdown code blocks, just the raw SRT content."""
 
         uploaded_files = []
