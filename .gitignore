@@ -1,4 +1,4 @@
 .env
-*.log
+transcription_debug.log
 temp_audio/
 __pycache__/
