@@ -15,16 +15,19 @@ with st.sidebar:
     
     # Model selection
     if api_key:
-        st.session_state.model_list = [
-            "models/gemini-2.5-flash"
-        ]a
+        if "model_list" not in st.session_state:
+            with st.spinner("Fetching available models..."):
+                st.session_state.model_list = list_available_models(api_key)
         
-        selected_model = st.selectbox("Select Model", st.session_state.model_list, index=0)
-        st.caption("Using gemini-2.5-flash as default")
+        selected_model = st.selectbox("Select Model", st.session_state.model_list)
+        
+        if st.button("Refresh Models"):
+             del st.session_state.model_list
+             st.rerun()
     else:
         # Fallback if API key is not provided
-        selected_model = "models/gemini-2.5-flash" # Default to a common model if no API key
-        st.caption("Please enter an API key to select a model.")
+        selected_model = "" 
+        st.caption("Please enter an API key to load available models.")
 
     st.info("Get your API key from [Google AI Studio](https://aistudio.google.com/app/apikey)")
 

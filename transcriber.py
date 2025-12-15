@@ -237,7 +237,8 @@ def transcribe_audio(api_key, audio_path, model_name="models/gemini-2.5-flash", 
            - Default: Create a new subtitle block for every sentence (split by punctuation).
            - Merge Condition: If two or more consecutive short sentences/phrases have a combined length of 15 characters or less, you MUST put them in the same subtitle block (same timestamp).
            - Split Condition: If a merged line would exceed 10 characters, start a new subtitle block.
-        4. Do not include any markdown code blocks, just the raw SRT content."""
+        4. Do not include any markdown code blocks, just the raw SRT content.
+        5. NO TRANSLATION: Transcribe in the original language of the audio. Do not translate."""
 
         uploaded_files = []
         
@@ -270,16 +271,53 @@ def transcribe_audio(api_key, audio_path, model_name="models/gemini-2.5-flash", 
             
         response = model.generate_content(prompt_parts)
         
+        # --- DEBUG LOGGING ---
+        try:
+            with open("transcription_debug.log", "a", encoding="utf-8") as log_file:
+                log_file.write(f"\n{'='*50}\n")
+                log_file.write(f"Timestamp: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
+                log_file.write(f"Model: {model_name}\n")
+                
+                # Log finish reason to diagnose truncation
+                finish_reason = "Unknown"
+                if response.candidates:
+                    finish_reason = response.candidates[0].finish_reason.name
+                log_file.write(f"Finish Reason: {finish_reason}\n")
+                
+                # Log Token Usage
+                if response.usage_metadata:
+                    log_file.write(f"Token Usage:\n")
+                    log_file.write(f"  - Prompt Tokens: {response.usage_metadata.prompt_token_count}\n")
+                    log_file.write(f"  - Candidates Tokens (Output): {response.usage_metadata.candidates_token_count}\n")
+                    log_file.write(f"  - Total Tokens: {response.usage_metadata.total_token_count}\n")
+                
+                try:
+                    log_file.write(f"Raw Text Length: {len(response.text)} chars\n")
+                    log_file.write(f"--- Raw Response Start ---\n")
+                    log_file.write(response.text)
+                    log_file.write(f"\n--- Raw Response End ---\n")
+                except Exception as e:
+                    log_file.write(f"Could not log text: {e}\n")
+                    if response.prompt_feedback:
+                         log_file.write(f"Prompt Feedback: {response.prompt_feedback}\n")
+        except Exception as log_err:
+            print(f"Failed to write log: {log_err}")
+        # ---------------------
+        
         raw_srt = ""
         try:
             raw_srt = response.text
              # Remove markdown code blocks if any
             raw_srt = raw_srt.replace("```srt", "").replace("```", "").strip()
         except Exception as e:
-             print(f"Error accessing response.text: {e}")
-             if response.candidates:
-                 # Attempt to salvage?
-                 pass
+             error_msg = f"Error accessing response.text: {e}. "
+             if response.prompt_feedback:
+                 error_msg += f"Prompt Feedback: {response.prompt_feedback}"
+             print(error_msg)
+             return f"Error: The model failed to generate text. {error_msg}"
+        
+        if not raw_srt:
+            return "Error: Model returned empty response. (Detailed feedback: check logs)"
         
         # 4. Post-process (clean/shift)
         # We use shift_srt_content with offset 0 just to use its cleaning logic (hallucination removal etc)
