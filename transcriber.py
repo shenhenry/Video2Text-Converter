@@ -163,7 +163,7 @@ def split_audio(audio_path, chunk_duration_sec=600, status_callback=None):
     audio.close() # Close the main handle
     return chunks
 
-def transcribe_audio(api_key, audio_path, model_name="models/gemini-1.5-flash", status_callback=None):
+def transcribe_audio(api_key, audio_path, model_name="models/gemini-2.5-flash", status_callback=None):
     """Transcribes audio using Gemini API and returns SRT content."""
     genai.configure(api_key=api_key.strip())
 
