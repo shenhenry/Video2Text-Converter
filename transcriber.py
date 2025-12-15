@@ -6,9 +6,10 @@ import time
 import re
 import math
 
-def extract_audio(video_path, audio_path="temp_audio.mp3"):
+def extract_audio(video_path, audio_path="temp_audio/temp_audio.mp3"):
     """Extracts audio from a video file."""
     try:
+        os.makedirs(os.path.dirname(audio_path), exist_ok=True)
         video = VideoFileClip(video_path)
         video.audio.write_audiofile(audio_path, codec='mp3')
         return audio_path
@@ -48,9 +49,17 @@ def list_available_models(api_key):
         return [f"Error listing models: {str(e)}"]
 
 def time_to_ms(time_str):
-    """Converts SRT timestamp "HH:MM:SS,mmm" to milliseconds."""
+    """Converts SRT timestamp "HH:MM:SS,mmm" or "MM:SS,mmm" to milliseconds."""
     try:
-        hours, minutes, seconds = time_str.split(':')
+        parts = time_str.split(':')
+        if len(parts) == 3:
+            hours, minutes, seconds = parts
+        elif len(parts) == 2:
+            hours = 0
+            minutes, seconds = parts
+        else:
+            return 0
+            
         seconds, milliseconds = seconds.split(',')
         total_ms = (int(hours) * 3600000) + (int(minutes) * 60000) + (int(seconds) * 1000) + int(milliseconds)
         return total_ms
@@ -69,7 +78,8 @@ def ms_to_time(ms):
 
 def shift_srt_content(srt_content, offset_ms, counter_start=1):
     """Parses, filters, and shifts SRT content."""
-    timestamp_pattern = re.compile(r'(\d{2}:\d{2}:\d{2},\d{3})\s-->\s(\d{2}:\d{2}:\d{2},\d{3})')
+    # Regex modified to support optional HH: prefix (e.g. match both 00:00:10,000 and 00:10,000)
+    timestamp_pattern = re.compile(r'((?:\d{2}:)?\d{2}:\d{2},\d{3})\s-->\s((?:\d{2}:)?\d{2}:\d{2},\d{3})')
     
     matches = list(timestamp_pattern.finditer(srt_content))
     valid_blocks = []
@@ -136,13 +146,17 @@ def split_audio(audio_path, chunk_duration_sec=600, status_callback=None):
     chunks = []
     
     num_chunks = math.ceil(duration / chunk_duration_sec)
-    base_name = os.path.splitext(audio_path)[0]
+    base_name = os.path.splitext(os.path.basename(audio_path))[0]
+    
+    # Create temp directory for splits
+    temp_dir = "temp_audio"
+    os.makedirs(temp_dir, exist_ok=True)
     
     for i in range(num_chunks):
         start_time = i * chunk_duration_sec
         end_time = min((i + 1) * chunk_duration_sec, duration)
         
-        chunk_filename = f"{base_name}_part{i}.mp3"
+        chunk_filename = os.path.join(temp_dir, f"{base_name}_part{i}.mp3")
         
         if status_callback:
             status_callback(f"Splitting file to {os.path.basename(chunk_filename)}...")
@@ -235,7 +249,7 @@ def transcribe_audio(api_key, audio_path, model_name="models/gemini-2.5-flash", 
            - Ensure specific continuity across file boundaries. DO NOT reset the timestamp to 00:00:00 for subsequent files. The timestamp for the start of the second file should follow immediately after the end of the first file.
         3. SEGMENTATION RULES (CRITICAL):
            - Default: Create a new subtitle block for every sentence (split by punctuation).
-           - Merge Condition: If two or more consecutive short sentences/phrases have a combined length of 15 characters or less, you MUST put them in the same subtitle block (same timestamp).
+           - Merge Condition: If two or more consecutive short sentences/phrases have a combined length of 10 characters or less, you CAN put them in the same subtitle block (same timestamp).
            - Split Condition: If a merged line would exceed 10 characters, start a new subtitle block.
         4. Do not include any markdown code blocks, just the raw SRT content.
         5. NO TRANSLATION: Transcribe in the original language of the audio. Do not translate."""

@@ -1,7 +1,10 @@
 import streamlit as st
 import os
 import time
+from dotenv import load_dotenv
 from transcriber import extract_audio, transcribe_audio, cleanup_files, list_available_models
+
+load_dotenv()
 
 st.set_page_config(page_title="Video2SRT Converter", page_icon="🎬")
 
@@ -10,7 +13,7 @@ st.markdown("Upload a video, and we'll generate subtitles for you using Google G
 
 # Sidebar for API Key and Model Selection #
 with st.sidebar:
-    api_key_input = st.text_input("Enter Google Gemini API Key", type="password")
+    api_key_input = st.text_input("Enter Google Gemini API Key", type="password", value=os.getenv("GEMINI_API_KEY", ""))
     api_key = api_key_input.strip() if api_key_input else ""
     
     # Model selection
