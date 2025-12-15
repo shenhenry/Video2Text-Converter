@@ -16,9 +16,7 @@ with st.sidebar:
     # Model selection
     if api_key:
         st.session_state.model_list = [
-            "models/gemini-flash-latest", 
-            "models/gemini-lite-latest", 
-            "models/gemini-pro-latest"
+            "models/gemini-flash-latest"
         ]
         
         selected_model = st.selectbox("Select Model", st.session_state.model_list, index=0)
