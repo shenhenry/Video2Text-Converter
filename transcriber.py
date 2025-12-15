@@ -225,64 +225,76 @@ def transcribe_audio(api_key, audio_path, model_name="models/gemini-1.5-flash", 
             {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_NONE"},
         ]
 
-        # Use same system instruction
+        # Updated system instruction for continuous transcription
         system_instruction = """You are a professional subtitle creator. Generate a valid SRT file content for the audio provided.
+        The audio may be split into multiple parts. You must treat them as a single continuous audio stream.
+        
         Rules:
         1. The output must be strictly in SRT format, starting from 1.
-        2. TIMESTAMPS: Start timestamps strictly from 00:00:00,000 relative to the beginning of this specific audio file. Do NOT use the video's absolute time or try to guess the time offset.
+        2. TIMESTAMPS: 
+           - Start timestamps strictly from 00:00:00,000 relative to the beginning of the FIRST audio file.
+           - Ensure specific continuity across file boundaries. DO NOT reset the timestamp to 00:00:00 for subsequent files. The timestamp for the start of the second file should follow immediately after the end of the first file.
         3. SEGMENTATION: Keep subtitles concise. Break long sentences into multiple subtitle blocks. Maximum 15 words per block.
         4. Do not include any markdown code blocks, just the raw SRT content."""
 
-        for chunk in chunks_to_process:
+        uploaded_files = []
+        
+        # 1. Upload all chunks
+        for i, chunk in enumerate(chunks_to_process):
             chunk_path = chunk['path']
-            start_ms = chunk['start_time_ms']
             chunk_name = os.path.basename(chunk_path)
             
-            start_time_str = ms_to_time(start_ms).split(',')[0] # Get HH:MM:SS
-            print(f"I: Processing chunk {chunk_path} starting at {start_ms}ms")
             if status_callback:
-                status_callback(f"Gemini transcribing {chunk_name} (Start: {start_time_str})...")
+                status_callback(f"Uploading part {i+1}/{len(chunks_to_process)}: {chunk_name}...")
             
-            # Upload
             audio_file = upload_to_gemini(chunk_path)
-            wait_for_files_active([audio_file])
-            
-            model = genai.GenerativeModel(
-                model_name=model_name,
-                generation_config=generation_config,
-                safety_settings=safety_settings,
-                system_instruction=system_instruction
-            )
-            
-            response = model.generate_content([audio_file, "Generate SRT subtitles for this audio."])
-            
-            chunk_srt = ""
-            try:
-                chunk_srt = response.text
-                # Remove markdown code blocks if any
-                chunk_srt = chunk_srt.replace("```srt", "").replace("```", "").strip()
-            except Exception as e:
-                print(f"Error accessing response.text for chunk: {e}")
-                if response.candidates:
-                     # Attempt to salvage?
-                     pass
-            
-            if chunk_srt:
-                shifted_srt, last_counter = shift_srt_content(chunk_srt, start_ms, current_counter)
-                final_srt_parts.append(shifted_srt)
-                current_counter = last_counter + 1
+            uploaded_files.append(audio_file)
+        
+        # 2. Wait for all files to be active
+        wait_for_files_active(uploaded_files)
+        
+        # 3. Generate content with ALL files in one request
+        model = genai.GenerativeModel(
+            model_name=model_name,
+            generation_config=generation_config,
+            safety_settings=safety_settings,
+            system_instruction=system_instruction
+        )
+        
+        prompt_parts = uploaded_files + ["Generate SRT subtitles for this full audio sequence. Ensure timestamps are continuous."]
         
         if status_callback:
-            status_callback("Combining script...")
+            status_callback("Generating subtitles (this may take a while)...")
             
+        response = model.generate_content(prompt_parts)
+        
+        raw_srt = ""
+        try:
+            raw_srt = response.text
+             # Remove markdown code blocks if any
+            raw_srt = raw_srt.replace("```srt", "").replace("```", "").strip()
+        except Exception as e:
+             print(f"Error accessing response.text: {e}")
+             if response.candidates:
+                 # Attempt to salvage?
+                 pass
+        
+        # 4. Post-process (clean/shift)
+        # We use shift_srt_content with offset 0 just to use its cleaning logic (hallucination removal etc)
+        # We trust the model to have done the accumulative timestamps, but we still want to clean the format.
+        final_srt, _ = shift_srt_content(raw_srt, 0, counter_start=1)
+        
+        if status_callback:
+             status_callback("Transcription complete!")
+
+        return final_srt
+
     except Exception as e:
         return f"Error during transcription process: {str(e)}"
     finally:
         # If we created temp chunks, clean them up
         if files_to_cleanup:
             cleanup_files(files_to_cleanup)
-
-    return "\n\n".join(final_srt_parts)
 
 def cleanup_files(file_paths):
     for path in file_paths:

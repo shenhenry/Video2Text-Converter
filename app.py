@@ -97,7 +97,7 @@ if uploaded_file is not None:
                         st.session_state['srt_content'] = srt_content
                         st.session_state['current_file'] = uploaded_file.name
                         
-                        update_status("Creating srt ext...")
+                        update_status("Finalizing...")
                         time.sleep(1) # Brief pause to let user see the message
                         status_text.empty() # Clear status
                         
