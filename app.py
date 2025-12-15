@@ -8,7 +8,7 @@ st.set_page_config(page_title="Video2SRT Converter", page_icon="🎬")
 st.title("🎬 Video to SRT Converter")
 st.markdown("Upload a video, and we'll generate subtitles for you using Google Gemini AI.")
 
-# Sidebar for API Key and Model Selection
+# Sidebar for API Key and Model Selection #
 with st.sidebar:
     api_key_input = st.text_input("Enter Google Gemini API Key", type="password")
     api_key = api_key_input.strip() if api_key_input else ""
