@@ -22,7 +22,7 @@ with st.sidebar:
         # Filter for likely candidates to make it easier, but allow all
         # Default to 1.5 flash if present, else first one
         default_index = 0
-        preferred_models = ["models/gemini-2.5-flash-native-audio-dialog", "models/gemini-2.5-flash", "models/gemini-1.5-flash", "models/gemini-1.5-pro", "models/gemini-pro"]
+        preferred_models = ["models/gemini-2.5-flash", "models/gemini-2.5-flash-native-audio-dialog", "models/gemini-1.5-flash", "models/gemini-1.5-pro", "models/gemini-pro"]
         
         # Ensure the experimental model is in the list
         for pm in preferred_models:
