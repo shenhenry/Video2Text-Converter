@@ -139,42 +139,90 @@ def shift_srt_content(srt_content, offset_ms, counter_start=1):
         
     return "\n".join(output).strip(), curr - 1
 
-def split_audio(audio_path, chunk_duration_sec=600, status_callback=None):
-    """Splits audio into chunks of specified duration."""
+import numpy as np
+
+def find_split_point(audio_clip, target_time, search_window=15):
+    """
+    Finds the best split point around target_time based on low volume (silence).
+    """
+    try:
+        # Define search range
+        start_search = max(0, target_time - search_window)
+        end_search = min(audio_clip.duration, target_time + search_window)
+        
+        # Extract audio segment for analysis
+        sub = audio_clip.subclip(start_search, end_search)
+        
+        # Get audio array (fps is usually 44100)
+        # to_soundarray returns shape (N, 2) for stereo
+        audio_array = sub.to_soundarray() 
+        
+        # Calculate volume envelope (RMS)
+        # Average simple volume across channels
+        volume = np.sqrt(np.mean(audio_array**2, axis=1))
+        
+        # We want to find a valley. 
+        # Smooth slightly to avoid single-sample dropouts? 
+        # For now, just finding the absolute minimum in this window is robust enough for speech.
+        min_vol_idx = np.argmin(volume)
+        
+        # Convert index back to time relative to start_search
+        best_time_relative = min_vol_idx / sub.fps
+        
+        best_time = start_search + best_time_relative
+        return best_time
+        
+    except Exception as e:
+        print(f"Warning: Silence detection failed ({e}), using exact time.")
+        return target_time
+
+def split_audio(audio_path, chunk_duration_sec=180, status_callback=None):
+    """Splits audio into chunks roughly at chunk_duration_sec intervals, adjusting for silence."""
     audio = AudioFileClip(audio_path)
-    duration = audio.duration
+    total_duration = audio.duration
     chunks = []
     
-    num_chunks = math.ceil(duration / chunk_duration_sec)
     base_name = os.path.splitext(os.path.basename(audio_path))[0]
-    
-    # Create temp directory for splits
     temp_dir = "temp_audio"
     os.makedirs(temp_dir, exist_ok=True)
     
-    for i in range(num_chunks):
-        start_time = i * chunk_duration_sec
-        end_time = min((i + 1) * chunk_duration_sec, duration)
+    current_start = 0.0
+    part_idx = 0
+    
+    while current_start < total_duration:
+        # Determine target end time
+        target_end = current_start + chunk_duration_sec
         
-        chunk_filename = os.path.join(temp_dir, f"{base_name}_part{i}.mp3")
+        # If we are near the end, just take the rest
+        if target_end >= total_duration:
+            actual_end = total_duration
+        else:
+            # Find smart split point
+            actual_end = find_split_point(audio, target_end, search_window=15)
+            
+        # Ensure we make progress (don't get stuck if actual_end <= current_start)
+        # This can happen if search window pulls back too far
+        if actual_end <= current_start + 1.0: # Minimum 1 second chunk
+             actual_end = min(current_start + chunk_duration_sec, total_duration)
+
+        chunk_filename = os.path.join(temp_dir, f"{base_name}_part{part_idx}.mp3")
         
         if status_callback:
-            status_callback(f"Splitting file to {os.path.basename(chunk_filename)}...")
-
-        # Extract subclip
-        # Check if we are at the very end to avoid tiny clips if accurate
-        if start_time >= duration:
-            break
+            status_callback(f"Splitting part {part_idx+1}: {current_start:.2f}s to {actual_end:.2f}s...")
             
-        chunk = audio.subclip(start_time, end_time)
+        chunk = audio.subclip(current_start, actual_end)
         chunk.write_audiofile(chunk_filename, codec='mp3', verbose=False, logger=None)
+        
         chunks.append({
             "path": chunk_filename,
-            "start_time_ms": int(start_time * 1000),
-            "duration_sec": end_time - start_time
+            "start_time_ms": int(current_start * 1000),
+            "duration_sec": actual_end - current_start
         })
-    
-    audio.close() # Close the main handle
+        
+        current_start = actual_end
+        part_idx += 1
+        
+    audio.close()
     return chunks
 
 def transcribe_audio(api_key, audio_path, model_name="models/gemini-2.5-flash", status_callback=None):
@@ -184,7 +232,7 @@ def transcribe_audio(api_key, audio_path, model_name="models/gemini-2.5-flash", 
     # 1. Check duration and decide if splitting is needed
     # We'll use a threshold of 3 minutes (180 seconds) to ensure better coverage
     # as the model sometimes cuts off after 2-3 minutes.
-    SPLIT_THRESHOLD_SEC = 600
+    SPLIT_THRESHOLD_SEC = 180
     
     # Use moviepy to check duration quickly without full split yet
     try:
@@ -244,7 +292,7 @@ def transcribe_audio(api_key, audio_path, model_name="models/gemini-2.5-flash", 
         Rules:
         1. The output must be strictly in SRT format, starting from 1.
         2. TIMESTAMPS: 
-           - Timestamps must strictly correspond to the exact time the text is spoken in the audio. It is NOT required to start from 00:00:00,000.
+           - Timestamps must strictly correspond to the exact time the text is spoken in the audio segment.
         3. SEGMENTATION RULES (CRITICAL):
            - Default: Create a new subtitle block for every sentence (split by punctuation).
            - Merge Condition: If two or more consecutive short sentences/phrases have a combined length of 10 characters or less, you CAN put them in the same subtitle block (same timestamp).
