@@ -22,7 +22,18 @@ with st.sidebar:
             with st.spinner("Fetching available models..."):
                 st.session_state.model_list = list_available_models(api_key)
         
-        selected_model = st.selectbox("Select Model", st.session_state.model_list)
+        # Filter for likely candidates to make it easier to find the best one
+        default_index = 0
+        preferred_models = ["models/gemini-2.0-flash", "models/gemini-2.0-flash-exp", "models/gemini-1.5-flash", "models/gemini-1.5-flash-latest", "models/gemini-1.5-pro"]
+
+        # Find the first preferred model that exists in the available list
+        for p in preferred_models:
+            if p in st.session_state.model_list:
+                default_index = st.session_state.model_list.index(p)
+                break
+        
+        selected_model = st.selectbox("Select Model", st.session_state.model_list, index=default_index)
+        st.caption(f"Defaulting to {st.session_state.model_list[default_index]} (if available)")
         
         if st.button("Refresh Models"):
              del st.session_state.model_list

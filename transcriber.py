@@ -240,13 +240,11 @@ def transcribe_audio(api_key, audio_path, model_name="models/gemini-2.5-flash", 
         ]
 
         system_instruction = """You are a professional subtitle creator. Generate a valid SRT file content for the audio provided.
-        The audio may be split into multiple parts. You must treat them as a single continuous audio stream.
         
         Rules:
         1. The output must be strictly in SRT format, starting from 1.
         2. TIMESTAMPS: 
-           - Start timestamps strictly from 00:00:00,000 relative to the beginning of the FIRST audio file.
-           - Ensure specific continuity across file boundaries. DO NOT reset the timestamp to 00:00:00 for subsequent files. The timestamp for the start of the second file should follow immediately after the end of the first file.
+           - Start timestamps strictly from 00:00:00,000.
         3. SEGMENTATION RULES (CRITICAL):
            - Default: Create a new subtitle block for every sentence (split by punctuation).
            - Merge Condition: If two or more consecutive short sentences/phrases have a combined length of 10 characters or less, you CAN put them in the same subtitle block (same timestamp).
@@ -254,94 +252,127 @@ def transcribe_audio(api_key, audio_path, model_name="models/gemini-2.5-flash", 
         4. Do not include any markdown code blocks, just the raw SRT content.
         5. NO TRANSLATION: Transcribe in the original language of the audio. Do not translate."""
 
-        uploaded_files = []
+        final_srt_parts = []
+        current_counter = 1
         
-        # 1. Upload all chunks
+        # Process chunks sequentially
         for i, chunk in enumerate(chunks_to_process):
             chunk_path = chunk['path']
             chunk_name = os.path.basename(chunk_path)
+            # Use the pre-calculated start time for this chunk as the offset
+            chunk_offset_ms = chunk.get('start_time_ms', 0)
             
             if status_callback:
-                status_callback(f"Uploading part {i+1}/{len(chunks_to_process)}: {chunk_name}...")
+                status_callback(f"Processing part {i+1}/{len(chunks_to_process)}: {chunk_name}...")
             
+            # 1. Upload
             audio_file = upload_to_gemini(chunk_path)
-            uploaded_files.append(audio_file)
-        
-        # 2. Wait for all files to be active
-        wait_for_files_active(uploaded_files)
-        
-        # 3. Generate content with ALL files in one request
-        model = genai.GenerativeModel(
-            model_name=model_name,
-            generation_config=generation_config,
-            safety_settings=safety_settings,
-            system_instruction=system_instruction
-        )
-        
-        prompt_parts = uploaded_files + ["Generate SRT subtitles for this full audio sequence. Ensure timestamps are continuous."]
-        
-        if status_callback:
-            status_callback("Generating subtitles (this may take a while)...")
             
-        response = model.generate_content(prompt_parts)
-        
-        # --- DEBUG LOGGING ---
-        try:
-            with open("transcription_debug.log", "a", encoding="utf-8") as log_file:
-                log_file.write(f"\n{'='*50}\n")
-                log_file.write(f"Timestamp: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
-                log_file.write(f"Model: {model_name}\n")
-                
-                # Log finish reason to diagnose truncation
-                finish_reason = "Unknown"
-                if response.candidates:
-                    finish_reason = response.candidates[0].finish_reason.name
-                log_file.write(f"Finish Reason: {finish_reason}\n")
-                
-                # Log Token Usage
-                if response.usage_metadata:
-                    log_file.write(f"Token Usage:\n")
-                    log_file.write(f"  - Prompt Tokens: {response.usage_metadata.prompt_token_count}\n")
-                    log_file.write(f"  - Candidates Tokens (Output): {response.usage_metadata.candidates_token_count}\n")
-                    log_file.write(f"  - Total Tokens: {response.usage_metadata.total_token_count}\n")
-                
+            # 2. Wait
+            wait_for_files_active([audio_file])
+            
+            # 3. Generate
+            model = genai.GenerativeModel(
+                model_name=model_name,
+                generation_config=generation_config,
+                safety_settings=safety_settings,
+                system_instruction=system_instruction
+            )
+            
+            prompt_parts = [audio_file, "Generate SRT subtitles for this audio."]
+            
+            response = None
+            max_retries = 3
+            for attempt in range(max_retries):
                 try:
-                    log_file.write(f"Raw Text Length: {len(response.text)} chars\n")
-                    log_file.write(f"--- Raw Response Start ---\n")
-                    log_file.write(response.text)
-                    log_file.write(f"\n--- Raw Response End ---\n")
+                    if status_callback and attempt > 0:
+                        status_callback(f"Rate limit hit. Retrying part {i+1} in {20 * (attempt+1)} seconds...")
+                    
+                    response = model.generate_content(prompt_parts)
+                    break # Success!
+                    
                 except Exception as e:
-                    log_file.write(f"Could not log text: {e}\n")
-                    if response.prompt_feedback:
-                         log_file.write(f"Prompt Feedback: {response.prompt_feedback}\n")
-        except Exception as log_err:
-            print(f"Failed to write log: {log_err}")
-        # ---------------------
-        
-        raw_srt = ""
-        try:
-            raw_srt = response.text
-             # Remove markdown code blocks if any
-            raw_srt = raw_srt.replace("```srt", "").replace("```", "").strip()
-        except Exception as e:
-             error_msg = f"Error accessing response.text: {e}. "
-             if response.prompt_feedback:
-                 error_msg += f"Prompt Feedback: {response.prompt_feedback}"
-             print(error_msg)
-             return f"Error: The model failed to generate text. {error_msg}"
-        
-        if not raw_srt:
-            return "Error: Model returned empty response. (Detailed feedback: check logs)"
-        
-        # 4. Post-process (clean/shift)
-        # We use shift_srt_content with offset 0 just to use its cleaning logic (hallucination removal etc)
-        # We trust the model to have done the accumulative timestamps, but we still want to clean the format.
-        final_srt, _ = shift_srt_content(raw_srt, 0, counter_start=1)
-        
-        if status_callback:
-             status_callback("Transcription complete!")
+                    if "429" in str(e) or "Resource exhausted" in str(e):
+                        if attempt < max_retries - 1:
+                            wait_time = 20 * (attempt + 1)
+                            print(f"Warning: Resource exhausted (429). Retrying in {wait_time}s...")
+                            time.sleep(wait_time)
+                            continue
+                        else:
+                             raise Exception(f"Failed after {max_retries} attempts due to rate limits. Please try again later.")
+                    else:
+                        raise e # Re-raise if it's not a rate limit issue
+            
+            # --- DEBUG LOGGING ---
+            try:
+                with open("transcription_debug.log", "a", encoding="utf-8") as log_file:
+                    log_file.write(f"\n{'='*50}\n")
+                    log_file.write(f"Timestamp: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
+                    log_file.write(f"Model: {model_name} | Part: {i+1}/{len(chunks_to_process)}\n")
+                    
+                    finish_reason = "Unknown"
+                    if response.candidates:
+                        finish_reason = response.candidates[0].finish_reason.name
+                    log_file.write(f"Finish Reason: {finish_reason}\n")
+                    
+                    if response.usage_metadata:
+                        log_file.write(f"Token Usage:\n")
+                        log_file.write(f"  - Prompt Tokens: {response.usage_metadata.prompt_token_count}\n")
+                        log_file.write(f"  - Candidates Tokens: {response.usage_metadata.candidates_token_count}\n")
+                        log_file.write(f"  - Total Tokens: {response.usage_metadata.total_token_count}\n")
+                    
+                    try:
+                        log_file.write(f"Raw Text Length: {len(response.text)} chars\n")
+                        log_file.write(f"--- Raw Response Start ---\n")
+                        log_file.write(response.text)
+                        log_file.write(f"\n--- Raw Response End ---\n")
+                    except Exception as e:
+                        log_file.write(f"Could not log text: {e}\n")
+                        if response.prompt_feedback:
+                             log_file.write(f"Prompt Feedback: {response.prompt_feedback}\n")
+            except Exception as log_err:
+                print(f"Failed to write log: {log_err}")
+            # ---------------------
+            
+            raw_srt = ""
+            try:
+                raw_srt = response.text
+                raw_srt = raw_srt.replace("```srt", "").replace("```", "").strip()
+            except Exception as e:
+                 print(f"Error accessing response.text: {e}")
+                 # Check blocked
+                 if response.prompt_feedback:
+                     print(f"Prompt Feedback: {response.prompt_feedback}")
+            
+            if raw_srt:
+                # 4. Post-process & Shift
+                # We shift the timestamps by the chunk's start time explicitly
+                part_srt, last_counter = shift_srt_content(raw_srt, chunk_offset_ms, counter_start=current_counter)
+                if part_srt:
+                    final_srt_parts.append(part_srt)
+                    # Update counter for next chunk
+                    # shift_srt_content returns the last used counter, so next starts at last + 1
+                    current_counter = last_counter + 1
+            else:
+                 print(f"Warning: Empty response for part {i+1}")
+            
+            # Cleanup immediately after use to assume fresh state for next iteration
+            # (Though keeping them is fine, deleting minimizes storage use during long process)
+            # But the user might want to debug audio... let's stick to cleaning up at the very end
+            # or we can delete the remote file resource to keep quotas clean?
+            # genai.delete_file(audio_file.name) # If the SDK supports it easily, but let's just leave it for now.
+            pass
+            
+            # Rate limiting cooldown
+            if i < len(chunks_to_process) - 1:
+                print("Cooling down for 5 seconds to avoid rate limits...")
+                time.sleep(5)
 
-        return final_srt
+        if status_callback:
+             status_callback("All parts processed. Stitching timestamps...")
+
+        full_srt = "\n\n".join(final_srt_parts)
+        return full_srt
 
     except Exception as e:
         return f"Error during transcription process: {str(e)}"
