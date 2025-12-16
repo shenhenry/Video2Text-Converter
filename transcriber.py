@@ -244,7 +244,7 @@ def transcribe_audio(api_key, audio_path, model_name="models/gemini-2.5-flash", 
         Rules:
         1. The output must be strictly in SRT format, starting from 1.
         2. TIMESTAMPS: 
-           - Start timestamps strictly from 00:00:00,000.
+           - Timestamps must strictly correspond to the exact time the text is spoken in the audio. It is NOT required to start from 00:00:00,000.
         3. SEGMENTATION RULES (CRITICAL):
            - Default: Create a new subtitle block for every sentence (split by punctuation).
            - Merge Condition: If two or more consecutive short sentences/phrases have a combined length of 10 characters or less, you CAN put them in the same subtitle block (same timestamp).
