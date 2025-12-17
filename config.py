@@ -2,24 +2,22 @@
 
 # Model Settings
 # Default model to use if none is specified
-DEFAULT_MODEL_NAME = "models/gemini-2.0-flash" 
+DEFAULT_MODEL_NAME = "models/gemini-flash-latest" 
 
 # List of preferred models for the UI dropdown
 PREFERRED_MODELS = [
-    "models/gemini-2.0-flash",
-    "models/gemini-2.0-flash-exp",
-    "models/gemini-1.5-flash",
-    "models/gemini-1.5-flash-latest",
-    "models/gemini-1.5-pro"
+    "models/gemini-flash-latest",
+    "models/gemini-2.5-flash",
+    "models/gemini-2.5-pro",
+    "mosels/gemini-2.0-flash"
 ]
 
 # Audio Processing Settings
 # Duration in seconds for each audio chunk
-# 180 seconds (3 mins) is a good balance for context and API limits
-CHUNK_DURATION_SEC = 180 
+CHUNK_DURATION_SEC = 60
 
 # Threshold to trigger splitting. If audio is shorter than this, it won't be split.
-SPLIT_THRESHOLD_SEC = 180
+SPLIT_THRESHOLD_SEC = 60
 
 # API Retry Settings
 MAX_RETRIES = 3
@@ -54,4 +52,7 @@ Rules:
    - Merge Condition: If two or more consecutive short sentences/phrases have a combined length of 10 characters or less, you CAN put them in the same subtitle block (same timestamp).
    - Split Condition: If a merged line would exceed 10 characters, start a new subtitle block.
 4. Do not include any markdown code blocks, just the raw SRT content.
-5. NO TRANSLATION: Transcribe in the original language of the audio. Do not translate."""
+5. LANGUAGE STRICTNESS:
+   - If the audio is in Chinese, you MUST transcribe in Traditional Chinese (繁體中文). Do NOT use Simplified Chinese.
+   - If the audio is in English, transcribe in English.
+   - Do not translate between languages, just transcribe what is heard, but ensure specific Chinese characters are Traditional."""

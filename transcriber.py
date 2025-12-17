@@ -1,4 +1,5 @@
-import os
+import os, pathlib
+import sys
 import google.generativeai as genai
 from moviepy.editor import VideoFileClip, AudioFileClip
 import json
@@ -7,7 +8,37 @@ import re
 import math
 import config
 
-def extract_audio(video_path, audio_path="temp_audio/temp_audio.mp3"):
+# Redirect stdout and stderr to both terminal and log file
+class DualWriter:
+    def __init__(self, file_path, original_stream):
+        self.file_path = file_path
+        self.original_stream = original_stream
+
+    def write(self, message):
+        try:
+            # Write to original stream first
+            self.original_stream.write(message)
+            self.original_stream.flush()
+            
+            # Write to log file
+            with open(self.file_path, "a", encoding="utf-8") as f:
+                f.write(message)
+        except Exception:
+            pass 
+
+    def flush(self):
+        try:
+            self.original_stream.flush()
+        except Exception:
+            pass
+
+log_file = "transcription_debug.log"
+if not isinstance(sys.stdout, DualWriter):
+    sys.stdout = DualWriter(log_file, sys.stdout)
+if not isinstance(sys.stderr, DualWriter):
+    sys.stderr = DualWriter(log_file, sys.stderr)
+
+def extract_audio(video_path, audio_path="temp/temp_audio.mp3"):
     """Extracts audio from a video file."""
     try:
         os.makedirs(os.path.dirname(audio_path), exist_ok=True)
@@ -182,7 +213,7 @@ def find_split_point_gemini(api_key, audio_clip, status_callback=None):
     Uses Gemini API to find the best split point in the provided audio clip.
     Returns: time in seconds relative to the start of the clip.
     """
-    temp_clip_path = "temp_split_search.mp3"
+    temp_clip_path = "temp/temp_split_search.mp3"
     try:
         # Write the search window clip to file
         audio_clip.write_audiofile(temp_clip_path, codec='mp3', verbose=False, logger=None)
@@ -234,118 +265,80 @@ def find_split_point_gemini(api_key, audio_clip, status_callback=None):
             os.remove(temp_clip_path)
 
 def split_audio(audio_path, chunk_duration_sec=config.CHUNK_DURATION_SEC, status_callback=None, api_key=None):
-    """
-    Splits audio into chunks.
-    Phase 1: Calculate split points using Gemini API (if api_key provided) or fallback.
-    Phase 2: Save points to file.
-    Phase 3: Split audio locally.
-    """
     audio = AudioFileClip(audio_path)
-    total_duration = audio.duration
-    
-    base_name = os.path.splitext(os.path.basename(audio_path))[0]
-    temp_dir = "temp_audio"
-    os.makedirs(temp_dir, exist_ok=True)
-    
-    # --- PHASE 1: Calculate Split Points ---
-    split_points = []
-    current_scan_time = 0.0
-    
-    # Adaptive search window: 15s for long chunks, or 20% of duration for short ones
-    search_window = min(chunk_duration_sec * 1.2, chunk_duration_sec * 0.2)
-    
-    print("Calculating split points...")
-    if status_callback:
-        status_callback("Analyzing audio for split points...")
+    temp_dir = pathlib.Path("temp")
+    temp_dir.mkdir(exist_ok=True)
 
-    while current_scan_time < total_duration:
-        target_end = current_scan_time + chunk_duration_sec
+    # 1. 快速清理 (一行搞定)
+    [f.unlink() for f in temp_dir.glob("*") if f.resolve() != pathlib.Path(audio_path).resolve()]
+
+    # 2. 計算切割點 (0.8x ~ 1.2x duration 區間搜尋)
+    split_points, curr = [], 0.0
+
+    while curr < audio.duration:
+        # 下一個理想切割點區間：[curr + 0.8*dur, curr + 1.2*dur]
+        win_start = curr + (chunk_duration_sec * 0.8)
+        win_end = curr + (chunk_duration_sec * 1.2)
         
-        if target_end >= total_duration:
-            actual_end = total_duration
+        # 如果最短切割點已經超過總長度，直接切到最後
+        if win_start >= audio.duration:
+            actual_end = audio.duration
         else:
-            # We define the search window range
-            start_search = max(0, target_end - search_window)
-            end_search = min(audio.duration, target_end + search_window)
+            # 確保區間不超過總長度
+            win_end = min(audio.duration, win_end)
             
+            # 搜尋該區間
             if api_key:
-                # Extract the subclip for Gemini to analyze
-                # Note: find_split_point_gemini expects just the clip and returns relative time
-                sub = audio.subclip(start_search, end_search)
-                best_relative = find_split_point_gemini(api_key, sub, status_callback)
-                actual_end = start_search + best_relative
+                # find_split_point_gemini 回傳的是相對時間，需加上 win_start
+                found_relative = find_split_point_gemini(api_key, audio.subclip(win_start, win_end), status_callback)
+                actual_end = win_start + found_relative
             else:
-                # Fallback to local numpy
-                actual_end = find_split_point(audio, target_end, search_window=search_window)
-            
-        # Ensure progress
-        if actual_end <= current_scan_time + 1.0:
-             actual_end = min(current_scan_time + chunk_duration_sec, total_duration)
-        
-        # Store the END time of this chunk
-        split_points.append(actual_end)
-        current_scan_time = actual_end
-        
-        if actual_end >= total_duration:
-            break
-            
-    # --- PHASE 2: Save to File ---
-    split_points_file = os.path.join(temp_dir, "split_points.txt")
-    try:
-        with open(split_points_file, "w", encoding="utf-8") as f:
-            f.write(f"Total Duration: {total_duration}\n")
-            f.write(f"Chunk Duration Target: {chunk_duration_sec}\n")
-            f.write("-" * 20 + "\n")
-            for idx, pt in enumerate(split_points):
-                f.write(f"Chunk {idx+1} End: {pt:.2f}\n")
-        print(f"Split points saved to {split_points_file}")
-    except Exception as e:
-        print(f"Failed to save split points: {e}")
-
-    # --- PHASE 3: Perform Split ---
-    chunks = []
-    current_start = 0.0
-    
-    try:
-        for idx, end_time in enumerate(split_points):
-            chunk_filename = os.path.join(temp_dir, f"{base_name}_part{idx}.mp3")
-            
-            if status_callback:
-                status_callback(f"Splitting part {idx+1}/{len(split_points)}: {current_start:.2f}s to {end_time:.2f}s...")
+                # find_split_point (numpy) 期待的是一個中心點 target_time 和 radius，這裡我們要把區間轉換一下
+                # 但原本的 find_split_point 邏輯是給 target 和 window，這有點不直觀
+                # 為了符合新邏輯，我們直接改為搜尋該子片段的最小音量
+                # 注意：這裡如果沒有 api_key，我們需要一個能接受 start/end 的 find_split_point
+                # 簡單起見，我們繼續用 subclip + argmin 邏輯
                 
-            chunk = audio.subclip(current_start, end_time)
-            chunk.write_audiofile(chunk_filename, codec='mp3', verbose=False, logger=None)
+                # 改寫：直接針對該 window 做 silence detection
+                sub = audio.subclip(win_start, win_end)
+                audio_array = sub.to_soundarray() 
+                volume = np.sqrt(np.mean(audio_array**2, axis=1))
+                min_vol_idx = np.argmin(volume)
+                actual_end = win_start + (min_vol_idx / sub.fps)
+        
+        # 安全機制：確保有前進，且不要切出極短片段 (除非是最後一段)
+        if actual_end <= curr + 1.0: 
+            actual_end = min(curr + chunk_duration_sec, audio.duration)
             
-            chunks.append({
-                "path": chunk_filename,
-                "start_time_ms": int(current_start * 1000),
-                "duration_sec": end_time - current_start
-            })
-            
-            current_start = end_time
-            
-        return chunks
+        split_points.append(actual_end)
+        curr = actual_end
 
-    except Exception as e:
-        print(f"Error during audio splitting: {e}")
-        # Cleanup partial chunks
-        for c in chunks:
-            if os.path.exists(c['path']):
-                os.remove(c['path'])
-        raise e
-    finally:
-        audio.close()
+    # 3. 執行切割與記錄
+    chunks = []
+    prev_start = 0.0
+    log_data = [f"Total: {audio.duration}\nTarget: {chunk_duration_sec}\n" + "-"*20]
+
+    for idx, end_t in enumerate(split_points):
+        if status_callback: status_callback(f"Part {idx+1}/{len(split_points)}...")
+        
+        p = temp_dir / f"{pathlib.Path(audio_path).stem}_part{idx}.mp3"
+        audio.subclip(prev_start, end_t).write_audiofile(str(p), codec='mp3', verbose=False, logger=None)
+        
+        chunks.append({"path": str(p), "start_time_ms": int(prev_start * 1000), "duration_sec": end_t - prev_start})
+        log_data.append(f"Chunk {idx+1} End: {end_t:.2f}")
+        prev_start = end_t
+
+    (temp_dir / "split_points.txt").write_text("\n".join(log_data))
+    audio.close()
+    return chunks
+
+
 
 
 def write_log(message):
-    """ Writes a message to the debug log with timestamp and force flush. """
-    try:
-        log_path = "transcription_debug.log"
-        with open(log_path, "a", encoding="utf-8") as f:
-            f.write(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] {message}\n")
-            f.flush() 
-    except Exception as e:
-        print(f"Failed to write log: {e}")
+    """ Writes a message to the debug log with timestamp (via print + stdout redirection). """
+    # Since stdout is redirected to the log file, simple print works for both.
+    print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] {message}")
 
 def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, status_callback=None):
     """Transcribes audio using Gemini API and returns SRT content."""
@@ -384,12 +377,14 @@ def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, 
             write_log(f"Audio duration {duration_sec}s > {SPLIT_THRESHOLD_SEC}s. Splitting...")
             chunks = split_audio(audio_path, chunk_duration_sec=SPLIT_THRESHOLD_SEC, status_callback=status_callback, api_key=api_key)
             chunks_to_process = chunks
-            for c in chunks:
-                files_to_cleanup.append(c['path'])
+            
+            # User requested NOT to cleanup temp files at the end
+            # for c in chunks:
+            #     files_to_cleanup.append(c['path'])
             
             # Also clean up the split points file
-            split_points_file = os.path.join("temp_audio", "split_points.txt")
-            files_to_cleanup.append(split_points_file)
+            # split_points_file = os.path.join("temp_audio", "split_points.txt")
+            # files_to_cleanup.append(split_points_file)
         except Exception as e:
             write_log(f"CRITICAL SPLITTING ERROR: {e}")
             write_log(f"Traceback: {str(e)}") # Ideally use traceback.format_exc() but keeping it simple for now or import traceback
@@ -542,6 +537,22 @@ def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, 
                      write_log(f"Prompt Feedback: {response.prompt_feedback}")
             
             if raw_srt:
+                # Save temp part SRT with offset info locally
+                try:
+                    offset_str = ms_to_time(chunk_offset_ms)
+                    chunk_stem = pathlib.Path(chunk_path).stem  # e.g. video_part0
+                    temp_srt_filename = f"temp_{chunk_stem}.srt"
+                    
+                    # Save in the same directory as the temp audio (temp_audio/)
+                    temp_srt_path = pathlib.Path(chunk_path).parent / temp_srt_filename
+                    
+                    with open(temp_srt_path, "w", encoding="utf-8") as f:
+                        f.write(f"Start Offset: {offset_str}\n\n{raw_srt}")
+                        
+                    write_log(f"Saved temp SRT chunk to: {temp_srt_path}")
+                except Exception as e:
+                    write_log(f"Failed to save temp SRT chunk: {e}")
+
                 # 4. Post-process & Shift
                 # We shift the timestamps by the chunk's start time explicitly
                 part_srt, last_counter = shift_srt_content(raw_srt, chunk_offset_ms, counter_start=current_counter)
