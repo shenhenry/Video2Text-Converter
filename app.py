@@ -3,6 +3,7 @@ import os
 import time
 from dotenv import load_dotenv
 from transcriber import extract_audio, transcribe_audio, cleanup_files, list_available_models
+import config
 
 load_dotenv()
 
@@ -24,7 +25,7 @@ with st.sidebar:
         
         # Filter for likely candidates to make it easier to find the best one
         default_index = 0
-        preferred_models = ["models/gemini-2.0-flash", "models/gemini-2.0-flash-exp", "models/gemini-1.5-flash", "models/gemini-1.5-flash-latest", "models/gemini-1.5-pro"]
+        preferred_models = config.PREFERRED_MODELS
 
         # Find the first preferred model that exists in the available list
         for p in preferred_models:

@@ -5,6 +5,7 @@ import json
 import time
 import re
 import math
+import config
 
 def extract_audio(video_path, audio_path="temp_audio/temp_audio.mp3"):
     """Extracts audio from a video file."""
@@ -176,63 +177,183 @@ def find_split_point(audio_clip, target_time, search_window=15):
         print(f"Warning: Silence detection failed ({e}), using exact time.")
         return target_time
 
-def split_audio(audio_path, chunk_duration_sec=180, status_callback=None):
-    """Splits audio into chunks roughly at chunk_duration_sec intervals, adjusting for silence."""
+def find_split_point_gemini(api_key, audio_clip, status_callback=None):
+    """
+    Uses Gemini API to find the best split point in the provided audio clip.
+    Returns: time in seconds relative to the start of the clip.
+    """
+    temp_clip_path = "temp_split_search.mp3"
+    try:
+        # Write the search window clip to file
+        audio_clip.write_audiofile(temp_clip_path, codec='mp3', verbose=False, logger=None)
+        
+        # Configure GenAI
+        genai.configure(api_key=api_key.strip())
+        
+        # Upload
+        if status_callback:
+            print("Uploading search window to Gemini for split analysis...")
+            
+        file = genai.upload_file(temp_clip_path, mime_type="audio/mp3")
+        
+        # Wait for processing
+        while file.state.name == "PROCESSING":
+            time.sleep(1)
+            file = genai.get_file(file.name)
+            
+        if file.state.name != "ACTIVE":
+            raise Exception("Gemini file processing failed")
+
+        model = genai.GenerativeModel(model_name=config.DEFAULT_MODEL_NAME)
+        
+        prompt = (
+            "Listen to this audio clip. I need to cut the audio file here. "
+            "Find the best timestamp (in seconds) to make a cut, such as a moment of silence or the end of a sentence. "
+            "Return ONLY the number (e.g. 5.43). If no good point, return the middle of the duration."
+        )
+        
+        response = model.generate_content([file, prompt])
+        
+        # Clean up
+        # genai.delete_file(file.name) 
+        
+        # Parse response
+        text = response.text.strip()
+        # Extract number
+        match = re.search(r"(\d+(\.\d+)?)", text)
+        if match:
+             return float(match.group(1))
+        
+        return audio_clip.duration / 2
+
+    except Exception as e:
+        print(f"Gemini split detection failed: {e}. Falling back to center.")
+        return audio_clip.duration / 2
+    finally:
+        if os.path.exists(temp_clip_path):
+            os.remove(temp_clip_path)
+
+def split_audio(audio_path, chunk_duration_sec=config.CHUNK_DURATION_SEC, status_callback=None, api_key=None):
+    """
+    Splits audio into chunks.
+    Phase 1: Calculate split points using Gemini API (if api_key provided) or fallback.
+    Phase 2: Save points to file.
+    Phase 3: Split audio locally.
+    """
     audio = AudioFileClip(audio_path)
     total_duration = audio.duration
-    chunks = []
     
     base_name = os.path.splitext(os.path.basename(audio_path))[0]
     temp_dir = "temp_audio"
     os.makedirs(temp_dir, exist_ok=True)
     
-    current_start = 0.0
-    part_idx = 0
+    # --- PHASE 1: Calculate Split Points ---
+    split_points = []
+    current_scan_time = 0.0
     
-    while current_start < total_duration:
-        # Determine target end time
-        target_end = current_start + chunk_duration_sec
+    # Adaptive search window: 15s for long chunks, or 20% of duration for short ones
+    search_window = min(chunk_duration_sec * 1.2, chunk_duration_sec * 0.2)
+    
+    print("Calculating split points...")
+    if status_callback:
+        status_callback("Analyzing audio for split points...")
+
+    while current_scan_time < total_duration:
+        target_end = current_scan_time + chunk_duration_sec
         
-        # If we are near the end, just take the rest
         if target_end >= total_duration:
             actual_end = total_duration
         else:
-            # Find smart split point
-            actual_end = find_split_point(audio, target_end, search_window=15)
+            # We define the search window range
+            start_search = max(0, target_end - search_window)
+            end_search = min(audio.duration, target_end + search_window)
             
-        # Ensure we make progress (don't get stuck if actual_end <= current_start)
-        # This can happen if search window pulls back too far
-        if actual_end <= current_start + 1.0: # Minimum 1 second chunk
-             actual_end = min(current_start + chunk_duration_sec, total_duration)
-
-        chunk_filename = os.path.join(temp_dir, f"{base_name}_part{part_idx}.mp3")
-        
-        if status_callback:
-            status_callback(f"Splitting part {part_idx+1}: {current_start:.2f}s to {actual_end:.2f}s...")
+            if api_key:
+                # Extract the subclip for Gemini to analyze
+                # Note: find_split_point_gemini expects just the clip and returns relative time
+                sub = audio.subclip(start_search, end_search)
+                best_relative = find_split_point_gemini(api_key, sub, status_callback)
+                actual_end = start_search + best_relative
+            else:
+                # Fallback to local numpy
+                actual_end = find_split_point(audio, target_end, search_window=search_window)
             
-        chunk = audio.subclip(current_start, actual_end)
-        chunk.write_audiofile(chunk_filename, codec='mp3', verbose=False, logger=None)
+        # Ensure progress
+        if actual_end <= current_scan_time + 1.0:
+             actual_end = min(current_scan_time + chunk_duration_sec, total_duration)
         
-        chunks.append({
-            "path": chunk_filename,
-            "start_time_ms": int(current_start * 1000),
-            "duration_sec": actual_end - current_start
-        })
+        # Store the END time of this chunk
+        split_points.append(actual_end)
+        current_scan_time = actual_end
         
-        current_start = actual_end
-        part_idx += 1
-        
-    audio.close()
-    return chunks
+        if actual_end >= total_duration:
+            break
+            
+    # --- PHASE 2: Save to File ---
+    split_points_file = os.path.join(temp_dir, "split_points.txt")
+    try:
+        with open(split_points_file, "w", encoding="utf-8") as f:
+            f.write(f"Total Duration: {total_duration}\n")
+            f.write(f"Chunk Duration Target: {chunk_duration_sec}\n")
+            f.write("-" * 20 + "\n")
+            for idx, pt in enumerate(split_points):
+                f.write(f"Chunk {idx+1} End: {pt:.2f}\n")
+        print(f"Split points saved to {split_points_file}")
+    except Exception as e:
+        print(f"Failed to save split points: {e}")
 
-def transcribe_audio(api_key, audio_path, model_name="models/gemini-2.5-flash", status_callback=None):
+    # --- PHASE 3: Perform Split ---
+    chunks = []
+    current_start = 0.0
+    
+    try:
+        for idx, end_time in enumerate(split_points):
+            chunk_filename = os.path.join(temp_dir, f"{base_name}_part{idx}.mp3")
+            
+            if status_callback:
+                status_callback(f"Splitting part {idx+1}/{len(split_points)}: {current_start:.2f}s to {end_time:.2f}s...")
+                
+            chunk = audio.subclip(current_start, end_time)
+            chunk.write_audiofile(chunk_filename, codec='mp3', verbose=False, logger=None)
+            
+            chunks.append({
+                "path": chunk_filename,
+                "start_time_ms": int(current_start * 1000),
+                "duration_sec": end_time - current_start
+            })
+            
+            current_start = end_time
+            
+        return chunks
+
+    except Exception as e:
+        print(f"Error during audio splitting: {e}")
+        # Cleanup partial chunks
+        for c in chunks:
+            if os.path.exists(c['path']):
+                os.remove(c['path'])
+        raise e
+    finally:
+        audio.close()
+
+def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, status_callback=None):
     """Transcribes audio using Gemini API and returns SRT content."""
     genai.configure(api_key=api_key.strip())
 
+    # Log start of transcription
+    try:
+        log_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "transcription_debug.log")
+        with open(log_path, "a", encoding="utf-8") as log_file:
+            log_file.write(f"\n{'-'*30} NEW SESSION {'-'*30}\n")
+            log_file.write(f"Timestamp: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
+            log_file.write(f"Processing File: {os.path.basename(audio_path)}\n")
+            log_file.write(f"Model: {model_name}\n")
+    except Exception as log_err:
+        print(f"Failed to write start log: {log_err}")
+
     # 1. Check duration and decide if splitting is needed
-    # We'll use a threshold of 3 minutes (180 seconds) to ensure better coverage
-    # as the model sometimes cuts off after 2-3 minutes.
-    SPLIT_THRESHOLD_SEC = 180
+    # User requested 1 minute chunking for testing
+    SPLIT_THRESHOLD_SEC = config.SPLIT_THRESHOLD_SEC
     
     # Use moviepy to check duration quickly without full split yet
     try:
@@ -249,12 +370,28 @@ def transcribe_audio(api_key, audio_path, model_name="models/gemini-2.5-flash", 
     chunks_to_process = []
     
     if duration_sec > SPLIT_THRESHOLD_SEC:
-        if status_callback:
-            status_callback(f"Audio is long ({int(duration_sec)}s), preparing to split...")
-        chunks = split_audio(audio_path, chunk_duration_sec=SPLIT_THRESHOLD_SEC, status_callback=status_callback)
-        chunks_to_process = chunks
-        for c in chunks:
-            files_to_cleanup.append(c['path'])
+        try:
+            if status_callback:
+                status_callback(f"Audio is long ({int(duration_sec)}s), preparing to split...")
+            chunks = split_audio(audio_path, chunk_duration_sec=SPLIT_THRESHOLD_SEC, status_callback=status_callback, api_key=api_key)
+            chunks_to_process = chunks
+            for c in chunks:
+                files_to_cleanup.append(c['path'])
+            
+            # Also clean up the split points file
+            split_points_file = os.path.join("temp_audio", "split_points.txt")
+            files_to_cleanup.append(split_points_file)
+        except Exception as e:
+            try:
+                log_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "transcription_debug.log")
+                with open(log_path, "a", encoding="utf-8") as log_file:
+                    log_file.write(f"\n{'!'*20} SPLITTING ERROR {'!'*20}\n")
+                    log_file.write(f"Timestamp: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
+                    log_file.write(f"Error Message: {str(e)}\n")
+                    import traceback
+                    log_file.write(f"Traceback:\n{traceback.format_exc()}\n")
+            except: pass
+            raise e
     else:
         # For single chunk, we need to know its duration too if we want to report it,
         # but the request specifically asked about the "last part" when splitting.
@@ -272,33 +409,11 @@ def transcribe_audio(api_key, audio_path, model_name="models/gemini-2.5-flash", 
     current_counter = 1
     
     try:
-        generation_config = {
-            "temperature": 0.1,
-            "top_p": 0.95,
-            "top_k": 64,
-            "max_output_tokens": 8192,
-            "response_mime_type": "text/plain",
-        }
+        generation_config = config.GENERATION_CONFIG
         
-        safety_settings = [
-            {"category": "HARM_CATEGORY_HARASSMENT", "threshold": "BLOCK_NONE"},
-            {"category": "HARM_CATEGORY_HATE_SPEECH", "threshold": "BLOCK_NONE"},
-            {"category": "HARM_CATEGORY_SEXUALLY_EXPLICIT", "threshold": "BLOCK_NONE"},
-            {"category": "HARM_CATEGORY_DANGEROUS_CONTENT", "threshold": "BLOCK_NONE"},
-        ]
+        safety_settings = config.SAFETY_SETTINGS
 
-        system_instruction = """You are a professional subtitle creator. Generate a valid SRT file content for the audio provided.
-        
-        Rules:
-        1. The output must be strictly in SRT format, starting from 1.
-        2. TIMESTAMPS: 
-           - Timestamps must strictly correspond to the exact time the text is spoken in the audio segment.
-        3. SEGMENTATION RULES (CRITICAL):
-           - Default: Create a new subtitle block for every sentence (split by punctuation).
-           - Merge Condition: If two or more consecutive short sentences/phrases have a combined length of 10 characters or less, you CAN put them in the same subtitle block (same timestamp).
-           - Split Condition: If a merged line would exceed 10 characters, start a new subtitle block.
-        4. Do not include any markdown code blocks, just the raw SRT content.
-        5. NO TRANSLATION: Transcribe in the original language of the audio. Do not translate."""
+        system_instruction = config.SYSTEM_INSTRUCTION
 
         final_srt_parts = []
         current_counter = 1
@@ -327,42 +442,90 @@ def transcribe_audio(api_key, audio_path, model_name="models/gemini-2.5-flash", 
                 system_instruction=system_instruction
             )
             
-            prompt_parts = [audio_file, "Generate SRT subtitles for this audio."]
+            # Use chat session to allow for follow-up corrections
+            chat = model.start_chat(history=[])
+            
+            prompt_content = [audio_file, "Generate SRT subtitles for this audio."]
             
             response = None
-            max_retries = 3
+            max_retries = config.MAX_RETRIES
+            
             for attempt in range(max_retries):
                 try:
                     if status_callback and attempt > 0:
                         status_callback(f"Rate limit hit. Retrying part {i+1} in {20 * (attempt+1)} seconds...")
                     
-                    response = model.generate_content(prompt_parts)
-                    break # Success!
+                    # For the first attempt, we send the audio and prompt.
+                    # For retry on rate limit (exception), we might need to resend?
+                    # Actually, if send_message fails, the history isn't updated, so valid to retry send_message.
+                    response = chat.send_message(prompt_content)
+                    break 
                     
                 except Exception as e:
                     if "429" in str(e) or "Resource exhausted" in str(e):
                         if attempt < max_retries - 1:
                             wait_time = 20 * (attempt + 1)
                             print(f"Warning: Resource exhausted (429). Retrying in {wait_time}s...")
+                            
+                            # Log rate limit event
+                            try:
+                                log_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "transcription_debug.log")
+                                with open(log_path, "a", encoding="utf-8") as log_file:
+                                    log_file.write(f"\n{'!'*20} RATE LIMIT HIT {'!'*20}\n")
+                                    log_file.write(f"Timestamp: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
+                                    log_file.write(f"Part: {i+1}/{len(chunks_to_process)} | Attempt: {attempt+1}\n")
+                                    log_file.write(f"Wait Time: {wait_time}s\n")
+                                    log_file.write(f"Error Message: {str(e)}\n")
+                            except Exception as log_err:
+                                print(f"Failed to log rate limit: {log_err}")
+
                             time.sleep(wait_time)
                             continue
                         else:
                              raise Exception(f"Failed after {max_retries} attempts due to rate limits. Please try again later.")
                     else:
-                        raise e # Re-raise if it's not a rate limit issue
+                        raise e 
             
+            # --- VALIDATION & CORRECTION ---
+            # Check if valid SRT (has timestamps)
+            if response and response.text:
+                # Basic check: does it contain at least one timestamp arrow?
+                if "-->" not in response.text:
+                    print(f"Warning: Part {i+1} response missing timestamps. Requesting immediate correction from Gemini...")
+                    if status_callback:
+                        status_callback(f"Part {i+1} format invalid (missing timestamps). Asking model to fix...")
+                    
+                    try:
+                        # Send correction request
+                        correction_prompt = (
+                            "The previous output was incorrect because it is missing the SRT timestamps. "
+                            "Please regenerate the ENTIRE output for this audio part in valid SRT format. "
+                            "Every block MUST have an index, a timestamp line (00:00:00,000 --> 00:00:00,000), and the text."
+                        )
+                        response = chat.send_message(correction_prompt)
+                        # We trust the retry fixed it. We could loop this but let's do one strong correction.
+                        if "-->" not in response.text:
+                             print(f"Error: Model failed to fix timestamps even after correction.")
+                    except Exception as e:
+                        print(f"Failed to send correction request: {e}")
+
             # --- DEBUG LOGGING ---
             try:
-                with open("transcription_debug.log", "a", encoding="utf-8") as log_file:
+                log_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "transcription_debug.log")
+                with open(log_path, "a", encoding="utf-8") as log_file:
                     log_file.write(f"\n{'='*50}\n")
                     log_file.write(f"Timestamp: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
                     log_file.write(f"Model: {model_name} | Part: {i+1}/{len(chunks_to_process)}\n")
+                    log_file.write(f"Chunk Start Time (Original Audio): {ms_to_time(chunk_offset_ms)}\n")
                     
                     finish_reason = "Unknown"
                     if response.candidates:
-                        finish_reason = response.candidates[0].finish_reason.name
+                         finish_reason = response.candidates[0].finish_reason.name
                     log_file.write(f"Finish Reason: {finish_reason}\n")
                     
+                    # Log if it was a corrected response
+                    log_file.write(f"Is Correction: {'Yes' if len(chat.history) > 2 else 'No'}\n")
+
                     if response.usage_metadata:
                         log_file.write(f"Token Usage:\n")
                         log_file.write(f"  - Prompt Tokens: {response.usage_metadata.prompt_token_count}\n")
@@ -413,8 +576,8 @@ def transcribe_audio(api_key, audio_path, model_name="models/gemini-2.5-flash", 
             
             # Rate limiting cooldown
             if i < len(chunks_to_process) - 1:
-                print("Cooling down for 5 seconds to avoid rate limits...")
-                time.sleep(5)
+                print("Waiting 0.1 second before processing next chunk...")
+                time.sleep(0.1)
 
         if status_callback:
              status_callback("All parts processed. Stitching timestamps...")
@@ -423,6 +586,17 @@ def transcribe_audio(api_key, audio_path, model_name="models/gemini-2.5-flash", 
         return full_srt
 
     except Exception as e:
+        try:
+            log_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "transcription_debug.log")
+            with open(log_path, "a", encoding="utf-8") as log_file:
+                log_file.write(f"\n{'!'*20} CRITICAL ERROR {'!'*20}\n")
+                log_file.write(f"Timestamp: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
+                log_file.write(f"Error Message: {str(e)}\n")
+                import traceback
+                log_file.write(f"Traceback:\n{traceback.format_exc()}\n")
+        except Exception as log_err:
+            print(f"Failed to log error: {log_err}")
+
         return f"Error during transcription process: {str(e)}"
     finally:
         # If we created temp chunks, clean them up
@@ -430,9 +604,20 @@ def transcribe_audio(api_key, audio_path, model_name="models/gemini-2.5-flash", 
             cleanup_files(files_to_cleanup)
 
 def cleanup_files(file_paths):
+    cleaned_dirs = set()
     for path in file_paths:
         if os.path.exists(path):
             try:
                 os.remove(path)
+                cleaned_dirs.add(os.path.dirname(path))
             except Exception as e:
                 print(f"Error removing {path}: {e}")
+    
+    # Try to remove empty directories
+    for d in cleaned_dirs:
+        if os.path.exists(d) and not os.listdir(d):
+            try:
+                os.rmdir(d)
+                print(f"Removed empty directory: {d}")
+            except OSError:
+                pass # Directory not empty
