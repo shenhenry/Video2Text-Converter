@@ -336,20 +336,26 @@ def split_audio(audio_path, chunk_duration_sec=config.CHUNK_DURATION_SEC, status
     finally:
         audio.close()
 
+
+def write_log(message):
+    """ Writes a message to the debug log with timestamp and force flush. """
+    try:
+        log_path = "transcription_debug.log"
+        with open(log_path, "a", encoding="utf-8") as f:
+            f.write(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] {message}\n")
+            f.flush() 
+    except Exception as e:
+        print(f"Failed to write log: {e}")
+
 def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, status_callback=None):
     """Transcribes audio using Gemini API and returns SRT content."""
-    genai.configure(api_key=api_key.strip())
+    
+    # 0. Immediate Logging
+    write_log(f"{'-'*30} NEW SESSION {'-'*30}")
+    write_log(f"Processing File: {audio_path}")
+    write_log(f"Model: {model_name}")
 
-    # Log start of transcription
-    try:
-        log_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "transcription_debug.log")
-        with open(log_path, "a", encoding="utf-8") as log_file:
-            log_file.write(f"\n{'-'*30} NEW SESSION {'-'*30}\n")
-            log_file.write(f"Timestamp: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
-            log_file.write(f"Processing File: {os.path.basename(audio_path)}\n")
-            log_file.write(f"Model: {model_name}\n")
-    except Exception as log_err:
-        print(f"Failed to write start log: {log_err}")
+    genai.configure(api_key=api_key.strip())
 
     # 1. Check duration and decide if splitting is needed
     # User requested 1 minute chunking for testing
@@ -360,7 +366,8 @@ def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, 
         audio_clip = AudioFileClip(audio_path)
         duration_sec = audio_clip.duration
         audio_clip.close()
-    except Exception:
+    except Exception as e:
+        write_log(f"Error reading audio duration: {e}")
         # Fallback if moviepy fails to read metadata, just try normal process
         duration_sec = 0 
 
@@ -373,6 +380,8 @@ def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, 
         try:
             if status_callback:
                 status_callback(f"Audio is long ({int(duration_sec)}s), preparing to split...")
+            
+            write_log(f"Audio duration {duration_sec}s > {SPLIT_THRESHOLD_SEC}s. Splitting...")
             chunks = split_audio(audio_path, chunk_duration_sec=SPLIT_THRESHOLD_SEC, status_callback=status_callback, api_key=api_key)
             chunks_to_process = chunks
             for c in chunks:
@@ -382,15 +391,10 @@ def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, 
             split_points_file = os.path.join("temp_audio", "split_points.txt")
             files_to_cleanup.append(split_points_file)
         except Exception as e:
-            try:
-                log_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "transcription_debug.log")
-                with open(log_path, "a", encoding="utf-8") as log_file:
-                    log_file.write(f"\n{'!'*20} SPLITTING ERROR {'!'*20}\n")
-                    log_file.write(f"Timestamp: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
-                    log_file.write(f"Error Message: {str(e)}\n")
-                    import traceback
-                    log_file.write(f"Traceback:\n{traceback.format_exc()}\n")
-            except: pass
+            write_log(f"CRITICAL SPLITTING ERROR: {e}")
+            write_log(f"Traceback: {str(e)}") # Ideally use traceback.format_exc() but keeping it simple for now or import traceback
+            import traceback
+            write_log(traceback.format_exc())
             raise e
     else:
         # For single chunk, we need to know its duration too if we want to report it,
@@ -428,6 +432,8 @@ def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, 
             if status_callback:
                 status_callback(f"Processing part {i+1}/{len(chunks_to_process)}: {chunk_name}...")
             
+            write_log(f"Processing Part {i+1}/{len(chunks_to_process)}: {chunk_name} (Offset: {chunk_offset_ms}ms)")
+
             # 1. Upload
             audio_file = upload_to_gemini(chunk_path)
             
@@ -467,17 +473,8 @@ def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, 
                             wait_time = 20 * (attempt + 1)
                             print(f"Warning: Resource exhausted (429). Retrying in {wait_time}s...")
                             
-                            # Log rate limit event
-                            try:
-                                log_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "transcription_debug.log")
-                                with open(log_path, "a", encoding="utf-8") as log_file:
-                                    log_file.write(f"\n{'!'*20} RATE LIMIT HIT {'!'*20}\n")
-                                    log_file.write(f"Timestamp: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
-                                    log_file.write(f"Part: {i+1}/{len(chunks_to_process)} | Attempt: {attempt+1}\n")
-                                    log_file.write(f"Wait Time: {wait_time}s\n")
-                                    log_file.write(f"Error Message: {str(e)}\n")
-                            except Exception as log_err:
-                                print(f"Failed to log rate limit: {log_err}")
+                            write_log(f"RATE LIMIT HIT | Part: {i+1} | Attempt: {attempt+1}")
+                            write_log(f"Waiting {wait_time}s due to error: {e}")
 
                             time.sleep(wait_time)
                             continue
@@ -492,6 +489,8 @@ def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, 
                 # Basic check: does it contain at least one timestamp arrow?
                 if "-->" not in response.text:
                     print(f"Warning: Part {i+1} response missing timestamps. Requesting immediate correction from Gemini...")
+                    write_log(f"WARNING: Invalid SRT format (no timestamps) for Part {i+1}. Requesting correction.")
+
                     if status_callback:
                         status_callback(f"Part {i+1} format invalid (missing timestamps). Asking model to fix...")
                     
@@ -506,43 +505,28 @@ def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, 
                         # We trust the retry fixed it. We could loop this but let's do one strong correction.
                         if "-->" not in response.text:
                              print(f"Error: Model failed to fix timestamps even after correction.")
+                             write_log("ERROR: Correction failed. Still no timestamps.")
                     except Exception as e:
                         print(f"Failed to send correction request: {e}")
+                        write_log(f"ERROR Sending correction request: {e}")
 
-            # --- DEBUG LOGGING ---
+            # --- DEBUG LOGGING for Result ---
+            finish_reason = "Unknown"
+            if response.candidates:
+                 finish_reason = response.candidates[0].finish_reason.name
+            
+            write_log(f"Generation Complete | Finish Reason: {finish_reason}")
+            write_log(f"Is Correction: {'Yes' if len(chat.history) > 2 else 'No'}")
+            
+            if response.usage_metadata:
+                write_log(f"Tokens: Prompt={response.usage_metadata.prompt_token_count}, Cand={response.usage_metadata.candidates_token_count}, Total={response.usage_metadata.total_token_count}")
+            
             try:
-                log_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "transcription_debug.log")
-                with open(log_path, "a", encoding="utf-8") as log_file:
-                    log_file.write(f"\n{'='*50}\n")
-                    log_file.write(f"Timestamp: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
-                    log_file.write(f"Model: {model_name} | Part: {i+1}/{len(chunks_to_process)}\n")
-                    log_file.write(f"Chunk Start Time (Original Audio): {ms_to_time(chunk_offset_ms)}\n")
-                    
-                    finish_reason = "Unknown"
-                    if response.candidates:
-                         finish_reason = response.candidates[0].finish_reason.name
-                    log_file.write(f"Finish Reason: {finish_reason}\n")
-                    
-                    # Log if it was a corrected response
-                    log_file.write(f"Is Correction: {'Yes' if len(chat.history) > 2 else 'No'}\n")
-
-                    if response.usage_metadata:
-                        log_file.write(f"Token Usage:\n")
-                        log_file.write(f"  - Prompt Tokens: {response.usage_metadata.prompt_token_count}\n")
-                        log_file.write(f"  - Candidates Tokens: {response.usage_metadata.candidates_token_count}\n")
-                        log_file.write(f"  - Total Tokens: {response.usage_metadata.total_token_count}\n")
-                    
-                    try:
-                        log_file.write(f"Raw Text Length: {len(response.text)} chars\n")
-                        log_file.write(f"--- Raw Response Start ---\n")
-                        log_file.write(response.text)
-                        log_file.write(f"\n--- Raw Response End ---\n")
-                    except Exception as e:
-                        log_file.write(f"Could not log text: {e}\n")
-                        if response.prompt_feedback:
-                             log_file.write(f"Prompt Feedback: {response.prompt_feedback}\n")
-            except Exception as log_err:
-                print(f"Failed to write log: {log_err}")
+                # Log a snippet or full text? User wants raw text length at least.
+                write_log(f"Raw Text Length: {len(response.text)} chars")
+                write_log(f"--- Raw Response Preview ---\n{response.text[:500]}...\n--- End Preview ---")
+            except Exception as e:
+                write_log(f"Could not log text: {e}")
             # ---------------------
             
             raw_srt = ""
@@ -551,9 +535,11 @@ def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, 
                 raw_srt = raw_srt.replace("```srt", "").replace("```", "").strip()
             except Exception as e:
                  print(f"Error accessing response.text: {e}")
+                 write_log(f"Error accessing response.text: {e}")
                  # Check blocked
                  if response.prompt_feedback:
                      print(f"Prompt Feedback: {response.prompt_feedback}")
+                     write_log(f"Prompt Feedback: {response.prompt_feedback}")
             
             if raw_srt:
                 # 4. Post-process & Shift
@@ -566,6 +552,7 @@ def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, 
                     current_counter = last_counter + 1
             else:
                  print(f"Warning: Empty response for part {i+1}")
+                 write_log(f"Warning: Empty response for part {i+1}")
             
             # Cleanup immediately after use to assume fresh state for next iteration
             # (Though keeping them is fine, deleting minimizes storage use during long process)
@@ -583,20 +570,13 @@ def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, 
              status_callback("All parts processed. Stitching timestamps...")
 
         full_srt = "\n\n".join(final_srt_parts)
+        write_log("Transcription process finished successfully.")
         return full_srt
 
     except Exception as e:
-        try:
-            log_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "transcription_debug.log")
-            with open(log_path, "a", encoding="utf-8") as log_file:
-                log_file.write(f"\n{'!'*20} CRITICAL ERROR {'!'*20}\n")
-                log_file.write(f"Timestamp: {time.strftime('%Y-%m-%d %H:%M:%S')}\n")
-                log_file.write(f"Error Message: {str(e)}\n")
-                import traceback
-                log_file.write(f"Traceback:\n{traceback.format_exc()}\n")
-        except Exception as log_err:
-            print(f"Failed to log error: {log_err}")
-
+        write_log(f"CRITICAL ERROR: {e}")
+        import traceback
+        write_log(f"Traceback:\n{traceback.format_exc()}")
         return f"Error during transcription process: {str(e)}"
     finally:
         # If we created temp chunks, clean them up
