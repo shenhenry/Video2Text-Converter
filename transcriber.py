@@ -84,8 +84,6 @@ def list_available_models(api_key):
 def time_to_ms(time_str):
     """Converts SRT timestamp "HH:MM:SS,mmm" or "MM:SS,mmm" (or dot separated) to milliseconds."""
     try:
-        # Normalize separator to comma for splitting, but wait, regex might validly conform
-        # Let's handle replace first
         time_str = time_str.replace('.', ',')
         
         parts = time_str.split(':')
@@ -100,12 +98,6 @@ def time_to_ms(time_str):
         if ',' in seconds:
             seconds_val, milliseconds_val = seconds.split(',')
             # Pad or truncate milliseconds to 3 digits conceptually? 
-            # Actually standard is 3. If 2 digits (.50), it is 500ms? Or 50ms?
-            # SRT standard: .500
-            # If input is 12:34.5, usually means 500ms.
-            # python int('5') is 5. We need ms.
-            # Let's align to standard:
-            # If len is 1, *100. If 2, *10. If 3, *1.
             ms_len = len(milliseconds_val)
             ms_int = int(milliseconds_val)
             if ms_len == 1: ms_int *= 100
@@ -130,10 +122,9 @@ def ms_to_time(ms):
     return f"{hours:02d}:{minutes:02d}:{seconds:02d},{ms:03d}"
 
 def shift_srt_content(srt_content, offset_ms, counter_start=1):
-    """Parses, filters, and shifts SRT content."""
     # Regex modified to support optional HH, and permit both comma and dot for millis, or no millis
-    # Pattern: HH:MM:SS,mmm  OR MM:SS,mmm OR HH:MM:SS.mmm
-    timestamp_pattern = re.compile(r'((?:\d{1,2}:)?\d{2}:\d{2}(?:[.,]\d{1,3})?)\s-->\s((?:\d{1,2}:)?\d{2}:\d{2}(?:[.,]\d{1,3})?)')
+    # Pattern: HH:MM:SS,mmm  OR MM:SS,mmm OR HH:MM:SS.mmm OR M:SS,mmm etc.
+    timestamp_pattern = re.compile(r'((?:\d{1,2}:)?\d{1,2}:\d{1,2}(?:[.,]\d{1,3})?)\s-->\s((?:\d{1,2}:)?\d{1,2}:\d{1,2}(?:[.,]\d{1,3})?)')
     
     matches = list(timestamp_pattern.finditer(srt_content))
     valid_blocks = []
@@ -154,8 +145,6 @@ def shift_srt_content(srt_content, offset_ms, counter_start=1):
         raw_text = srt_content[content_start:content_end]
         
         # Process lines to remove indices and empty space
-        # We rely on the timestamp as the anchor. The text follows it.
-        # The index for the NEXT block might be at the end of this chunk.
         lines = [l.strip() for l in raw_text.split('\n') if l.strip()]
         
         # Filter out the index of the next block if present (heuristic: last line is digit)
@@ -171,8 +160,6 @@ def shift_srt_content(srt_content, offset_ms, counter_start=1):
         # Filter duplicate consecutive blocks (hallucination loop) where timestamps are identical
         if valid_blocks:
             last_start, last_end, _ = valid_blocks[-1]
-            # Calculating shifted times for comparison would be clean, but let's just compare raw ms logic
-            # implicitly handled since we rebuild fresh below.
             pass
 
         # Apply shift
@@ -196,9 +183,6 @@ def shift_srt_content(srt_content, offset_ms, counter_start=1):
 import numpy as np
 
 def find_split_point(audio_clip, target_time, search_window=15):
-    """
-    Finds the best split point around target_time based on low volume (silence).
-    """
     try:
         # Define search range
         start_search = max(0, target_time - search_window)
@@ -208,16 +192,12 @@ def find_split_point(audio_clip, target_time, search_window=15):
         sub = audio_clip.subclip(start_search, end_search)
         
         # Get audio array (fps is usually 44100)
-        # to_soundarray returns shape (N, 2) for stereo
         audio_array = sub.to_soundarray() 
         
         # Calculate volume envelope (RMS)
-        # Average simple volume across channels
         volume = np.sqrt(np.mean(audio_array**2, axis=1))
         
         # We want to find a valley. 
-        # Smooth slightly to avoid single-sample dropouts? 
-        # For now, just finding the absolute minimum in this window is robust enough for speech.
         min_vol_idx = np.argmin(volume)
         
         # Convert index back to time relative to start_search
@@ -231,10 +211,6 @@ def find_split_point(audio_clip, target_time, search_window=15):
         return target_time
 
 def find_split_point_gemini(api_key, audio_clip, status_callback=None):
-    """
-    Uses Gemini API to find the best split point in the provided audio clip.
-    Returns: time in seconds relative to the start of the clip.
-    """
     temp_clip_path = "temp/temp_split_search.mp3"
     try:
         # Write the search window clip to file
@@ -259,11 +235,7 @@ def find_split_point_gemini(api_key, audio_clip, status_callback=None):
 
         model = genai.GenerativeModel(model_name=config.DEFAULT_MODEL_NAME)
         
-        prompt = (
-            "Listen to this audio clip. I need to cut the audio file here. "
-            "Find the best timestamp (in seconds) to make a cut, such as a moment of silence or the end of a sentence. "
-            "Return ONLY the number (e.g. 5.43). If no good point, return the middle of the duration."
-        )
+        prompt = config.SPLIT_POINT_PROMPT
         
         response = model.generate_content([file, prompt])
         
@@ -291,7 +263,7 @@ def split_audio(audio_path, chunk_duration_sec=config.CHUNK_DURATION_SEC, status
     temp_dir = pathlib.Path("temp")
     temp_dir.mkdir(exist_ok=True)
 
-    # 1. 快速清理 (一行搞定)
+    # 1. 快速清理
     [f.unlink() for f in temp_dir.glob("*") if f.resolve() != pathlib.Path(audio_path).resolve()]
 
     # 2. 計算切割點 (0.8x ~ 1.2x duration 區間搜尋)
@@ -310,23 +282,11 @@ def split_audio(audio_path, chunk_duration_sec=config.CHUNK_DURATION_SEC, status
             win_end = min(audio.duration, win_end)
             
             # 搜尋該區間
-            if api_key:
-                # find_split_point_gemini 回傳的是相對時間，需加上 win_start
+            if api_key and config.USE_GEMINI_SPLIT:
                 found_relative = find_split_point_gemini(api_key, audio.subclip(win_start, win_end), status_callback)
                 actual_end = win_start + found_relative
             else:
-                # find_split_point (numpy) 期待的是一個中心點 target_time 和 radius，這裡我們要把區間轉換一下
-                # 但原本的 find_split_point 邏輯是給 target 和 window，這有點不直觀
-                # 為了符合新邏輯，我們直接改為搜尋該子片段的最小音量
-                # 注意：這裡如果沒有 api_key，我們需要一個能接受 start/end 的 find_split_point
-                # 簡單起見，我們繼續用 subclip + argmin 邏輯
-                
-                # 改寫：直接針對該 window 做 silence detection
-                sub = audio.subclip(win_start, win_end)
-                audio_array = sub.to_soundarray() 
-                volume = np.sqrt(np.mean(audio_array**2, axis=1))
-                min_vol_idx = np.argmin(volume)
-                actual_end = win_start + (min_vol_idx / sub.fps)
+                actual_end = find_split_point(audio, (win_start + win_end) / 2, (win_end - win_start) / 2)
         
         # 安全機制：確保有前進，且不要切出極短片段 (除非是最後一段)
         if actual_end <= curr + 1.0: 
@@ -360,22 +320,15 @@ def split_audio(audio_path, chunk_duration_sec=config.CHUNK_DURATION_SEC, status
 
 def write_log(message):
     """ Writes a message to the debug log with timestamp (via print + stdout redirection). """
-    # Since stdout is redirected to the log file, simple print works for both.
     print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] {message}")
 
 def merge_srt_parts(new_chunks_info, status_callback=None):
-    """
-    Iteratively merges new chunks into 'temp/final_context.srt'.
-    1. If final_context.srt doesn't exist, create it with the first chunk.
-    2. If it exists, append the new chunks to it, shifting timestamps and updating counters.
-    """
     final_srt_path = pathlib.Path("temp/final_context.srt")
     
     # Iterate through the new chunks to merge
     for i, chunk in enumerate(new_chunks_info):
         chunk_path = chunk['path']
         chunk_stem = pathlib.Path(chunk_path).stem
-        # Use simple naming: temp_partX.srt matched with temp_partX.mp3
         temp_srt_path = pathlib.Path(chunk_path).parent / f"{chunk_stem}.srt"
         
         write_log(f"Merging chunk into context: {temp_srt_path}")
@@ -384,7 +337,6 @@ def merge_srt_parts(new_chunks_info, status_callback=None):
             continue
 
         try:
-# ... (rest of merge function same until next replacement point if needed, or I can replace the whole helper)
             # 1. Read the new chunk content
             content = temp_srt_path.read_text(encoding="utf-8")
             
@@ -404,13 +356,8 @@ def merge_srt_parts(new_chunks_info, status_callback=None):
             
             if final_srt_path.exists():
                 existing_content = final_srt_path.read_text(encoding="utf-8")
-                # Parse the last counter from existing file
-                # A heuristic: find the last logic block number
-                # Or we can just count empty lines? Risk of hallucination spaces.
-                # Let's use regex to find the last index line ^\d+$
                 indices = re.findall(r'\n(\d+)\n\d{2}:\d{2}', existing_content)
                 if not indices:
-                    # Maybe it's the very first line?
                     match = re.match(r'^(\d+)\n', existing_content)
                     if match:
                          indices = [match.group(1)]
@@ -454,7 +401,6 @@ def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, 
     genai.configure(api_key=api_key.strip())
 
     # 1. Check duration and decide if splitting is needed
-    # User requested 1 minute chunking for testing
     SPLIT_THRESHOLD_SEC = config.SPLIT_THRESHOLD_SEC
     
     # Use moviepy to check duration quickly without full split yet
@@ -480,14 +426,6 @@ def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, 
             write_log(f"Audio duration {duration_sec}s > {SPLIT_THRESHOLD_SEC}s. Splitting...")
             chunks = split_audio(audio_path, chunk_duration_sec=SPLIT_THRESHOLD_SEC, status_callback=status_callback, api_key=api_key)
             chunks_to_process = chunks
-            
-            # User requested NOT to cleanup temp files at the end
-            # for c in chunks:
-            #     files_to_cleanup.append(c['path'])
-            
-            # Also clean up the split points file
-            # split_points_file = os.path.join("temp_audio", "split_points.txt")
-            # files_to_cleanup.append(split_points_file)
         except Exception as e:
             write_log(f"CRITICAL SPLITTING ERROR: {e}")
             write_log(f"Traceback: {str(e)}") # Ideally use traceback.format_exc() but keeping it simple for now or import traceback
@@ -495,9 +433,6 @@ def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, 
             write_log(traceback.format_exc())
             raise e
     else:
-        # For single chunk, we need to know its duration too if we want to report it,
-        # but the request specifically asked about the "last part" when splitting.
-        # We can just set it if we have it.
         chunks_to_process = [{"path": audio_path, "start_time_ms": 0, "duration_sec": duration_sec}]
 
     if status_callback and chunks_to_process:
@@ -558,10 +493,7 @@ def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, 
                 try:
                     if status_callback and attempt > 0:
                         status_callback(f"Rate limit hit. Retrying part {i+1} in {20 * (attempt+1)} seconds...")
-                    
-                    # For the first attempt, we send the audio and prompt.
-                    # For retry on rate limit (exception), we might need to resend?
-                    # Actually, if send_message fails, the history isn't updated, so valid to retry send_message.
+
                     response = chat.send_message(prompt_content)
                     break 
                     

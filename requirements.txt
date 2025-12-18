@@ -2,4 +2,4 @@ streamlit
 moviepy<2.0
 google-generativeai
 python-dotenv
-numpy
+numpy<2.0
