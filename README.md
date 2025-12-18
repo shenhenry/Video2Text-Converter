@@ -41,6 +41,25 @@ A Streamlit-based application that extracts audio from video files and uses Goog
 2. **Open your browser**:
    The app usually opens automatically at `http://localhost:8501`.
 
+## 🖥️ Local Execution Path (For This Machine)
+
+To quickly start the application on this machine's terminal, copy and paste the following commands:
+
+1. **Navigate to the Project Directory**:
+   ```bash
+   cd "/Users/henryshen/Library/CloudStorage/GoogleDrive-shenhaocheng720@gmail.com/其他電腦/我的電腦/Henry/Antigravity/Video2Text Converter"
+   ```
+
+2. **Install Dependencies** (If not already installed):
+   ```bash
+   python3 -m pip install -r requirements.txt
+   ```
+
+3. **Run the Application**:
+   ```bash
+   python3 -m streamlit run app.py
+   ```
+
 3. **Generate Subtitles**:
    - Enter your **Google Gemini API Key** in the sidebar.
    - Select a model (e.g., `gemini-1.5-flash`).

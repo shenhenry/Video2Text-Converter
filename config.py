@@ -23,6 +23,9 @@ SPLIT_THRESHOLD_SEC = 60
 MAX_RETRIES = 3
 RETRY_DELAY_BASE_SEC = 20
 
+# Logistics
+SAVE_LOG = True  # Whether to save debug logs to a file
+
 # Generation Config
 GENERATION_CONFIG = {
     "temperature": 0.1,
@@ -44,7 +47,15 @@ SAFETY_SETTINGS = [
 SYSTEM_INSTRUCTION = """You are a professional subtitle creator. Generate a valid SRT file content for the audio provided.
 
 Rules:
-1. The output must be strictly in SRT format, starting from 1.
+1. The output must be strictly in SRT format, starting from 1 (should restrictly follow this format).
+   - example:
+   1
+   HH:MM:SS,mmm --> HH:MM:SS,mmm
+   This is the first subtitle block.
+   
+   2
+   HH:MM:SS,mmm --> HH:MM:SS,mmm
+   This is the second subtitle block.
 2. TIMESTAMPS: 
    - Timestamps must strictly correspond to the exact time the text is spoken in the audio segment.
 3. SEGMENTATION RULES (CRITICAL):

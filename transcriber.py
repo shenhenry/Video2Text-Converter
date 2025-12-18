@@ -20,9 +20,10 @@ class DualWriter:
             self.original_stream.write(message)
             self.original_stream.flush()
             
-            # Write to log file
-            with open(self.file_path, "a", encoding="utf-8") as f:
-                f.write(message)
+            # Write to log file if enabled
+            if config.SAVE_LOG:
+                with open(self.file_path, "a", encoding="utf-8") as f:
+                    f.write(message)
         except Exception:
             pass 
 
@@ -81,8 +82,12 @@ def list_available_models(api_key):
         return [f"Error listing models: {str(e)}"]
 
 def time_to_ms(time_str):
-    """Converts SRT timestamp "HH:MM:SS,mmm" or "MM:SS,mmm" to milliseconds."""
+    """Converts SRT timestamp "HH:MM:SS,mmm" or "MM:SS,mmm" (or dot separated) to milliseconds."""
     try:
+        # Normalize separator to comma for splitting, but wait, regex might validly conform
+        # Let's handle replace first
+        time_str = time_str.replace('.', ',')
+        
         parts = time_str.split(':')
         if len(parts) == 3:
             hours, minutes, seconds = parts
@@ -92,8 +97,24 @@ def time_to_ms(time_str):
         else:
             return 0
             
-        seconds, milliseconds = seconds.split(',')
-        total_ms = (int(hours) * 3600000) + (int(minutes) * 60000) + (int(seconds) * 1000) + int(milliseconds)
+        if ',' in seconds:
+            seconds_val, milliseconds_val = seconds.split(',')
+            # Pad or truncate milliseconds to 3 digits conceptually? 
+            # Actually standard is 3. If 2 digits (.50), it is 500ms? Or 50ms?
+            # SRT standard: .500
+            # If input is 12:34.5, usually means 500ms.
+            # python int('5') is 5. We need ms.
+            # Let's align to standard:
+            # If len is 1, *100. If 2, *10. If 3, *1.
+            ms_len = len(milliseconds_val)
+            ms_int = int(milliseconds_val)
+            if ms_len == 1: ms_int *= 100
+            elif ms_len == 2: ms_int *= 10
+        else:
+            seconds_val = seconds
+            ms_int = 0
+            
+        total_ms = (int(hours) * 3600000) + (int(minutes) * 60000) + (int(seconds_val) * 1000) + ms_int
         return total_ms
     except ValueError:
         return 0
@@ -110,8 +131,9 @@ def ms_to_time(ms):
 
 def shift_srt_content(srt_content, offset_ms, counter_start=1):
     """Parses, filters, and shifts SRT content."""
-    # Regex modified to support optional HH: prefix (e.g. match both 00:00:10,000 and 00:10,000)
-    timestamp_pattern = re.compile(r'((?:\d{2}:)?\d{2}:\d{2},\d{3})\s-->\s((?:\d{2}:)?\d{2}:\d{2},\d{3})')
+    # Regex modified to support optional HH, and permit both comma and dot for millis, or no millis
+    # Pattern: HH:MM:SS,mmm  OR MM:SS,mmm OR HH:MM:SS.mmm
+    timestamp_pattern = re.compile(r'((?:\d{1,2}:)?\d{2}:\d{2}(?:[.,]\d{1,3})?)\s-->\s((?:\d{1,2}:)?\d{2}:\d{2}(?:[.,]\d{1,3})?)')
     
     matches = list(timestamp_pattern.finditer(srt_content))
     valid_blocks = []
@@ -321,7 +343,8 @@ def split_audio(audio_path, chunk_duration_sec=config.CHUNK_DURATION_SEC, status
     for idx, end_t in enumerate(split_points):
         if status_callback: status_callback(f"Part {idx+1}/{len(split_points)}...")
         
-        p = temp_dir / f"{pathlib.Path(audio_path).stem}_part{idx}.mp3"
+        # Use "temp_partX.mp3" naming pattern
+        p = temp_dir / f"temp_part{idx}.mp3"
         audio.subclip(prev_start, end_t).write_audiofile(str(p), codec='mp3', verbose=False, logger=None)
         
         chunks.append({"path": str(p), "start_time_ms": int(prev_start * 1000), "duration_sec": end_t - prev_start})
@@ -340,6 +363,81 @@ def write_log(message):
     # Since stdout is redirected to the log file, simple print works for both.
     print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] {message}")
 
+def merge_srt_parts(new_chunks_info, status_callback=None):
+    """
+    Iteratively merges new chunks into 'temp/final_context.srt'.
+    1. If final_context.srt doesn't exist, create it with the first chunk.
+    2. If it exists, append the new chunks to it, shifting timestamps and updating counters.
+    """
+    final_srt_path = pathlib.Path("temp/final_context.srt")
+    
+    # Iterate through the new chunks to merge
+    for i, chunk in enumerate(new_chunks_info):
+        chunk_path = chunk['path']
+        chunk_stem = pathlib.Path(chunk_path).stem
+        # Use simple naming: temp_partX.srt matched with temp_partX.mp3
+        temp_srt_path = pathlib.Path(chunk_path).parent / f"{chunk_stem}.srt"
+        
+        write_log(f"Merging chunk into context: {temp_srt_path}")
+        if not temp_srt_path.exists():
+            write_log(f"Error: Missing temp SRT file: {temp_srt_path}")
+            continue
+
+        try:
+# ... (rest of merge function same until next replacement point if needed, or I can replace the whole helper)
+            # 1. Read the new chunk content
+            content = temp_srt_path.read_text(encoding="utf-8")
+            
+            # Parse Offset
+            lines = content.split('\n')
+            offset_ms = 0
+            raw_body = content
+            if lines and lines[0].startswith("Start Offset:"):
+                offset_str = lines[0].replace("Start Offset:", "").strip()
+                offset_ms = time_to_ms(offset_str)
+                parts = content.split('\n\n', 1)
+                raw_body = parts[1] if len(parts) > 1 else "\n".join(lines[2:]) if len(lines) > 2 else ""
+
+            # 2. Determine starting counter
+            current_counter = 1
+            existing_content = ""
+            
+            if final_srt_path.exists():
+                existing_content = final_srt_path.read_text(encoding="utf-8")
+                # Parse the last counter from existing file
+                # A heuristic: find the last logic block number
+                # Or we can just count empty lines? Risk of hallucination spaces.
+                # Let's use regex to find the last index line ^\d+$
+                indices = re.findall(r'\n(\d+)\n\d{2}:\d{2}', existing_content)
+                if not indices:
+                    # Maybe it's the very first line?
+                    match = re.match(r'^(\d+)\n', existing_content)
+                    if match:
+                         indices = [match.group(1)]
+                
+                if indices:
+                    current_counter = int(indices[-1]) + 1
+            
+            # 3. Process the new chunk (Shift & Renumber)
+            part_srt, last_counter = shift_srt_content(raw_body, offset_ms, counter_start=current_counter)
+            
+            # 4. Write back
+            if part_srt:
+                if existing_content:
+                    new_content = existing_content + "\n\n" + part_srt
+                else:
+                    new_content = part_srt
+                
+                final_srt_path.write_text(new_content, encoding="utf-8")
+                write_log(f"Updated {final_srt_path} with new chunk data. Last counter: {last_counter}")
+            else:
+                write_log("Warning: No valid SRT content found in chunk to merge.")
+
+        except Exception as e:
+            write_log(f"Failed to merge chunk {temp_srt_path}: {e}")
+
+    return final_srt_path
+
 def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, status_callback=None):
     """Transcribes audio using Gemini API and returns SRT content."""
     
@@ -347,6 +445,11 @@ def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, 
     write_log(f"{'-'*30} NEW SESSION {'-'*30}")
     write_log(f"Processing File: {audio_path}")
     write_log(f"Model: {model_name}")
+
+    # Initialize Context File Cleanup
+    final_context_path = pathlib.Path("temp/final_context.srt")
+    if final_context_path.exists():
+        final_context_path.unlink()
 
     genai.configure(api_key=api_key.strip())
 
@@ -446,7 +549,7 @@ def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, 
             # Use chat session to allow for follow-up corrections
             chat = model.start_chat(history=[])
             
-            prompt_content = [audio_file, "Generate SRT subtitles for this audio."]
+            prompt_content = [audio_file, system_instruction]
             
             response = None
             max_retries = config.MAX_RETRIES
@@ -494,7 +597,7 @@ def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, 
                         correction_prompt = (
                             "The previous output was incorrect because it is missing the SRT timestamps. "
                             "Please regenerate the ENTIRE output for this audio part in valid SRT format. "
-                            "Every block MUST have an index, a timestamp line (00:00:00,000 --> 00:00:00,000), and the text."
+                            "Every block MUST have an index, a timestamp line (HH:MM:SS,mmm --> HH:MM:SS,mmm), and the text."
                         )
                         response = chat.send_message(correction_prompt)
                         # We trust the retry fixed it. We could loop this but let's do one strong correction.
@@ -540,36 +643,29 @@ def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, 
                 # Save temp part SRT with offset info locally
                 try:
                     offset_str = ms_to_time(chunk_offset_ms)
-                    chunk_stem = pathlib.Path(chunk_path).stem  # e.g. video_part0
-                    temp_srt_filename = f"temp_{chunk_stem}.srt"
+                    chunk_stem = pathlib.Path(chunk_path).stem  # e.g. temp_part0
+                    temp_srt_filename = f"{chunk_stem}.srt"
                     
-                    # Save in the same directory as the temp audio (temp_audio/)
+                    # Save in the same directory as the temp audio (temp/)
                     temp_srt_path = pathlib.Path(chunk_path).parent / temp_srt_filename
                     
                     with open(temp_srt_path, "w", encoding="utf-8") as f:
                         f.write(f"Start Offset: {offset_str}\n\n{raw_srt}")
                         
                     write_log(f"Saved temp SRT chunk to: {temp_srt_path}")
+                    
+                    # === IMMEDIATE INCREMENTAL MERGE ===
+                    # Call merge immediately with just this chunk
+                    merge_srt_parts([chunk], status_callback=status_callback)
+                    
                 except Exception as e:
-                    write_log(f"Failed to save temp SRT chunk: {e}")
+                    write_log(f"Failed to save/merge temp SRT chunk: {e}")
 
-                # 4. Post-process & Shift
-                # We shift the timestamps by the chunk's start time explicitly
-                part_srt, last_counter = shift_srt_content(raw_srt, chunk_offset_ms, counter_start=current_counter)
-                if part_srt:
-                    final_srt_parts.append(part_srt)
-                    # Update counter for next chunk
-                    # shift_srt_content returns the last used counter, so next starts at last + 1
-                    current_counter = last_counter + 1
             else:
                  print(f"Warning: Empty response for part {i+1}")
                  write_log(f"Warning: Empty response for part {i+1}")
             
-            # Cleanup immediately after use to assume fresh state for next iteration
-            # (Though keeping them is fine, deleting minimizes storage use during long process)
-            # But the user might want to debug audio... let's stick to cleaning up at the very end
-            # or we can delete the remote file resource to keep quotas clean?
-            # genai.delete_file(audio_file.name) # If the SDK supports it easily, but let's just leave it for now.
+            # (No cleanup here, we need the files)
             pass
             
             # Rate limiting cooldown
@@ -577,10 +673,13 @@ def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, 
                 print("Waiting 0.1 second before processing next chunk...")
                 time.sleep(0.1)
 
-        if status_callback:
-             status_callback("All parts processed. Stitching timestamps...")
-
-        full_srt = "\n\n".join(final_srt_parts)
+        # --- FINAL READ ---
+        final_file = pathlib.Path("temp/final_context.srt")
+        if final_file.exists():
+            full_srt = final_file.read_text(encoding="utf-8")
+        else:
+            full_srt = ""
+            
         write_log("Transcription process finished successfully.")
         return full_srt
 
