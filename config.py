@@ -14,15 +14,15 @@ PREFERRED_MODELS = [
 
 # Audio Processing Settings
 # Duration in seconds for each audio chunk
-CHUNK_DURATION_SEC = 60
+CHUNK_DURATION_SEC = 120
 
 # Threshold to trigger splitting. If audio is shorter than this, it won't be split.
-SPLIT_THRESHOLD_SEC = 60
+SPLIT_THRESHOLD_SEC = 120
 
 # Split Method
 # If True, use Gemini to find the optimal split point (more accurate but slower).
 # If False, use simple silence detection (RMS).
-USE_GEMINI_SPLIT = False
+USE_GEMINI_SPLIT = True
 
 # API Retry Settings
 MAX_RETRIES = 3
@@ -50,7 +50,6 @@ SAFETY_SETTINGS = [
 
 # System Instruction for the Gemini Model
 SYSTEM_INSTRUCTION = """You are a professional subtitle creator. Generate a valid SRT file content for the audio provided.
-
 Rules:
 1. The output must be strictly in SRT format, starting from 1 (should restrictly follow this format).
    - example:
@@ -67,9 +66,10 @@ Rules:
    - DO NOT use MM:SS,mmm format. ALWAYS include the hour field (e.g., 00:12:34,567).
    - Timestamps must strictly correspond to the exact time the text is spoken in the audio segment.
 3. SEGMENTATION RULES (CRITICAL):
-   - Basic Rule: Split by punctuation. Each subtitle block contains one segment of text, ideally not exceeding 10 characters.
-   - Merge Condition: If consecutive segments have a combined length of 10 characters or less, you CAN merge them into one subtitle block.
+   - Basic Rule: Split by punctuation. Each subtitle block contains one segment of text.
+   - Merge Condition: If consecutive segments have a combined length of 15 characters or less, you CAN merge them into one subtitle block. But if the combined length exceeds 15 characters, you MUST split them into separate subtitle blocks.
    - Formatting Constraint: Do NOT use newlines within a single subtitle block. The text for each block must be relatively short and on a single line.
+   - Forced Split: When you encounter a period ("."), "。" (Chinese period), question mark ("?"), or exclamation mark ("!"), you MUST obtain a new timestamp and start a new subtitle block immediately. DO NOT continue in the same block.
 4. Do not include any markdown code blocks, just the raw SRT content.
 5. LANGUAGE STRICTNESS:
    - If the audio is in Chinese, you MUST transcribe in Traditional Chinese (繁體中文). Do NOT use Simplified Chinese.

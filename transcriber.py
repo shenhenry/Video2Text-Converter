@@ -7,6 +7,7 @@ import time
 import re
 import math
 import config
+import numpy as np
 
 # Redirect stdout and stderr to both terminal and log file
 class DualWriter:
@@ -33,11 +34,14 @@ class DualWriter:
         except Exception:
             pass
 
-log_file = "transcription_debug.log"
-if not isinstance(sys.stdout, DualWriter):
-    sys.stdout = DualWriter(log_file, sys.stdout)
-if not isinstance(sys.stderr, DualWriter):
-    sys.stderr = DualWriter(log_file, sys.stderr)
+if not hasattr(sys, "_dual_writer_setup"):
+    log_file = "transcription_debug.log"
+    # Ensure we don't wrap if it's already a DualWriter (extra safety)
+    if not isinstance(sys.stdout, DualWriter):
+        sys.stdout = DualWriter(log_file, sys.stdout)
+    if not isinstance(sys.stderr, DualWriter):
+        sys.stderr = DualWriter(log_file, sys.stderr)
+    sys._dual_writer_setup = True
 
 def extract_audio(video_path, audio_path="temp/temp_audio.mp3"):
     """Extracts audio from a video file."""
@@ -85,6 +89,9 @@ def time_to_ms(time_str):
     """Converts SRT timestamp "HH:MM:SS,mmm" or "MM:SS,mmm" (or dot separated) to milliseconds."""
     try:
         time_str = time_str.replace('.', ',')
+        if time_str.count(':') == 3: # 處理像 01:02:03:500 的情況
+            last_colon = time_str.rfind(':')
+            time_str = time_str[:last_colon] + ',' + time_str[last_colon+1:]
         
         parts = time_str.split(':')
         if len(parts) == 3:
@@ -109,6 +116,7 @@ def time_to_ms(time_str):
         total_ms = (int(hours) * 3600000) + (int(minutes) * 60000) + (int(seconds_val) * 1000) + ms_int
         return total_ms
     except ValueError:
+        write_log(f"time_to_ms(): Invalid time string: {time_str}")
         return 0
 
 def ms_to_time(ms):
@@ -122,16 +130,24 @@ def ms_to_time(ms):
     return f"{hours:02d}:{minutes:02d}:{seconds:02d},{ms:03d}"
 
 def shift_srt_content(srt_content, offset_ms, counter_start=1):
-    # Regex modified to support optional HH, and permit both comma and dot for millis, or no millis
-    # Pattern: HH:MM:SS,mmm  OR MM:SS,mmm OR HH:MM:SS.mmm OR M:SS,mmm etc.
-    timestamp_pattern = re.compile(r'((?:\d{1,2}:)?\d{1,2}:\d{1,2}(?:[.,]\d{1,3})?)\s-->\s((?:\d{1,2}:)?\d{1,2}:\d{1,2}(?:[.,]\d{1,3})?)')
-    
+    if not srt_content:
+        write_log(f'No SRT content provided')
+        return None
+
+    # Define Pattern: HH:MM:SS,mmm --> HH:MM:SS,mmm (Optional Text)
+    # The regex now captures 3 groups: start_time, end_time, and SAME-LINE text (if any)
+    # Updated to support optional hours and [.,:] separator, aligning with organize_srt_format
+    timestamp_pattern = re.compile(r'((?:\d{1,2}:){1,2}\d{1,2}(?:[.,:]\d{1,3})?)\s-->\s((?:\d{1,2}:){1,2}\d{1,2}(?:[.,:]\d{1,3})?)(.*)')
+    # Find all matches
     matches = list(timestamp_pattern.finditer(srt_content))
+    write_log(f'shift_srt_content(): Found {len(matches)} matches in SRT content')
     valid_blocks = []
     
     for i, match in enumerate(matches):
         start_str = match.group(1)
         end_str = match.group(2)
+        inline_text = match.group(3).strip() # Capture text on the same line
+        
         start_ms = time_to_ms(start_str)
         end_ms = time_to_ms(end_str)
         
@@ -144,30 +160,45 @@ def shift_srt_content(srt_content, offset_ms, counter_start=1):
             
         raw_text = srt_content[content_start:content_end]
         
+        # If there was text on the same line as the timestamp, treat it as the first line of content
+        if inline_text:
+            write_log(f'shift_srt_content(): Inline text found in section {i+1}, inline_text: {inline_text}, raw_text: {raw_text}')
+            raw_text = "\n" + raw_text
+            write_log(f'shift_srt_content(): Inline text found in section {i+1}, modified raw text: {raw_text}')
+        
         # Process lines to remove indices and empty space
         lines = [l.strip() for l in raw_text.split('\n') if l.strip()]
         
         # Filter out the index of the next block if present (heuristic: last line is digit)
         if lines and lines[-1].isdigit():
+            write_log(f'shift_srt_content(): Section {i+1} removing index line: {lines[-1]}')
             lines.pop()
             
         # If no text remains, it was an empty/hallucinated block
         if not lines:
+            write_log(f'shift_srt_content(): No valid SRT content found in section {i+1}.')
             continue
             
         text_content = "\n".join(lines)
         
-        # Filter duplicate consecutive blocks (hallucination loop) where timestamps are identical
-        if valid_blocks:
-            last_start, last_end, _ = valid_blocks[-1]
-            pass
-
         # Apply shift
         new_start = ms_to_time(start_ms + offset_ms)
         new_end = ms_to_time(end_ms + offset_ms)
+
+        # Filter duplicate consecutive blocks (hallucination loop) where timestamps are identical
+        if valid_blocks:
+            last_start, last_end, _ = valid_blocks[-1]
+            
+            if new_start == last_start and new_end == last_end:
+                write_log(f'shift_srt_content(): bypass duplicate block: {start_str} - {end_str}')
+                continue
         
         valid_blocks.append((new_start, new_end, text_content))
         
+    if not valid_blocks:
+        write_log(f'shift_srt_content(): valid_blocks is empty. No valid blocks to return.')
+        return None, 0
+    
     # Reconstruct SRT
     output = []
     curr = counter_start
@@ -178,9 +209,11 @@ def shift_srt_content(srt_content, offset_ms, counter_start=1):
         output.append("")
         curr += 1
         
-    return "\n".join(output).strip(), curr - 1
-
-import numpy as np
+    if not output:
+        write_log("shift_srt_content(): output is empty. No valid output to return.")
+        return None, 0
+    else:
+        return "\n".join(output).strip(), curr - 1
 
 def find_split_point(audio_clip, target_time, search_window=15):
     try:
@@ -315,12 +348,92 @@ def split_audio(audio_path, chunk_duration_sec=config.CHUNK_DURATION_SEC, status
     audio.close()
     return chunks
 
-
-
-
 def write_log(message):
     """ Writes a message to the debug log with timestamp (via print + stdout redirection). """
     print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] {message}")
+
+def organize_srt_format(file_path):
+    """
+    Reads a temporary SRT file, standardizes its format, and re-writes it.
+    This function handles the 'Start Offset' header specially.
+    """
+    path = pathlib.Path(file_path)
+    if not path.exists():
+        return
+
+    try:
+        content = path.read_text(encoding="utf-8")
+        lines = content.splitlines()
+        
+        header = ""
+        body_lines = lines
+        
+        # Preserve Start Offset header
+        if lines and lines[0].startswith("Start Offset:"):
+            header = lines[0]
+            body_lines = lines[1:]
+        
+        raw_body = "\n".join(body_lines).strip()
+        
+        # Use (?:\d{1,2}:){1,2} to allow "MM:SS" or "HH:MM:SS"
+        # Use [.,:]\d{1,3} to allow dot, comma, or colon before milliseconds
+        timestamp_pattern = re.compile(
+            r'((?:\d{1,2}:){1,2}\d{1,2}(?:[.,:]\d{1,3})?)\s-->\s((?:\d{1,2}:){1,2}\d{1,2}(?:[.,:]\d{1,3})?)'
+        )
+        
+        matches = list(timestamp_pattern.finditer(raw_body))
+        
+        if not matches:
+            write_log(f"organize_srt_format(): No timestamps found in {file_path}, skipping organization.")
+            return
+
+        blocks = []
+        for i, match in enumerate(matches):
+            # Convert to milliseconds first, then back to HH:MM:SS,mmm format
+            start_time = ms_to_time(time_to_ms(match.group(1)))
+            end_time = ms_to_time(time_to_ms(match.group(2)))
+            
+            # Content is after this match and before the next match
+            start_idx = match.end()
+            if i < len(matches) - 1:
+                raw_segment = raw_body[start_idx:matches[i+1].start()]
+            else:
+                raw_segment = raw_body[start_idx:]
+                
+            # Clean the text segment
+            segment_lines = raw_segment.split('\n')
+            clean_lines = []
+            for line in segment_lines:
+                line = line.strip()
+                if not line: continue
+                if line.isdigit(): continue
+                # Exclude potential source markers or residual timestamps
+                if "-->" in line: continue 
+                clean_lines.append(line)
+            
+            text_content = "\n".join(clean_lines)
+            blocks.append((start_time, end_time, text_content))
+            
+        # Reconstruct file content
+        new_content_parts = []
+        if header:
+            new_content_parts.append(header)
+            new_content_parts.append("") # Empty line separate header
+            
+        for idx, (start, end, text) in enumerate(blocks, 1):
+            new_content_parts.append(str(idx))
+            new_content_parts.append(f"{start} --> {end}")
+            new_content_parts.append(text)
+            new_content_parts.append("") # Blank line
+            
+        final_content = "\n".join(new_content_parts).strip()
+        
+        # Ensure one newline at end? standardize to no newline at very end
+        path.write_text(final_content, encoding="utf-8")
+        write_log(f"Organized SRT format for {file_path}. Total blocks: {len(blocks)}")
+        
+    except Exception as e:
+        write_log(f"Error in organize_srt_format for {file_path}: {e}")
 
 def merge_srt_parts(new_chunks_info, status_callback=None):
     final_srt_path = pathlib.Path("temp/final_context.srt")
@@ -331,24 +444,39 @@ def merge_srt_parts(new_chunks_info, status_callback=None):
         chunk_stem = pathlib.Path(chunk_path).stem
         temp_srt_path = pathlib.Path(chunk_path).parent / f"{chunk_stem}.srt"
         
-        write_log(f"Merging chunk into context: {temp_srt_path}")
         if not temp_srt_path.exists():
             write_log(f"Error: Missing temp SRT file: {temp_srt_path}")
             continue
+        write_log(f"Merging chunk into context: {temp_srt_path}")
 
         try:
             # 1. Read the new chunk content
             content = temp_srt_path.read_text(encoding="utf-8")
-            
+            if not content.strip():
+                write_log(f"Warning: SRT file {temp_srt_path} is empty.")
+                continue
+
             # Parse Offset
             lines = content.split('\n')
             offset_ms = 0
             raw_body = content
             if lines and lines[0].startswith("Start Offset:"):
                 offset_str = lines[0].replace("Start Offset:", "").strip()
-                offset_ms = time_to_ms(offset_str)
+                try:
+                    offset_ms = time_to_ms(offset_str)
+                    write_log(f"  > Start Offset parsed: {offset_str} -> {offset_ms}ms")
+                except Exception as e:
+                    write_log(f"  > Error parsing offset '{offset_str}': {e}")
+
                 parts = content.split('\n\n', 1)
+                # Fallback logic to grab body if double newline isn't strictly there but offset line exists
                 raw_body = parts[1] if len(parts) > 1 else "\n".join(lines[2:]) if len(lines) > 2 else ""
+            else:
+                write_log(f"  > No 'Start Offset' found in header. Treating file as raw SRT.")
+
+            write_log(f"  > Raw body length: {len(raw_body)} chars. Preview: {raw_body[:50].replace(chr(10), ' ')}...")
+            if not raw_body.strip():
+                write_log(f"  > Warning: Raw body extracted is empty.")
 
             # 2. Determine starting counter
             current_counter = 1
@@ -365,7 +493,10 @@ def merge_srt_parts(new_chunks_info, status_callback=None):
                 if indices:
                     current_counter = int(indices[-1]) + 1
             
+            write_log(f"  > Current counter sequence starts at: {current_counter}")
+
             # 3. Process the new chunk (Shift & Renumber)
+            write_log(f"  > Shifting content with offset {offset_ms}ms...")
             part_srt, last_counter = shift_srt_content(raw_body, offset_ms, counter_start=current_counter)
             
             # 4. Write back
@@ -379,6 +510,10 @@ def merge_srt_parts(new_chunks_info, status_callback=None):
                 write_log(f"Updated {final_srt_path} with new chunk data. Last counter: {last_counter}")
             else:
                 write_log("Warning: No valid SRT content found in chunk to merge.")
+                if not raw_body: 
+                    write_log("  > Reason: Input raw_body was empty.")
+                else: 
+                    write_log("  > Reason: shift_srt_content returned None or empty string (regex match failed?).")
 
         except Exception as e:
             write_log(f"Failed to merge chunk {temp_srt_path}: {e}")
@@ -586,6 +721,9 @@ def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, 
                         
                     write_log(f"Saved temp SRT chunk to: {temp_srt_path}")
                     
+                    # Organize/Clean SRT format before merging
+                    organize_srt_format(temp_srt_path)
+
                     # === IMMEDIATE INCREMENTAL MERGE ===
                     # Call merge immediately with just this chunk
                     merge_srt_parts([chunk], status_callback=status_callback)

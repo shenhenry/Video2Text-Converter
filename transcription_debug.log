@@ -1,1828 +1,434 @@
-[2025-12-18 14:50:04] ------------------------------ NEW SESSION ------------------------------
-[2025-12-18 14:50:06] Processing File: temp_【建華愛閱趴】建華Podcast EP.37《詩魂》🎧💫  Podcast Episode 37- [ 詩魂 ] - 建華國中影音頻道｜CHJH Media Channel (youtube) (1).mp3
-[2025-12-18 14:50:06] Model: models/gemini-flash-latest
-[2025-12-18 14:50:07] Audio duration 593.19s > 60s. Splitting...
-Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
-Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
-Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
-Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
-Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
-Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
-Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
-Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
-Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
-Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
-[2025-12-18 14:50:34] Processing Part 1/11: temp_part0.mp3 (Offset: 0ms)
-Uploaded file 'temp_part0.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/mnziz0z9jxo4
+[2025-12-19 19:23:43] ------------------------------ NEW SESSION ------------------------------
+[2025-12-19 19:23:43] Processing File: temp_【建華愛閱趴】建華Podcast EP.37《詩魂》🎧💫  Podcast Episode 37- [ 詩魂 ] - 建華國中影音頻道｜CHJH Media Channel (youtube) (1).mp3
+[2025-12-19 19:23:43] Model: models/gemini-flash-latest
+[2025-12-19 19:23:44] Audio duration 593.19s > 120s. Splitting...
+Uploading search window to Gemini for split analysis...
+Uploading search window to Gemini for split analysis...
+Uploading search window to Gemini for split analysis...
+Uploading search window to Gemini for split analysis...
+[2025-12-19 19:24:50] Processing Part 1/5: temp_part0.mp3 (Offset: 0ms)
+Uploaded file 'temp_part0.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/3imrbjrrogu3
 Waiting for file processing...
 ...all files ready
-[2025-12-18 14:51:16] Generation Complete | Finish Reason: STOP
-[2025-12-18 14:51:16] Is Correction: No
-[2025-12-18 14:51:16] Tokens: Prompt=2564, Cand=402, Total=4550
-[2025-12-18 14:51:16] Raw Text Length: 505 chars
-[2025-12-18 14:51:16] --- Raw Response Preview ---
+[2025-12-19 19:25:11] Generation Complete | Finish Reason: STOP
+[2025-12-19 19:25:11] Is Correction: No
+[2025-12-19 19:25:11] Tokens: Prompt=5550, Cand=1136, Total=9984
+[2025-12-19 19:25:11] Raw Text Length: 1410 chars
+[2025-12-19 19:25:11] --- Raw Response Preview ---
 1
-00:08:290 --> 00:10:190
+00:08:390 --> 00:09:890
 That's Lisa and Reese.
 
 2
-00:10:190 --> 00:12:390
-歡迎來到建華愛樂趴。
+00:09:890 --> 00:12:390
+歡迎來到建華愛約趴。
 
 3
-00:28:390 --> 00:30:890
+00:28:200 --> 00:30:700
 各位聽眾朋友大家好,
 
 4
-00:30:890 --> 00:33:390
-歡迎收聽建華的愛樂趴。
+00:30:700 --> 00:33:300
+歡迎收聽建華的愛約趴。
 
 5
-00:33:390 --> 00:34:890
+00:33:300 --> 00:34:700
 我是紫橋老師。
 
 6
-00:34:890 --> 00:38:890
+00:34:700 --> 00:38:700
 今天和我一起的還有兩位802的同學。
 
 7
-00:39:190 --> 00:41:490
-我是玄府。我是黃柔匪。
-
-8
-00:42:190 --> 00:48:890
-今天我們要分享的班書是失魂,帶大家一起進入柳宗元的冒險世界。
-
-9
-00:48:890 --> 00:51:790
-探索失境,尋找魂器。
-
-10
-00:52:190 --> 00:53:890
-我們邀請到了兩位同學,
-
-11
-00:53:890 --> 00:57:890
-他們有非常多想和大家分享的內容。
-
-12
-00:58:190 --> 00:59:890
-那麼現在就讓我...
---- End Preview ---
-[2025-12-18 14:51:16] Saved temp SRT chunk to: temp/temp_part0.srt
-[2025-12-18 14:51:16] Merging chunk into context: temp/temp_part0.srt
-[2025-12-18 14:51:16] Warning: No valid SRT content found in chunk to merge.
-Waiting 0.1 second before processing next chunk...
-[2025-12-18 14:51:16] Processing Part 2/11: temp_part1.mp3 (Offset: 60000ms)
-Exception ignored in: <module 'threading' from '/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/threading.py'>
-Traceback (most recent call last):
-  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/threading.py", line 1448, in _shutdown
-    lock.acquire()
-  File "/Users/henryshen/Library/Python/3.9/lib/python/site-packages/streamlit/web/bootstrap.py", line 42, in signal_handler
-    server.stop()
-  File "/Users/henryshen/Library/Python/3.9/lib/python/site-packages/streamlit/web/server/server.py", line 510, in stop
-    self._runtime.stop()
-  File "/Users/henryshen/Library/Python/3.9/lib/python/site-packages/streamlit/runtime/runtime.py", line 329, in stop
-    async_objs.eventloop.call_soon_threadsafe(stop_on_eventloop)
-  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/asyncio/base_events.py", line 791, in call_soon_threadsafe
-    self._check_closed()
-  File "/Library/Developer/CommandLineTools/Library/Frameworks/Python3.framework/Versions/3.9/lib/python3.9/asyncio/base_events.py", line 510, in _check_closed
-    raise RuntimeError('Event loop is closed')
-RuntimeError: Event loop is closed
-[2025-12-18 18:49:15] ------------------------------ NEW SESSION ------------------------------
-[2025-12-18 18:49:15] Processing File: temp_【建華愛閱趴】建華Podcast EP.37《詩魂》🎧💫  Podcast Episode 37- [ 詩魂 ] - 建華國中影音頻道｜CHJH Media Channel (youtube) (1).mp3
-[2025-12-18 18:49:15] Model: models/gemini-flash-latest
-[2025-12-18 18:50:18] Audio duration 593.19s > 60s. Splitting...
-Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
-Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
-Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
-Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
-Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
-Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
-Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
-Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
-Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
-Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
-[2025-12-18 18:50:39] Processing Part 1/11: temp_part0.mp3 (Offset: 0ms)
-Uploaded file 'temp_part0.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/8xf0sy7dx8l4
-Waiting for file processing...
-...all files ready
-[2025-12-18 18:50:51] Generation Complete | Finish Reason: STOP
-[2025-12-18 18:50:51] Is Correction: No
-[2025-12-18 18:50:51] Tokens: Prompt=2564, Cand=402, Total=4056
-[2025-12-18 18:50:51] Raw Text Length: 505 chars
-[2025-12-18 18:50:51] --- Raw Response Preview ---
-1
-00:08:290 --> 00:09:900
-That's Lisa and Reese.
-
-2
-00:09:900 --> 00:12:300
-歡迎來到建華愛樂趴。
-
-3
-00:28:390 --> 00:30:890
-各位聽眾朋友大家好。
-
-4
-00:31:100 --> 00:33:200
-歡迎收聽建華的愛樂趴。
-
-5
-00:33:400 --> 00:34:800
-我是紫橋老師。
-
-6
-00:35:000 --> 00:38:600
-今天和我一起的還有兩位802的同學。
-
-7
-00:39:000 --> 00:41:300
-我是玄府。我是黃柔匪。
-
-8
-00:42:100 --> 00:48:700
-今天我們要分享的班書是失魂,帶大家一起進入柳宗元的冒險世界。
-
-9
-00:49:000 --> 00:51:600
-探索失境,尋找魂氣。
-
-10
-00:52:000 --> 00:54:000
-我們邀請到了兩位同學。
-
-11
-00:54:000 --> 00:57:800
-他們有非常多想和大家分享的內容。
-
-12
-00:58:000 --> 00:59:800
-那麼現在就讓我...
---- End Preview ---
-[2025-12-18 18:50:51] Saved temp SRT chunk to: temp/temp_part0.srt
-[2025-12-18 18:50:51] Merging chunk into context: temp/temp_part0.srt
-[2025-12-18 18:50:51] Warning: No valid SRT content found in chunk to merge.
-Waiting 0.1 second before processing next chunk...
-[2025-12-18 18:50:51] Processing Part 2/11: temp_part1.mp3 (Offset: 60000ms)
-Uploaded file 'temp_part1.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/jjppvp1ilbw4
-Waiting for file processing...
-...all files ready
-[2025-12-18 18:51:10] Generation Complete | Finish Reason: STOP
-[2025-12-18 18:51:10] Is Correction: No
-[2025-12-18 18:51:10] Tokens: Prompt=2564, Cand=461, Total=5345
-[2025-12-18 18:51:10] Raw Text Length: 572 chars
-[2025-12-18 18:51:10] --- Raw Response Preview ---
-1
-00:00:00,000 --> 00:00:900
-呢?
-
-2
-00:01:500 --> 00:06:500
-想要請同學想像一下自己也走進詩境,你們會有什麼感覺呢?
-
-3
-00:07:00,000 --> 00:12:00,000
-我的感受呢是希望可以體驗一下古人筆下的天地之美。
-
-4
-00:12:00,000 --> 00:14:500
-確實是我希望能夠有的體驗。
-
-5
-00:15:00,000 --> 00:19:500
-我想那可能是一場夢入師中不知歸處的旅程吧。
-
-6
-00:20:500 --> 00:26:500
-我感受到從所未有的畫面,並從中體會到詩人想傳達的情感。
-
-7
-00:29:500 --> 00:32:500
-哇,同學說的真的是非常有畫面感呢。
-
-8
-00:32:500 --> 00:38:500
-今天呢,讓我們邊聊書中的內容,一邊冒險,一邊分享自己對唐詩的感受。
-
-9
-00:41:500 --> 00:46:500
-我覺得詩不只是要背,而是去想像那首詩的畫面。
-
-10
-00:47:00,000 --> 00:54:500
-沒錯,不只是讀文字,腦中呢自己先想...
---- End Preview ---
-[2025-12-18 18:51:10] Saved temp SRT chunk to: temp/temp_part1.srt
-[2025-12-18 18:51:10] Merging chunk into context: temp/temp_part1.srt
-[2025-12-18 18:51:10] Updated temp/final_context.srt with new chunk data. Last counter: 6
-Waiting 0.1 second before processing next chunk...
-[2025-12-18 18:51:10] Processing Part 3/11: temp_part2.mp3 (Offset: 120000ms)
-Uploaded file 'temp_part2.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/57ook4yb14me
-Waiting for file processing...
-...all files ready
-[2025-12-18 18:51:27] Generation Complete | Finish Reason: STOP
-[2025-12-18 18:51:27] Is Correction: No
-[2025-12-18 18:51:27] Tokens: Prompt=2564, Cand=662, Total=5396
-[2025-12-18 18:51:27] Raw Text Length: 798 chars
-[2025-12-18 18:51:27] --- Raw Response Preview ---
-1
-00:00:00,870 --> 00:03:300
-我覺得是一種驚奇以及感動。
-
-2
-00:03:600 --> 00:07,000
-原本覺得唐詩它只是課本上的文字，
-
-3
-00:07,300 --> 00:10,900
-在書中呢,卻成了一個可以走進走出的世界。
-
-4
-00:11,300 --> 00:13,300
-有山水、有詩人、有情感。
-
-5
-00:13,600 --> 00:15,000
-詩句化作場景,
-
-6
-00:15,000 --> 00:16,500
-意境化作冒險。
-
-7
-00:16,900 --> 00:19,000
-覺得唐詩突然有了生命力,
-
-8
-00:19,300 --> 00:23,900
-不再只是背誦,而是能夠親身體驗的一場旅程。
-
-9
-00:24,400 --> 00:25,400
-我想到的是有趣,
-
-10
-00:25,700 --> 00:29,000
-因為它將唐詩融入奇幻冒險故事,
-
-11
-00:29,400 --> 00:32,800
-將讀者身歷其境地體驗詩境。
-
-12
-00:33,300 --> 00:34,300
-哇,真的太棒了!
-
-13
-00:...
---- End Preview ---
-[2025-12-18 18:51:27] Saved temp SRT chunk to: temp/temp_part2.srt
-[2025-12-18 18:51:27] Merging chunk into context: temp/temp_part2.srt
-[2025-12-18 18:51:27] Updated temp/final_context.srt with new chunk data. Last counter: 24
-Waiting 0.1 second before processing next chunk...
-[2025-12-18 18:51:27] Processing Part 4/11: temp_part3.mp3 (Offset: 180000ms)
-Uploaded file 'temp_part3.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/cx1g9a4go9kg
-Waiting for file processing...
-...all files ready
-[2025-12-18 18:51:40] Generation Complete | Finish Reason: STOP
-[2025-12-18 18:51:40] Is Correction: No
-[2025-12-18 18:51:40] Tokens: Prompt=2564, Cand=557, Total=4491
-[2025-12-18 18:51:40] Raw Text Length: 678 chars
-[2025-12-18 18:51:40] --- Raw Response Preview ---
-1
-00:00:00,800 --> 00:00:11,000
-會選勇氣，因為主角從一開始膽小，逃避困難，
-到成長成為一個能夠獨立面對挑戰的人。
-
-2
-00:00:11,500 --> 00:00:13,000
-同學們都說得很好。
-
-3
-00:00:13,000 --> 00:00:16,900
-其實我們面對困難的態度比什麼都還要重要。
-
-4
-00:00:17,100 --> 00:00:20,500
-那書中有提到柳宗元這個角色，你們喜歡嗎?
-
-5
-00:00:21,500 --> 00:00:24,000
-我相當喜歡柳宗元這個角色的塑造。
-
-6
-00:00:24,000 --> 00:00:32,000
-因為他從一開始的對詩不感興趣，在歷經考驗後呢，
-卻變得有勇敢以及有同理心。
-
-7
-00:00:32,000 --> 00:00:35,900
-他學會了請聽詩句中的情感，也學會了面對自己。
-
-8
-00:00:36,000 --> 00:00:42,000
-從這種不懂到理解的成長，就像許多人學詩的過程一樣，
-我覺得相當有趣。
-
-9
-00:00:42,800 --> 00:00:43,50...
---- End Preview ---
-[2025-12-18 18:51:40] Saved temp SRT chunk to: temp/temp_part3.srt
-[2025-12-18 18:51:40] Merging chunk into context: temp/temp_part3.srt
-[2025-12-18 18:51:40] Updated temp/final_context.srt with new chunk data. Last counter: 36
-Waiting 0.1 second before processing next chunk...
-[2025-12-18 18:51:40] Processing Part 5/11: temp_part4.mp3 (Offset: 240000ms)
-Uploaded file 'temp_part4.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/cxcv103nrb1c
-Waiting for file processing...
-...all files ready
-[2025-12-18 18:51:59] Generation Complete | Finish Reason: STOP
-[2025-12-18 18:51:59] Is Correction: No
-[2025-12-18 18:51:59] Tokens: Prompt=2564, Cand=704, Total=5309
-[2025-12-18 18:51:59] Raw Text Length: 844 chars
-[2025-12-18 18:51:59] --- Raw Response Preview ---
-1
-00:00:00,000 --> 00:00:01,500
-會有勇氣。
-
-2
-00:00:01,500 --> 00:00:05,500
-這個過程呢是非常值得我們學習的。
-
-3
-00:00:08,000 --> 00:00:14,500
-那如果你們今天是柳宗元的話,你們會最想挑戰他們書中提到哪一個詩境?
-
-4
-00:00:14,500 --> 00:00:15,500
-你覺得為什麼呢?
-
-5
-00:00:16,000 --> 00:00:17,500
-我會想要挑戰江雪。
-
-6
-00:00:17,500 --> 00:00:23,500
-因為那邊的林靜千山,孤州獨調的景色,我非常想要體驗看看。
-
-7
-00:00:24,000 --> 00:00:28,500
-如果能夠在那白雪皚皚中尋找師魂,
-
-8
-00:00:28,500 --> 00:00:31,000
-便是要學會如何與孤獨共處。
-
-9
-00:00:31,500 --> 00:00:34,500
-那樣的試煉,雖冷,但卻非常的純粹。
-
-10
-00:00:35,500 --> 00:00:37,000
-我想挑戰山水詩境。
-
-11
-00...
---- End Preview ---
-[2025-12-18 18:51:59] Saved temp SRT chunk to: temp/temp_part4.srt
-[2025-12-18 18:51:59] Merging chunk into context: temp/temp_part4.srt
-[2025-12-18 18:51:59] Updated temp/final_context.srt with new chunk data. Last counter: 53
-Waiting 0.1 second before processing next chunk...
-[2025-12-18 18:51:59] Processing Part 6/11: temp_part5.mp3 (Offset: 300000ms)
-Uploaded file 'temp_part5.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/21dq3f2y08cu
-Waiting for file processing...
-...all files ready
-[2025-12-18 18:52:20] Generation Complete | Finish Reason: STOP
-[2025-12-18 18:52:20] Is Correction: No
-[2025-12-18 18:52:20] Tokens: Prompt=2564, Cand=636, Total=5599
-[2025-12-18 18:52:20] Raw Text Length: 771 chars
-[2025-12-18 18:52:20] --- Raw Response Preview ---
-1
-00:00:00,740 --> 00:00:03,040
-應該是有一點難度的。
-
-2
-00:00:03,040 --> 00:00:06,940
-因為每一個魂器都在濕的意境中。
-
-3
-00:00:06,940 --> 00:00:10,940
-不只要破關,還要真正了解那一首詩的意思。
-
-4
-00:00:11,840 --> 00:00:16,540
-我會試著靜下心觀察生活中的細節,
-
-5
-00:00:16,540 --> 00:00:21,940
-從自然、生活或情感裡找出感動人的詩魂。
-
-6
-00:00:22,640 --> 00:00:26,640
-沒錯,其實尋找魂氣,老師也覺得非常的不容易。
-
-7
-00:00:26,640 --> 00:00:29,640
-需要我們多感受詩的想法。
-
-8
-00:00:30,340 --> 00:00:34,740
-那請問一下,你們覺得這本書中有感受,有改變了你們對唐詩的印象嗎?
-
-9
-00:00:35,540 --> 00:00:36,140
-有。
-
-10
-00:00:36,140 --> 00:00:39,940
-我現在覺得每一首詩呢,就像...
---- End Preview ---
-[2025-12-18 18:52:20] Saved temp SRT chunk to: temp/temp_part5.srt
-[2025-12-18 18:52:20] Merging chunk into context: temp/temp_part5.srt
-[2025-12-18 18:52:20] Updated temp/final_context.srt with new chunk data. Last counter: 68
-Waiting 0.1 second before processing next chunk...
-[2025-12-18 18:52:20] Processing Part 7/11: temp_part6.mp3 (Offset: 360000ms)
-Uploaded file 'temp_part6.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/4fn883wiekce
-Waiting for file processing...
-...all files ready
-[2025-12-18 18:52:41] Generation Complete | Finish Reason: STOP
-[2025-12-18 18:52:41] Is Correction: No
-[2025-12-18 18:52:41] Tokens: Prompt=2564, Cand=688, Total=5855
-[2025-12-18 18:52:41] Raw Text Length: 822 chars
-[2025-12-18 18:52:41] --- Raw Response Preview ---
-1
-00:00:00,000 --> 00:00:01,500
-奧妙與生命力。
-
-2
-00:00:02,000 --> 00:00:10,300
-太好了,也期待你們把這個心境呢,能運用在其他閱讀上,也可以多多來跟老師分享。
-
-3
-00:00:10,600 --> 00:00:13,600
-那我想請問你們認為的詩魂是什麼意思呢?
-
-4
-00:00:14,200 --> 00:00:18,500
-詩魂在這個中華文化裡面其實有很多的意思。
-
-5
-00:00:18,500 --> 00:00:22,500
-那我今天想要分享的是關於歷史文化的部分。
-
-6
-00:00:22,800 --> 00:00:23,500
-我舉例一下。
-
-7
-00:00:23,800 --> 00:00:27,800
-像是屈原,我可以稱他為楚辭之魂。
-
-8
-00:00:28,000 --> 00:00:33,500
-因為他用離騷寫出了想要守護國家的理想。
-
-9
-00:00:33,800 --> 00:00:36,500
-而李白肯定就是自由之魂了。
-
-10
-00:00:36,900 --> 00:00:39,800
-他筆下...
---- End Preview ---
-[2025-12-18 18:52:41] Saved temp SRT chunk to: temp/temp_part6.srt
-[2025-12-18 18:52:41] Merging chunk into context: temp/temp_part6.srt
-[2025-12-18 18:52:41] Updated temp/final_context.srt with new chunk data. Last counter: 84
-Waiting 0.1 second before processing next chunk...
-[2025-12-18 18:52:41] Processing Part 8/11: temp_part7.mp3 (Offset: 420000ms)
-Uploaded file 'temp_part7.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/4wdgzseb6l31
-Waiting for file processing...
-...all files ready
-[2025-12-18 18:53:05] Generation Complete | Finish Reason: STOP
-[2025-12-18 18:53:05] Is Correction: No
-[2025-12-18 18:53:05] Tokens: Prompt=2564, Cand=545, Total=6757
-[2025-12-18 18:53:05] Raw Text Length: 664 chars
-[2025-12-18 18:53:05] --- Raw Response Preview ---
-1
-00:00:00,000 --> 00:00:02,000
-魂氣或靈感呢？
-
-2
-00:02:500 --> 00:10:500
-呃，平常的話，自己尋找魂氣的話，
-我會帶上耳機，然後播播自己喜歡的音樂。
-
-3
-00:10:500 --> 00:18:000
-靈感呢，就像魂氣一樣，不是抓得越緊，
-就越能夠找到，而是當靜下心來時，
-它就會自己回來的。
-
-4
-00:19:500 --> 00:22:000
-我會寫日記或聽音樂，
-
-5
-00:22:000 --> 00:24:500
-把感覺轉化成文字，
-
-6
-00:24:500 --> 00:27:500
-重新找回創作和熱情。
-
-7
-00:28:000 --> 00:28:900
-非常好。
-
-8
-00:29:000 --> 00:36:000
-想請問兩位同學，你們讀完詩魂這本書，
-你會最想跟你們的好朋友推薦哪一部分？
-
-9
-00:36:000 --> 00:37:500
-為什麼呢？
-
-10
-00:38:000 --> 00:43:000
-我會想要推薦柳宗元他第一次進入詩境，
-發現詩魂的那一段。
-
-11
-00:43:000 --> 00:46...
---- End Preview ---
-[2025-12-18 18:53:05] Saved temp SRT chunk to: temp/temp_part7.srt
-[2025-12-18 18:53:05] Merging chunk into context: temp/temp_part7.srt
-[2025-12-18 18:53:05] Updated temp/final_context.srt with new chunk data. Last counter: 85
-Waiting 0.1 second before processing next chunk...
-[2025-12-18 18:53:05] Processing Part 9/11: temp_part8.mp3 (Offset: 480000ms)
-Uploaded file 'temp_part8.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/wjpckictcx6f
-Waiting for file processing...
-...all files ready
-[2025-12-18 18:53:17] Generation Complete | Finish Reason: STOP
-[2025-12-18 18:53:17] Is Correction: No
-[2025-12-18 18:53:17] Tokens: Prompt=2564, Cand=423, Total=4164
-[2025-12-18 18:53:17] Raw Text Length: 534 chars
-[2025-12-18 18:53:17] --- Raw Response Preview ---
-1
-00:00:00,000 --> 00:00:04,700
-努力在文字裡尋找回自己的信念與希望。
-
-2
-00:00:05,300 --> 0000:11,500
-那這本書有沒有讓你們對寫作啊,或是創作,或是詩有新的想法呢?
-
-3
-00:00:12,300 --> 00:00:23,000
-我開始了解到創作,它其實可以像是冒險一樣,自自句句皆有生命,可以將主,可以將讀者帶入其中,就是一個非常強的表現感。
-
-4
-00:00:23,700 --> 00:00:31,300
-我發現寫詩不一定要華麗的詞,而是要真實的表達心裡的感覺。
-
-5
-00:00:32,400 --> 00:00:38,000
-沒錯,今天呢,我們和兩位802同學一起走進了詩魂的世界。
-
-6
-00:00:38,200 --> 00:00:45,400
-其實讀書也不只是背文字,更重要的是用心去感受,去想像,去體驗每個畫面。
-
-7
-00:00:45,600 --> 00:00:56,900
-就像剛剛同學有提到的,當我們勇敢面對挑戰,投入自己的感受,甚至感受到那份高雅、寧靜、脫俗的氛圍時,詩魂就會出現。
-
-8
-00:00:57,...
---- End Preview ---
-[2025-12-18 18:53:17] Saved temp SRT chunk to: temp/temp_part8.srt
-[2025-12-18 18:53:17] Merging chunk into context: temp/temp_part8.srt
-[2025-12-18 18:53:17] Updated temp/final_context.srt with new chunk data. Last counter: 21
-Waiting 0.1 second before processing next chunk...
-[2025-12-18 18:53:17] Processing Part 10/11: temp_part9.mp3 (Offset: 540000ms)
-Uploaded file 'temp_part9.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/aqva2np3pf9h
-Waiting for file processing...
-...all files ready
-[2025-12-18 18:53:32] Generation Complete | Finish Reason: STOP
-[2025-12-18 18:53:32] Is Correction: No
-[2025-12-18 18:53:32] Tokens: Prompt=2264, Cand=529, Total=4458
-[2025-12-18 18:53:32] Raw Text Length: 639 chars
-[2025-12-18 18:53:32] --- Raw Response Preview ---
-1
-00:00:00,000 --> 00:00:01,400
-找到自己的詩魂,
-
-2
-00:00:01,400 --> 00:00:06,800
-把文字變成畫面,變成感受,
-開啟屬於自己的奇幻旅程。
-
-3
-00:00:07,200 --> 00:00:09,400
-感謝兩位同學的精彩分享。
-
-4
-00:00:09,700 --> 00:00:12,700
-今天的建華愛月趴就到這邊結束了。
-
-5
-00:00:13,000 --> 00:00:15,800
-我是紫橋老師。
+00:39:100 --> 00:40:100
 我是玄府。
 
-6
-00:00:16,200 --> 00:00:17,000
+8
+00:40:400 --> 00:41:400
 我是黃柔匪。
 
-7
-00:00:17,300 --> 00:00:19,400
-感謝大家,期待下次再見。
-
-8
-00:00:25,400 --> 00:00:27,900
-謝謝大家收聽今天的節目。
-
 9
-00:00:28,400 --> 00:00:36,200
-若您喜歡今天的內容,歡迎訂閱
-建華愛月趴頻道,並推薦給您身旁的親友。
+00:42:100 --> 00:45:300
+今天我們要分享的班書是師魂,
 
 10
-00:00:36,500 --> 00:00:39,400
-邀請大家給我們五星評論支持。
+00:45:300 --> 00:48:700
+帶大家一起進入柳宗元的冒險世界。
 
 11
-00:...
+00:48:700 --> 00:51:600
+探索師境,尋找魂氣。
+
+12
+00:51:900 --> 00:53:900
+我們邀請到了兩位同學,
+
+13
+00:53:900 --> 00:5...
 --- End Preview ---
-[2025-12-18 18:53:32] Saved temp SRT chunk to: temp/temp_part9.srt
-[2025-12-18 18:53:32] Merging chunk into context: temp/temp_part9.srt
-[2025-12-18 18:53:32] Updated temp/final_context.srt with new chunk data. Last counter: 34
+[2025-12-19 19:25:11] Saved temp SRT chunk to: temp/temp_part0.srt
+[2025-12-19 19:25:11] Organized SRT format for temp/temp_part0.srt. Total blocks: 31
+[2025-12-19 19:25:11] Merging chunk into context: temp/temp_part0.srt
+[2025-12-19 19:25:11]   > Start Offset parsed: 00:00:00,000 -> 0ms
+[2025-12-19 19:25:11]   > Raw body length: 1596 chars. Preview: 1 00:14:30,000 --> 00:10:29,000 That's Lisa and Re...
+[2025-12-19 19:25:11]   > Current counter sequence starts at: 1
+[2025-12-19 19:25:11]   > Shifting content with offset 0ms...
+[2025-12-19 19:25:11] shift_srt_content(): Found 31 matches in SRT content
+[2025-12-19 19:25:11] shift_srt_content(): Section 1 removing index line: 2
+[2025-12-19 19:25:11] shift_srt_content(): Section 2 removing index line: 3
+[2025-12-19 19:25:11] shift_srt_content(): Section 3 removing index line: 4
+[2025-12-19 19:25:11] shift_srt_content(): Section 4 removing index line: 5
+[2025-12-19 19:25:11] shift_srt_content(): Section 5 removing index line: 6
+[2025-12-19 19:25:11] shift_srt_content(): Section 6 removing index line: 7
+[2025-12-19 19:25:11] shift_srt_content(): Section 7 removing index line: 8
+[2025-12-19 19:25:11] shift_srt_content(): Section 8 removing index line: 9
+[2025-12-19 19:25:11] shift_srt_content(): Section 9 removing index line: 10
+[2025-12-19 19:25:11] shift_srt_content(): Section 10 removing index line: 11
+[2025-12-19 19:25:11] shift_srt_content(): Section 11 removing index line: 12
+[2025-12-19 19:25:11] shift_srt_content(): Section 12 removing index line: 13
+[2025-12-19 19:25:11] shift_srt_content(): Section 13 removing index line: 14
+[2025-12-19 19:25:11] shift_srt_content(): Section 14 removing index line: 15
+[2025-12-19 19:25:11] shift_srt_content(): Section 15 removing index line: 16
+[2025-12-19 19:25:11] shift_srt_content(): Section 16 removing index line: 17
+[2025-12-19 19:25:11] shift_srt_content(): Section 17 removing index line: 18
+[2025-12-19 19:25:11] shift_srt_content(): Section 18 removing index line: 19
+[2025-12-19 19:25:11] shift_srt_content(): Section 19 removing index line: 20
+[2025-12-19 19:25:11] shift_srt_content(): Section 20 removing index line: 21
+[2025-12-19 19:25:11] shift_srt_content(): Section 21 removing index line: 22
+[2025-12-19 19:25:11] shift_srt_content(): Section 22 removing index line: 23
+[2025-12-19 19:25:11] shift_srt_content(): Section 23 removing index line: 24
+[2025-12-19 19:25:11] shift_srt_content(): Section 24 removing index line: 25
+[2025-12-19 19:25:11] shift_srt_content(): Section 25 removing index line: 26
+[2025-12-19 19:25:11] shift_srt_content(): Section 26 removing index line: 27
+[2025-12-19 19:25:11] shift_srt_content(): Section 27 removing index line: 28
+[2025-12-19 19:25:11] shift_srt_content(): Section 28 removing index line: 29
+[2025-12-19 19:25:11] shift_srt_content(): Section 29 removing index line: 30
+[2025-12-19 19:25:11] shift_srt_content(): Section 30 removing index line: 31
+[2025-12-19 19:25:11] Updated temp/final_context.srt with new chunk data. Last counter: 31
 Waiting 0.1 second before processing next chunk...
-[2025-12-18 18:53:32] Processing Part 11/11: temp_part10.mp3 (Offset: 590595ms)
-Uploaded file 'temp_part10.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/b0vmlzsdjhtc
+[2025-12-19 19:25:11] Processing Part 2/5: temp_part1.mp3 (Offset: 142900ms)
+Uploaded file 'temp_part1.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/987rubzloe1m
 Waiting for file processing...
 ...all files ready
-[2025-12-18 18:53:42] Generation Complete | Finish Reason: STOP
-[2025-12-18 18:53:42] Is Correction: No
-[2025-12-18 18:53:42] Tokens: Prompt=728, Cand=34, Total=1108
-[2025-12-18 18:53:42] Raw Text Length: 37 chars
-[2025-12-18 18:53:42] --- Raw Response Preview ---
+[2025-12-19 19:25:39] Generation Complete | Finish Reason: STOP
+[2025-12-19 19:25:39] Is Correction: No
+[2025-12-19 19:25:39] Tokens: Prompt=5281, Cand=1681, Total=11572
+[2025-12-19 19:25:39] Raw Text Length: 1989 chars
+[2025-12-19 19:25:39] --- Raw Response Preview ---
 1
-00:00:00,000 --> 00:00:02,000
-[喧鬧聲]...
---- End Preview ---
-[2025-12-18 18:53:42] Saved temp SRT chunk to: temp/temp_part10.srt
-[2025-12-18 18:53:42] Merging chunk into context: temp/temp_part10.srt
-[2025-12-18 18:53:42] Updated temp/final_context.srt with new chunk data. Last counter: 35
-[2025-12-18 18:53:42] Transcription process finished successfully.
-[2025-12-18 19:09:37] ------------------------------ NEW SESSION ------------------------------[2025-12-18 19:09:37] ------------------------------ NEW SESSION ------------------------------
-
-[2025-12-18 19:09:37] Processing File: temp_【建華愛閱趴】建華Podcast EP.37《詩魂》🎧💫  Podcast Episode 37- [ 詩魂 ] - 建華國中影音頻道｜CHJH Media Channel (youtube) (1).mp3[2025-12-18 19:09:37] Processing File: temp_【建華愛閱趴】建華Podcast EP.37《詩魂》🎧💫  Podcast Episode 37- [ 詩魂 ] - 建華國中影音頻道｜CHJH Media Channel (youtube) (1).mp3
-
-[2025-12-18 19:09:37] Model: models/gemini-flash-latest[2025-12-18 19:09:37] Model: models/gemini-flash-latest
-
-[2025-12-18 19:09:38] Audio duration 593.19s > 60s. Splitting...[2025-12-18 19:09:38] Audio duration 593.19s > 60s. Splitting...
-
-Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
-
-Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
-
-Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
-
-Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
-
-Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
-
-Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
-
-Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
-
-Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
-
-Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
-
-Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
-
-[2025-12-18 19:10:04] Processing Part 1/11: temp_part0.mp3 (Offset: 0ms)[2025-12-18 19:10:04] Processing Part 1/11: temp_part0.mp3 (Offset: 0ms)
-
-Uploaded file 'temp_part0.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/zipx5rf00jw7Uploaded file 'temp_part0.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/zipx5rf00jw7
-
-Waiting for file processing...Waiting for file processing...
-
-...all files ready...all files ready
-
-[2025-12-18 19:10:20] Generation Complete | Finish Reason: STOP[2025-12-18 19:10:20] Generation Complete | Finish Reason: STOP
-
-[2025-12-18 19:10:20] Is Correction: No[2025-12-18 19:10:20] Is Correction: No
-
-[2025-12-18 19:10:20] Tokens: Prompt=2754, Cand=403, Total=4211[2025-12-18 19:10:20] Tokens: Prompt=2754, Cand=403, Total=4211
-
-[2025-12-18 19:10:20] Raw Text Length: 506 chars[2025-12-18 19:10:20] Raw Text Length: 506 chars
-
-[2025-12-18 19:10:20] --- Raw Response Preview ---
-1
-00:08,340 --> 00:09,840
-That's Lisa and Reese.
+00:00:00,800 --> 00:00:07,000
+我想到的是有趣，因為他將唐詩融入奇幻冒險故事，
 
 2
-00:09,840 --> 00:12,540
-歡迎來到建華愛樂趴。
-
-3
-00:28,340 --> 00:30,840
-各位聽眾朋友大家好。
-
-4
-00:30,840 --> 00:33,340
-歡迎收聽建華的愛樂趴。
-
-5
-00:33,340 --> 00:34,840
-我是紫橋老師。
-
-6
-00:34,840 --> 00:38,540
-今天和我一起的還有兩位802的同學。
-
-7
-00:38,940 --> 00:41,440
-我是玄府。我是黃柔斐。
-
-8
-00:42,140 --> 00:45,340
-今天我們要分享的班書是失魂。
-
-9
-00:45,340 --> 00:48,740
-帶大家一起進入柳宗元的冒險世界。
-
-10
-00:48,740 --> 00:51,540
-探索詩境,尋找魂氣。
-
-11
-00:52,040 --> 00:57,540
-我們邀請到了兩位同學,他們有非常多想和大家分享的內容。
-
-12
-00:57,540 --> 00:59,740
-那麼,現在就讓...
---- End Preview ---[2025-12-18 19:10:20] --- Raw Response Preview ---
-1
-00:08,340 --> 00:09,840
-That's Lisa and Reese.
-
-2
-00:09,840 --> 00:12,540
-歡迎來到建華愛樂趴。
-
-3
-00:28,340 --> 00:30,840
-各位聽眾朋友大家好。
-
-4
-00:30,840 --> 00:33,340
-歡迎收聽建華的愛樂趴。
-
-5
-00:33,340 --> 00:34,840
-我是紫橋老師。
-
-6
-00:34,840 --> 00:38,540
-今天和我一起的還有兩位802的同學。
-
-7
-00:38,940 --> 00:41,440
-我是玄府。我是黃柔斐。
-
-8
-00:42,140 --> 00:45,340
-今天我們要分享的班書是失魂。
-
-9
-00:45,340 --> 00:48,740
-帶大家一起進入柳宗元的冒險世界。
-
-10
-00:48,740 --> 00:51,540
-探索詩境,尋找魂氣。
-
-11
-00:52,040 --> 00:57,540
-我們邀請到了兩位同學,他們有非常多想和大家分享的內容。
-
-12
-00:57,540 --> 00:59,740
-那麼,現在就讓...
---- End Preview ---
-
-[2025-12-18 19:10:20] Saved temp SRT chunk to: temp/temp_part0.srt[2025-12-18 19:10:20] Saved temp SRT chunk to: temp/temp_part0.srt
-
-[2025-12-18 19:10:20] Merging chunk into context: temp/temp_part0.srt[2025-12-18 19:10:20] Merging chunk into context: temp/temp_part0.srt
-
-[2025-12-18 19:10:20] Updated temp/final_context.srt with new chunk data. Last counter: 12[2025-12-18 19:10:20] Updated temp/final_context.srt with new chunk data. Last counter: 12
-
-Waiting 0.1 second before processing next chunk...Waiting 0.1 second before processing next chunk...
-
-[2025-12-18 19:10:20] Processing Part 2/11: temp_part1.mp3 (Offset: 60000ms)[2025-12-18 19:10:20] Processing Part 2/11: temp_part1.mp3 (Offset: 60000ms)
-
-Uploaded file 'temp_part1.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/jhu94tz7r1vzUploaded file 'temp_part1.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/jhu94tz7r1vz
-
-Waiting for file processing...Waiting for file processing...
-
-...all files ready...all files ready
-
-[2025-12-18 19:10:34] Generation Complete | Finish Reason: STOP[2025-12-18 19:10:34] Generation Complete | Finish Reason: STOP
-
-[2025-12-18 19:10:34] Is Correction: No[2025-12-18 19:10:34] Is Correction: No
-
-[2025-12-18 19:10:34] Tokens: Prompt=2754, Cand=479, Total=4834[2025-12-18 19:10:34] Tokens: Prompt=2754, Cand=479, Total=4834
-
-[2025-12-18 19:10:34] Raw Text Length: 585 chars[2025-12-18 19:10:34] Raw Text Length: 585 chars
-
-[2025-12-18 19:10:34] --- Raw Response Preview ---
-1
-00:00:00,707 --> 00:00:04,877
-想要請同學想像一下自己也走進詩境,
-你們會有什麼感覺呢?
-
-2
-00:00:05,877 --> 00:00:13,677
-我的感受呢是希望可以體驗一下古人筆下的天地之美,
-確實是我希望能夠有體驗。
-
-3
-00:00:13,677 --> 00:00:17,897
-我想那可能是一場夢入詩中,不知歸處的旅程吧。
-
-4
-00:00:19,007 --> 00:00:23,507
-我感受到從所未有的畫面,
-領從中體會到詩人想傳達的情感。
-
-5
-00:00:26,007 --> 00:00:29,807
-哇,同學說的真的是非常有畫面感了。
-
-6
-00:00:29,807 --> 00:00:36,707
-今天呢,讓我們邊聊書中的內容,一邊冒險,
-一邊分享自己對唐詩的感受。
-
-7
-00:00:39,007 --> 00:00:43,407
-我覺得詩不只是要背,而是去想像那首詩的畫面。
-
-8
-00:00:43,707 --> 00:00:44,707
-沒錯。
-
-9
-00:00:44,707 --> 00:00:51,707
-不只是讀文...
---- End Preview ---[2025-12-18 19:10:34] --- Raw Response Preview ---
-1
-00:00:00,707 --> 00:00:04,877
-想要請同學想像一下自己也走進詩境,
-你們會有什麼感覺呢?
-
-2
-00:00:05,877 --> 00:00:13,677
-我的感受呢是希望可以體驗一下古人筆下的天地之美,
-確實是我希望能夠有體驗。
-
-3
-00:00:13,677 --> 00:00:17,897
-我想那可能是一場夢入詩中,不知歸處的旅程吧。
-
-4
-00:00:19,007 --> 00:00:23,507
-我感受到從所未有的畫面,
-領從中體會到詩人想傳達的情感。
-
-5
-00:00:26,007 --> 00:00:29,807
-哇,同學說的真的是非常有畫面感了。
-
-6
-00:00:29,807 --> 00:00:36,707
-今天呢,讓我們邊聊書中的內容,一邊冒險,
-一邊分享自己對唐詩的感受。
-
-7
-00:00:39,007 --> 00:00:43,407
-我覺得詩不只是要背,而是去想像那首詩的畫面。
-
-8
-00:00:43,707 --> 00:00:44,707
-沒錯。
-
-9
-00:00:44,707 --> 00:00:51,707
-不只是讀文...
---- End Preview ---
-
-[2025-12-18 19:10:34] Saved temp SRT chunk to: temp/temp_part1.srt[2025-12-18 19:10:34] Saved temp SRT chunk to: temp/temp_part1.srt
-
-[2025-12-18 19:10:34] Merging chunk into context: temp/temp_part1.srt[2025-12-18 19:10:34] Merging chunk into context: temp/temp_part1.srt
-
-[2025-12-18 19:10:34] Updated temp/final_context.srt with new chunk data. Last counter: 22[2025-12-18 19:10:34] Updated temp/final_context.srt with new chunk data. Last counter: 22
-
-Waiting 0.1 second before processing next chunk...Waiting 0.1 second before processing next chunk...
-
-[2025-12-18 19:10:34] Processing Part 3/11: temp_part2.mp3 (Offset: 120000ms)[2025-12-18 19:10:34] Processing Part 3/11: temp_part2.mp3 (Offset: 120000ms)
-
-Uploaded file 'temp_part2.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/oe9590mco2a7Uploaded file 'temp_part2.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/oe9590mco2a7
-
-Waiting for file processing...Waiting for file processing...
-
-...all files ready...all files ready
-
-[2025-12-18 19:10:48] Generation Complete | Finish Reason: STOP[2025-12-18 19:10:48] Generation Complete | Finish Reason: STOP
-
-[2025-12-18 19:10:48] Is Correction: No[2025-12-18 19:10:48] Is Correction: No
-
-[2025-12-18 19:10:48] Tokens: Prompt=2754, Cand=740, Total=5537[2025-12-18 19:10:48] Tokens: Prompt=2754, Cand=740, Total=5537
-
-[2025-12-18 19:10:48] Raw Text Length: 872 chars[2025-12-18 19:10:48] Raw Text Length: 872 chars
-
-[2025-12-18 19:10:48] --- Raw Response Preview ---
-1
-00:00:00,808 --> 00:00:04,008
-我覺得是一種驚奇以及感動。
-
-2
-00:00:04,008 --> 00:00:07,458
-原本覺得唐詩它只是課本上的文字，
-
-3
-00:00:07,458 --> 00:00:11,508
-在書中呢卻成了一個可以走進走出的世界，
-
-4
-00:00:11,508 --> 00:00:13,978
-有山水、有詩人、有情感。
-
-5
-00:00:14,248 --> 00:00:17,248
-詩句化作場景，意境化作冒險，
-
-6
-00:00:17,248 --> 00:00:19,648
-覺得唐詩突然有了生命力，
-
-7
-00:00:19,648 --> 00:00:24,378
-不再只是背誦，而是能夠親身體驗的一場旅程。
-
-8
-00:00:25,008 --> 00:00:26,798
-我想到的是有趣，
-
-9
-00:00:26,798 --> 00:00:30,448
-因為它將唐詩融入奇幻冒險故事，
-
-10
-00:00:30,448 --> 00:00:33,488
+00:00:07,000 --> 00:00:09,500
 將讀者身歷其境地體驗詩境。
 
-11
-00:00:34,008 ...
---- End Preview ---[2025-12-18 19:10:48] --- Raw Response Preview ---
-1
-00:00:00,808 --> 00:00:04,008
-我覺得是一種驚奇以及感動。
-
-2
-00:00:04,008 --> 00:00:07,458
-原本覺得唐詩它只是課本上的文字，
-
 3
-00:00:07,458 --> 00:00:11,508
-在書中呢卻成了一個可以走進走出的世界，
+00:00:09,800 --> 00:00:11,000
+哇，真的太棒了，
 
 4
-00:00:11,508 --> 00:00:13,978
-有山水、有詩人、有情感。
+00:00:11,000 --> 00:00:15,000
+讀完後真的能跟身體、靈魂踏上一段感動的旅程。
 
 5
-00:00:14,248 --> 00:00:17,248
-詩句化作場景，意境化作冒險，
+00:00:15,300 --> 00:00:18,000
+如果要用一個形容詞形容這本書，
 
 6
-00:00:17,248 --> 00:00:19,648
-覺得唐詩突然有了生命力，
+00:00:18,000 --> 00:01:19,000
+你們會選什麼呢?
 
 7
-00:00:19,648 --> 00:00:24,378
-不再只是背誦，而是能夠親身體驗的一場旅程。
+00:00:19,700 --> 00:00:21,000
+我會選靈動這個詞，
 
 8
-00:00:25,008 --> 00:00:26,798
-我想到的是有趣，
+00:00:21,000 --> 00:00:24,800
+因為整本書它就是有一種詩意以及靈氣的感覺。
 
 9
-00:00:26,798 --> 00:00:30,448
-因為它將唐詩融入奇幻冒險故事，
+00:00:24,800 --> 00:00:27,000
+例如主角柳宗元的冒險，
 
 10
-00:00:30,448 --> 00:00:33,488
-將讀者身歷其境地體驗詩境。
+00:00:27,000 --> 00:00:29,500
+就如同詩魂真的在其中穿梭一般。
 
 11
-00:00:34,008 ...
+00:00:30,30...
 --- End Preview ---
-
-[2025-12-18 19:10:48] Saved temp SRT chunk to: temp/temp_part2.srt[2025-12-18 19:10:48] Saved temp SRT chunk to: temp/temp_part2.srt
-
-[2025-12-18 19:10:48] Merging chunk into context: temp/temp_part2.srt[2025-12-18 19:10:48] Merging chunk into context: temp/temp_part2.srt
-
-[2025-12-18 19:10:48] Updated temp/final_context.srt with new chunk data. Last counter: 40[2025-12-18 19:10:48] Updated temp/final_context.srt with new chunk data. Last counter: 40
-
-Waiting 0.1 second before processing next chunk...Waiting 0.1 second before processing next chunk...
-
-[2025-12-18 19:10:49] Processing Part 4/11: temp_part3.mp3 (Offset: 180000ms)[2025-12-18 19:10:49] Processing Part 4/11: temp_part3.mp3 (Offset: 180000ms)
-
-Uploaded file 'temp_part3.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/m056h83kr7fkUploaded file 'temp_part3.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/m056h83kr7fk
-
-Waiting for file processing...Waiting for file processing...
-
-...all files ready...all files ready
-
-[2025-12-18 19:11:04] Generation Complete | Finish Reason: STOP[2025-12-18 19:11:04] Generation Complete | Finish Reason: STOP
-
-[2025-12-18 19:11:04] Is Correction: No[2025-12-18 19:11:04] Is Correction: No
-
-[2025-12-18 19:11:04] Tokens: Prompt=2754, Cand=589, Total=5404[2025-12-18 19:11:04] Tokens: Prompt=2754, Cand=589, Total=5404
-
-[2025-12-18 19:11:04] Raw Text Length: 714 chars[2025-12-18 19:11:04] Raw Text Length: 714 chars
-
-[2025-12-18 19:11:04] --- Raw Response Preview ---
+[2025-12-19 19:25:39] Saved temp SRT chunk to: temp/temp_part1.srt
+[2025-12-19 19:25:39] Organized SRT format for temp/temp_part1.srt. Total blocks: 41
+[2025-12-19 19:25:39] Merging chunk into context: temp/temp_part1.srt
+[2025-12-19 19:25:39]   > Start Offset parsed: 00:02:22,900 -> 142900ms
+[2025-12-19 19:25:39]   > Raw body length: 1989 chars. Preview: 1 00:00:00,800 --> 00:00:07,000 我想到的是有趣，因為他將唐詩融入奇幻...
+[2025-12-19 19:25:39]   > Current counter sequence starts at: 32
+[2025-12-19 19:25:39]   > Shifting content with offset 142900ms...
+[2025-12-19 19:25:39] shift_srt_content(): Found 41 matches in SRT content
+[2025-12-19 19:25:39] shift_srt_content(): Section 1 removing index line: 2
+[2025-12-19 19:25:39] shift_srt_content(): Section 2 removing index line: 3
+[2025-12-19 19:25:39] shift_srt_content(): Section 3 removing index line: 4
+[2025-12-19 19:25:39] shift_srt_content(): Section 4 removing index line: 5
+[2025-12-19 19:25:39] shift_srt_content(): Section 5 removing index line: 6
+[2025-12-19 19:25:39] shift_srt_content(): Section 6 removing index line: 7
+[2025-12-19 19:25:39] shift_srt_content(): Section 7 removing index line: 8
+[2025-12-19 19:25:39] shift_srt_content(): Section 8 removing index line: 9
+[2025-12-19 19:25:39] shift_srt_content(): Section 9 removing index line: 10
+[2025-12-19 19:25:39] shift_srt_content(): Section 10 removing index line: 11
+[2025-12-19 19:25:39] shift_srt_content(): Section 11 removing index line: 12
+[2025-12-19 19:25:39] shift_srt_content(): Section 12 removing index line: 13
+[2025-12-19 19:25:39] shift_srt_content(): Section 13 removing index line: 14
+[2025-12-19 19:25:39] shift_srt_content(): Section 14 removing index line: 15
+[2025-12-19 19:25:39] shift_srt_content(): Section 15 removing index line: 16
+[2025-12-19 19:25:39] shift_srt_content(): Section 16 removing index line: 17
+[2025-12-19 19:25:39] shift_srt_content(): Section 17 removing index line: 18
+[2025-12-19 19:25:39] shift_srt_content(): Section 18 removing index line: 19
+[2025-12-19 19:25:39] shift_srt_content(): Section 19 removing index line: 20
+[2025-12-19 19:25:39] shift_srt_content(): Section 20 removing index line: 21
+[2025-12-19 19:25:39] shift_srt_content(): Section 21 removing index line: 22
+[2025-12-19 19:25:39] shift_srt_content(): Section 22 removing index line: 23
+[2025-12-19 19:25:40] shift_srt_content(): Section 23 removing index line: 24
+[2025-12-19 19:25:40] shift_srt_content(): Section 24 removing index line: 25
+[2025-12-19 19:25:40] shift_srt_content(): Section 25 removing index line: 26
+[2025-12-19 19:25:40] shift_srt_content(): Section 26 removing index line: 27
+[2025-12-19 19:25:40] shift_srt_content(): Section 27 removing index line: 28
+[2025-12-19 19:25:40] shift_srt_content(): Section 28 removing index line: 29
+[2025-12-19 19:25:40] shift_srt_content(): Section 29 removing index line: 30
+[2025-12-19 19:25:40] shift_srt_content(): Section 30 removing index line: 31
+[2025-12-19 19:25:40] shift_srt_content(): Section 31 removing index line: 32
+[2025-12-19 19:25:40] shift_srt_content(): Section 32 removing index line: 33
+[2025-12-19 19:25:40] shift_srt_content(): Section 33 removing index line: 34
+[2025-12-19 19:25:40] shift_srt_content(): Section 34 removing index line: 35
+[2025-12-19 19:25:40] shift_srt_content(): Section 35 removing index line: 36
+[2025-12-19 19:25:40] shift_srt_content(): Section 36 removing index line: 37
+[2025-12-19 19:25:40] shift_srt_content(): Section 37 removing index line: 38
+[2025-12-19 19:25:40] shift_srt_content(): Section 38 removing index line: 39
+[2025-12-19 19:25:40] shift_srt_content(): Section 39 removing index line: 40
+[2025-12-19 19:25:40] shift_srt_content(): Section 40 removing index line: 41
+[2025-12-19 19:25:40] Updated temp/final_context.srt with new chunk data. Last counter: 72
+Waiting 0.1 second before processing next chunk...
+[2025-12-19 19:25:40] Processing Part 3/5: temp_part2.mp3 (Offset: 277400ms)
+Uploaded file 'temp_part2.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/38zvv5denof4
+Waiting for file processing...
+...all files ready
+[2025-12-19 19:26:03] Generation Complete | Finish Reason: STOP
+[2025-12-19 19:26:03] Is Correction: No
+[2025-12-19 19:26:03] Tokens: Prompt=5344, Cand=1512, Total=10314
+[2025-12-19 19:26:03] Raw Text Length: 1825 chars
+[2025-12-19 19:26:03] --- Raw Response Preview ---
 1
-00:00:00,000 --> 00:00:01,200
-會選勇氣,
+00:00:00,700 --> 00:00:05,000 透過大自然的景色,表達自己的情感和思考。
 
 2
-00:00:01,200 --> 00:00:10,000
-因為主角從一開始膽小,逃避困難,
-到成長成為一個能夠獨立面對挑戰的人。
-
+00:00:05,000 --> 00:00:09,000 哇,剛剛聽到恩福同學這樣講,我覺得老師好像真的能感受到
 3
-00:00:10,700 --> 00:00:12,100
-同學們都說得很好。
+00:00:09,000 --> 00:00:12,500 孤舟千山的景色,也非常想要一起體驗看看呢。
 
 4
-00:00:12,100 --> 00:00:15,900
-其實我們面對困難的態度比什麼都還要重要。
-
+00:00:12,500 --> 00:00:16,500 那書中呢,其實一直提到魂氣,你們覺得找魂氣難不難?
 5
-00:00:16,100 --> 00:00:20,300
-那書中有提到柳宗元這個角色,你們喜歡嗎?
+00:00:16,500 --> 00:00:18,500 你會想要怎麼做呢?
 
 6
-00:00:21,300 --> 00:00:24,300
-我相當喜歡柳宗元這個角色的塑造。
-
+00:00:19,000 --> 00:00:21,000 應該是有一點難度的,
 7
-00:00:24,300 --> 00:00:32,000
-因為他從一開始的對詩不感興趣,在歷經考驗後呢,
-卻變得有情感以及有同理心。
-
+00:00:21,000 --> 00:00:23,500 因為每一個魂氣都在詩的意境中,
 8
-00:00:32,000 --> 00:00:36,300
-他學會了請聽詩句中的情感,也學會了面對自己。
+00:00:23,500 --> 00:00:27,500 不只要破關,還要真正了解那一首詩的意思。
 
 9
-00:00:36,600 --> 00:00:42,600
-從這種不懂到理解的成長,就像許多人學詩的過程一樣,
-我覺得相當有...
---- End Preview ---[2025-12-18 19:11:04] --- Raw Response Preview ---
-1
-00:00:00,000 --> 00:00:01,200
-會選勇氣,
-
-2
-00:00:01,200 --> 00:00:10,000
-因為主角從一開始膽小,逃避困難,
-到成長成為一個能夠獨立面對挑戰的人。
-
-3
-00:00:10,700 --> 00:00:12,100
-同學們都說得很好。
-
-4
-00:00:12,100 --> 00:00:15,900
-其實我們面對困難的態度比什麼都還要重要。
-
-5
-00:00:16,100 --> 00:00:20,300
-那書中有提到柳宗元這個角色,你們喜歡嗎?
-
-6
-00:00:21,300 --> 00:00:24,300
-我相當喜歡柳宗元這個角色的塑造。
-
-7
-00:00:24,300 --> 00:00:32,000
-因為他從一開始的對詩不感興趣,在歷經考驗後呢,
-卻變得有情感以及有同理心。
-
-8
-00:00:32,000 --> 00:00:36,300
-他學會了請聽詩句中的情感,也學會了面對自己。
-
-9
-00:00:36,600 --> 00:00:42,600
-從這種不懂到理解的成長,就像許多人學詩的過程一樣,
-我覺得相當有...
---- End Preview ---
-
-[2025-12-18 19:11:04] Saved temp SRT chunk to: temp/temp_part3.srt[2025-12-18 19:11:04] Saved temp SRT chunk to: temp/temp_part3.srt
-
-[2025-12-18 19:11:04] Merging chunk into context: temp/temp_part3.srt[2025-12-18 19:11:04] Merging chunk into context: temp/temp_part3.srt
-
-[2025-12-18 19:11:04] Updated temp/final_context.srt with new chunk data. Last counter: 53[2025-12-18 19:11:04] Updated temp/final_context.srt with new chunk data. Last counter: 53
-
-Waiting 0.1 second before processing next chunk...Waiting 0.1 second before processing next chunk...
-
-[2025-12-18 19:11:04] Processing Part 5/11: temp_part4.mp3 (Offset: 240000ms)[2025-12-18 19:11:04] Processing Part 5/11: temp_part4.mp3 (Offset: 240000ms)
-
-Uploaded file 'temp_part4.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/ymk0yeremimuUploaded file 'temp_part4.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/ymk0yeremimu
-
-Waiting for file processing...Waiting for file processing...
-
-...all files ready...all files ready
-
-[2025-12-18 19:11:18] Generation Complete | Finish Reason: STOP[2025-12-18 19:11:18] Generation Complete | Finish Reason: STOP
-
-[2025-12-18 19:11:18] Is Correction: No[2025-12-18 19:11:18] Is Correction: No
-
-[2025-12-18 19:11:18] Tokens: Prompt=2754, Cand=544, Total=4703[2025-12-18 19:11:18] Tokens: Prompt=2754, Cand=544, Total=4703
-
-[2025-12-18 19:11:18] Raw Text Length: 666 chars[2025-12-18 19:11:18] Raw Text Length: 666 chars
-
-[2025-12-18 19:11:18] --- Raw Response Preview ---
-1
-00:00:00,000 --> 00:00:00,990
-的勇氣,
-
-2
-00:00:00,990 --> 00:00:03,690
-這個過程呢是非常值得我們學習的。
-
-3
-00:00:07,130 --> 00:00:14,300
-那如果你們今天是柳宗元的話,你們會最想挑戰他們書中提到哪一個詩境,你覺得為什麼呢?
-
-4
-00:00:14,500 --> 00:00:16,400
-我會想要挑戰江雪,
-
-5
-00:00:16,400 --> 00:00:21,000
-因為那邊的臨近千山,孤州獨調的景色,我非常想要體驗看看。
-
-6
-00:00:22,000 --> 00:00:28,500
-如果能夠在那白雪皚皚中尋找失魂,便是要學會如何與孤獨共處。
-
-7
-00:00:29,000 --> 00:00:32,300
-這樣的試煉,雖冷,但卻非常的純粹。
-
-8
-00:00:32,900 --> 00:00:35,700
-我想挑戰山水詩境
-
-9
-00:00:36,000 --> 00:00:41,800
-的詩境,透過大自然的景色表達自己的情感和思考。
-
+00:00:28,000 --> 00:00:34,000 我會試著靜下心觀察生活中的細節,從自然、生活或情感裡
 10
-00:00:42,800 -->...
---- End Preview ---[2025-12-18 19:11:18] --- Raw Response Preview ---
+00:00:34,000 --> 00:00:...
+--- End Preview ---
+[2025-12-19 19:26:03] Saved temp SRT chunk to: temp/temp_part2.srt
+[2025-12-19 19:26:03] Organized SRT format for temp/temp_part2.srt. Total blocks: 36
+[2025-12-19 19:26:03] Merging chunk into context: temp/temp_part2.srt
+[2025-12-19 19:26:03]   > Start Offset parsed: 00:04:37,400 -> 277400ms
+[2025-12-19 19:26:03]   > Raw body length: 1848 chars. Preview: 1 00:00:00,700 --> 00:00:05,000 透過大自然的景色,表達自己的情感和思...
+[2025-12-19 19:26:03]   > Current counter sequence starts at: 73
+[2025-12-19 19:26:03]   > Shifting content with offset 277400ms...
+[2025-12-19 19:26:03] shift_srt_content(): Found 36 matches in SRT content
+[2025-12-19 19:26:03] shift_srt_content(): Section 1 removing index line: 2
+[2025-12-19 19:26:03] shift_srt_content(): Section 2 removing index line: 3
+[2025-12-19 19:26:03] shift_srt_content(): Section 3 removing index line: 4
+[2025-12-19 19:26:03] shift_srt_content(): Section 4 removing index line: 5
+[2025-12-19 19:26:03] shift_srt_content(): Section 5 removing index line: 6
+[2025-12-19 19:26:03] shift_srt_content(): Section 6 removing index line: 7
+[2025-12-19 19:26:03] shift_srt_content(): Section 7 removing index line: 8
+[2025-12-19 19:26:03] shift_srt_content(): Section 8 removing index line: 9
+[2025-12-19 19:26:03] shift_srt_content(): Section 9 removing index line: 10
+[2025-12-19 19:26:03] shift_srt_content(): Section 10 removing index line: 11
+[2025-12-19 19:26:03] shift_srt_content(): Section 11 removing index line: 12
+[2025-12-19 19:26:03] shift_srt_content(): Section 12 removing index line: 13
+[2025-12-19 19:26:03] shift_srt_content(): Section 13 removing index line: 14
+[2025-12-19 19:26:03] shift_srt_content(): Section 14 removing index line: 15
+[2025-12-19 19:26:03] shift_srt_content(): Section 15 removing index line: 16
+[2025-12-19 19:26:03] shift_srt_content(): Section 16 removing index line: 17
+[2025-12-19 19:26:03] shift_srt_content(): Section 17 removing index line: 18
+[2025-12-19 19:26:03] shift_srt_content(): Section 18 removing index line: 19
+[2025-12-19 19:26:03] shift_srt_content(): Section 19 removing index line: 20
+[2025-12-19 19:26:03] shift_srt_content(): Section 20 removing index line: 21
+[2025-12-19 19:26:03] shift_srt_content(): Section 21 removing index line: 22
+[2025-12-19 19:26:03] shift_srt_content(): Section 22 removing index line: 23
+[2025-12-19 19:26:03] shift_srt_content(): Section 23 removing index line: 24
+[2025-12-19 19:26:03] shift_srt_content(): Section 24 removing index line: 25
+[2025-12-19 19:26:03] shift_srt_content(): Section 25 removing index line: 26
+[2025-12-19 19:26:03] shift_srt_content(): Section 26 removing index line: 27
+[2025-12-19 19:26:03] shift_srt_content(): Section 27 removing index line: 28
+[2025-12-19 19:26:03] shift_srt_content(): Section 28 removing index line: 29
+[2025-12-19 19:26:03] shift_srt_content(): Section 29 removing index line: 30
+[2025-12-19 19:26:03] shift_srt_content(): Section 30 removing index line: 31
+[2025-12-19 19:26:03] shift_srt_content(): Section 31 removing index line: 32
+[2025-12-19 19:26:03] shift_srt_content(): Section 32 removing index line: 33
+[2025-12-19 19:26:03] shift_srt_content(): Section 33 removing index line: 34
+[2025-12-19 19:26:03] shift_srt_content(): Section 34 removing index line: 35
+[2025-12-19 19:26:03] shift_srt_content(): Section 35 removing index line: 36
+[2025-12-19 19:26:03] Updated temp/final_context.srt with new chunk data. Last counter: 108
+Waiting 0.1 second before processing next chunk...
+[2025-12-19 19:26:04] Processing Part 4/5: temp_part3.mp3 (Offset: 413880ms)
+Uploaded file 'temp_part3.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/rggy9oqv066d
+Waiting for file processing...
+...all files ready
+[2025-12-19 19:26:21] Generation Complete | Finish Reason: STOP
+[2025-12-19 19:26:21] Is Correction: No
+[2025-12-19 19:26:21] Tokens: Prompt=5422, Cand=1016, Total=8791
+[2025-12-19 19:26:21] Raw Text Length: 1284 chars
+[2025-12-19 19:26:21] --- Raw Response Preview ---
 1
-00:00:00,000 --> 00:00:00,990
-的勇氣,
+00:00:00,000 --> 00:00:02,500 意境,才能抓到失魂的所在。
 
 2
-00:00:00,990 --> 00:00:03,690
-這個過程呢是非常值得我們學習的。
+00:00:03,000 --> 00:00:07,900 那你們會想要用什麼方式尋找魂氣或靈感呢?
 
 3
-00:00:07,130 --> 00:00:14,300
-那如果你們今天是柳宗元的話,你們會最想挑戰他們書中提到哪一個詩境,你覺得為什麼呢?
+00:00:09,000 --> 00:00:16,600 平常的話,自己尋找魂氣的話,我會帶上耳機,然後播播自己喜歡的音樂。
 
 4
-00:00:14,500 --> 00:00:16,400
-我會想要挑戰江雪,
+00:00:16,600 --> 00:00:24,500 靈感呢,就像魂氣一樣,不是抓得越緊,就越能夠找到,而是當靜下心來時,它就會自己回來的。
 
 5
-00:00:16,400 --> 00:00:21,000
-因為那邊的臨近千山,孤州獨調的景色,我非常想要體驗看看。
+00:00:25,700 --> 00:00:33,700 我會寫日記或聽音樂,把感覺轉化成文字,重新找回創作和熱情。
 
 6
-00:00:22,000 --> 00:00:28,500
-如果能夠在那白雪皚皚中尋找失魂,便是要學會如何與孤獨共處。
+00:00:34,500 --> 00:00:35,000 非常好。
 
 7
-00:00:29,000 --> 00:00:32,300
-這樣的試煉,雖冷,但卻非常的純粹。
+00:00:35,000 --> 00:00:43,500 想請問兩位同學,你們讀完失魂這本書,你會最想跟你們的好朋友推薦哪一部分,為什麼呢?
 
 8
-00:00:32,900 --> 00:00:35,700
-我想挑戰山水詩境
+00:00:44,000 --> 00:00:49,000 我會想要推薦柳宗元他第一次進入失景,發現失魂的那一段。
 
 9
-00:00:36,000 --> 00:00:41,800
-的詩境,透過大自然的景色表達自己的情感和思考。
-
-10
-00:00:42,800 -->...
+00:00:49,000 -->...
 --- End Preview ---
-
-[2025-12-18 19:11:18] Saved temp SRT chunk to: temp/temp_part4.srt[2025-12-18 19:11:18] Saved temp SRT chunk to: temp/temp_part4.srt
-
-[2025-12-18 19:11:18] Merging chunk into context: temp/temp_part4.srt[2025-12-18 19:11:18] Merging chunk into context: temp/temp_part4.srt
-
-[2025-12-18 19:11:18] Updated temp/final_context.srt with new chunk data. Last counter: 65[2025-12-18 19:11:18] Updated temp/final_context.srt with new chunk data. Last counter: 65
-
-Waiting 0.1 second before processing next chunk...Waiting 0.1 second before processing next chunk...
-
-[2025-12-18 19:11:18] Processing Part 6/11: temp_part5.mp3 (Offset: 300000ms)[2025-12-18 19:11:18] Processing Part 6/11: temp_part5.mp3 (Offset: 300000ms)
-
-Uploaded file 'temp_part5.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/3xcmoaaoyan1Uploaded file 'temp_part5.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/3xcmoaaoyan1
-
-Waiting for file processing...Waiting for file processing...
-
-...all files ready...all files ready
-
-[2025-12-18 19:11:40] Generation Complete | Finish Reason: STOP[2025-12-18 19:11:40] Generation Complete | Finish Reason: STOP
-
-[2025-12-18 19:11:40] Is Correction: No[2025-12-18 19:11:40] Is Correction: No
-
-[2025-12-18 19:11:40] Tokens: Prompt=2754, Cand=456, Total=6772[2025-12-18 19:11:40] Tokens: Prompt=2754, Cand=456, Total=6772
-
-[2025-12-18 19:11:40] Raw Text Length: 567 chars[2025-12-18 19:11:40] Raw Text Length: 567 chars
-
-[2025-12-18 19:11:40] --- Raw Response Preview ---
+[2025-12-19 19:26:21] Saved temp SRT chunk to: temp/temp_part3.srt
+[2025-12-19 19:26:21] Organized SRT format for temp/temp_part3.srt. Total blocks: 22
+[2025-12-19 19:26:21] Merging chunk into context: temp/temp_part3.srt
+[2025-12-19 19:26:21]   > Start Offset parsed: 00:06:53,880 -> 413880ms
+[2025-12-19 19:26:21]   > Raw body length: 1359 chars. Preview: 1 00:00:00,000 --> 00:00:02,500 意境,才能抓到失魂的所在。  2 0...
+[2025-12-19 19:26:21]   > Current counter sequence starts at: 109
+[2025-12-19 19:26:21]   > Shifting content with offset 413880ms...
+[2025-12-19 19:26:21] shift_srt_content(): Found 22 matches in SRT content
+[2025-12-19 19:26:21] shift_srt_content(): Section 1 removing index line: 2
+[2025-12-19 19:26:21] shift_srt_content(): Section 2 removing index line: 3
+[2025-12-19 19:26:21] shift_srt_content(): Section 3 removing index line: 4
+[2025-12-19 19:26:21] shift_srt_content(): Section 4 removing index line: 5
+[2025-12-19 19:26:21] shift_srt_content(): Section 5 removing index line: 6
+[2025-12-19 19:26:21] shift_srt_content(): Section 6 removing index line: 7
+[2025-12-19 19:26:21] shift_srt_content(): Section 7 removing index line: 8
+[2025-12-19 19:26:21] shift_srt_content(): Section 8 removing index line: 9
+[2025-12-19 19:26:21] shift_srt_content(): Section 9 removing index line: 10
+[2025-12-19 19:26:21] shift_srt_content(): Section 10 removing index line: 11
+[2025-12-19 19:26:21] shift_srt_content(): Section 11 removing index line: 12
+[2025-12-19 19:26:21] shift_srt_content(): Section 12 removing index line: 13
+[2025-12-19 19:26:21] shift_srt_content(): Section 13 removing index line: 14
+[2025-12-19 19:26:21] shift_srt_content(): Section 14 removing index line: 15
+[2025-12-19 19:26:21] shift_srt_content(): Section 15 removing index line: 16
+[2025-12-19 19:26:21] shift_srt_content(): Section 16 removing index line: 17
+[2025-12-19 19:26:21] shift_srt_content(): Section 17 removing index line: 18
+[2025-12-19 19:26:21] shift_srt_content(): Section 18 removing index line: 19
+[2025-12-19 19:26:21] shift_srt_content(): Section 19 removing index line: 20
+[2025-12-19 19:26:21] shift_srt_content(): Section 20 removing index line: 21
+[2025-12-19 19:26:21] shift_srt_content(): Section 21 removing index line: 22
+[2025-12-19 19:26:22] Updated temp/final_context.srt with new chunk data. Last counter: 130
+Waiting 0.1 second before processing next chunk...
+[2025-12-19 19:26:22] Processing Part 5/5: temp_part4.mp3 (Offset: 552780ms)
+Uploaded file 'temp_part4.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/389r8whg8v6s
+Waiting for file processing...
+...all files ready
+[2025-12-19 19:26:36] Generation Complete | Finish Reason: STOP
+[2025-12-19 19:26:36] Is Correction: No
+[2025-12-19 19:26:36] Tokens: Prompt=2270, Cand=487, Total=4860
+[2025-12-19 19:26:36] Raw Text Length: 577 chars
+[2025-12-19 19:26:36] --- Raw Response Preview ---
 1
-00:00:00,450 --> 00:00:13,000
-應該是有一點難度的,因為每一個魂氣都在濕的意境中,
-不只要破關,還要真正了解那一首詩的意思。
+00:00:00,800 --> 00:00:02,100
+了,我是紫霞老師。
 
 2
-00:00:13,500 --> 00:00:27,000
-我會試著靜下心觀察生活中的細節,
-從自然、生活或情感裡找出感動人的詩魂。
-
-3
-00:00:27,500 --> 00:00:35,000
-沒錯,其實尋找魂氣,老師也覺得非常的不容易,
-需要我們多感受詩的想法。
-
-4
-00:00:35,500 --> 00:00:42,000
-那請問一下,你們覺得這本書中有感受
-有改變了你們對唐詩的印象嗎?
-
-5
-00:00:42,500 --> 00:00:43,000
-有,
-
-6
-00:00:43,000 --> 00:00:47,000
-我現在覺得每一首詩呢,就像是一種小小的世界,
-
-7
-00:00:47,000 --> 00:00:50,000
-它藏著它藏著古人的心情故事,
-
-8
-00:00:50,000 --> 00:01:02,000
-而現在我在背詩的時候呢,也會開始去想那個詩人
-他所想的事情,他看到的風景,感受,
-我覺...
---- End Preview ---[2025-12-18 19:11:40] --- Raw Response Preview ---
-1
-00:00:00,450 --> 00:00:13,000
-應該是有一點難度的,因為每一個魂氣都在濕的意境中,
-不只要破關,還要真正了解那一首詩的意思。
-
-2
-00:00:13,500 --> 00:00:27,000
-我會試著靜下心觀察生活中的細節,
-從自然、生活或情感裡找出感動人的詩魂。
-
-3
-00:00:27,500 --> 00:00:35,000
-沒錯,其實尋找魂氣,老師也覺得非常的不容易,
-需要我們多感受詩的想法。
-
-4
-00:00:35,500 --> 00:00:42,000
-那請問一下,你們覺得這本書中有感受
-有改變了你們對唐詩的印象嗎?
-
-5
-00:00:42,500 --> 00:00:43,000
-有,
-
-6
-00:00:43,000 --> 00:00:47,000
-我現在覺得每一首詩呢,就像是一種小小的世界,
-
-7
-00:00:47,000 --> 00:00:50,000
-它藏著它藏著古人的心情故事,
-
-8
-00:00:50,000 --> 00:01:02,000
-而現在我在背詩的時候呢,也會開始去想那個詩人
-他所想的事情,他看到的風景,感受,
-我覺...
---- End Preview ---
-
-[2025-12-18 19:11:40] Saved temp SRT chunk to: temp/temp_part5.srt[2025-12-18 19:11:40] Saved temp SRT chunk to: temp/temp_part5.srt
-
-[2025-12-18 19:11:40] Merging chunk into context: temp/temp_part5.srt[2025-12-18 19:11:40] Merging chunk into context: temp/temp_part5.srt
-
-[2025-12-18 19:11:40] Updated temp/final_context.srt with new chunk data. Last counter: 74[2025-12-18 19:11:40] Updated temp/final_context.srt with new chunk data. Last counter: 74
-
-Waiting 0.1 second before processing next chunk...Waiting 0.1 second before processing next chunk...
-
-[2025-12-18 19:11:40] Processing Part 7/11: temp_part6.mp3 (Offset: 360000ms)[2025-12-18 19:11:40] Processing Part 7/11: temp_part6.mp3 (Offset: 360000ms)
-
-Uploaded file 'temp_part6.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/bkytk39v4gttUploaded file 'temp_part6.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/bkytk39v4gtt
-
-Waiting for file processing...Waiting for file processing...
-
-...all files ready...all files ready
-
-[2025-12-18 19:11:56] Generation Complete | Finish Reason: STOP[2025-12-18 19:11:56] Generation Complete | Finish Reason: STOP
-
-[2025-12-18 19:11:56] Is Correction: No[2025-12-18 19:11:56] Is Correction: No
-
-[2025-12-18 19:11:56] Tokens: Prompt=2754, Cand=690, Total=5915[2025-12-18 19:11:56] Tokens: Prompt=2754, Cand=690, Total=5915
-
-[2025-12-18 19:11:56] Raw Text Length: 824 chars[2025-12-18 19:11:56] Raw Text Length: 824 chars
-
-[2025-12-18 19:11:56] --- Raw Response Preview ---
-1
-00:00:00,000 --> 00:00:01,500
-奧妙與生命力。
-
-2
-00:00:02,000 --> 00:00:08,700
-太好了,也期待你們把這個心境呢,能運用在其他閱讀上,
-也可以多多來跟老師分享。
-
-3
-00:00:08,900 --> 00:00:12,000
-那我想請問你們認為的詩魂是什麼意思呢?
-
-4
-00:00:12,700 --> 00:00:16,900
-詩魂在這個中華文化裡面其實有很多的意思。
-
-5
-00:00:16,900 --> 00:00:19,900
-那我今天想要分享的是關於歷史文化的部分。
-
-6
-00:00:20,200 --> 00:00:20,900
-我舉例一下,
-
-7
-00:00:21,100 --> 00:00:24,500
-像是屈原,我可以稱他為楚辭之魂,
-
-8
-00:00:24,500 --> 00:00:28,300
-因為他用離騷寫出了想要守護國家的理想。
-
-9
-00:00:28,500 --> 00:00:30,900
-而李白肯定就是自由之魂了。
-
-10
-00:00:31,200 --> 00:00:34,200
-他筆...
---- End Preview ---[2025-12-18 19:11:56] --- Raw Response Preview ---
-1
-00:00:00,000 --> 00:00:01,500
-奧妙與生命力。
-
-2
-00:00:02,000 --> 00:00:08,700
-太好了,也期待你們把這個心境呢,能運用在其他閱讀上,
-也可以多多來跟老師分享。
-
-3
-00:00:08,900 --> 00:00:12,000
-那我想請問你們認為的詩魂是什麼意思呢?
-
-4
-00:00:12,700 --> 00:00:16,900
-詩魂在這個中華文化裡面其實有很多的意思。
-
-5
-00:00:16,900 --> 00:00:19,900
-那我今天想要分享的是關於歷史文化的部分。
-
-6
-00:00:20,200 --> 00:00:20,900
-我舉例一下,
-
-7
-00:00:21,100 --> 00:00:24,500
-像是屈原,我可以稱他為楚辭之魂,
-
-8
-00:00:24,500 --> 00:00:28,300
-因為他用離騷寫出了想要守護國家的理想。
-
-9
-00:00:28,500 --> 00:00:30,900
-而李白肯定就是自由之魂了。
-
-10
-00:00:31,200 --> 00:00:34,200
-他筆...
---- End Preview ---
-
-[2025-12-18 19:11:56] Saved temp SRT chunk to: temp/temp_part6.srt[2025-12-18 19:11:56] Saved temp SRT chunk to: temp/temp_part6.srt
-
-[2025-12-18 19:11:56] Merging chunk into context: temp/temp_part6.srt[2025-12-18 19:11:56] Merging chunk into context: temp/temp_part6.srt
-
-[2025-12-18 19:11:56] Updated temp/final_context.srt with new chunk data. Last counter: 90[2025-12-18 19:11:56] Updated temp/final_context.srt with new chunk data. Last counter: 90
-
-Waiting 0.1 second before processing next chunk...Waiting 0.1 second before processing next chunk...
-
-[2025-12-18 19:11:56] Processing Part 8/11: temp_part7.mp3 (Offset: 420000ms)[2025-12-18 19:11:56] Processing Part 8/11: temp_part7.mp3 (Offset: 420000ms)
-
-Uploaded file 'temp_part7.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/hnavypx6cvgfUploaded file 'temp_part7.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/hnavypx6cvgf
-
-Waiting for file processing...Waiting for file processing...
-
-...all files ready...all files ready
-
-[2025-12-18 19:12:09] Generation Complete | Finish Reason: STOP[2025-12-18 19:12:09] Generation Complete | Finish Reason: STOP
-
-[2025-12-18 19:12:09] Is Correction: No[2025-12-18 19:12:09] Is Correction: No
-
-[2025-12-18 19:12:09] Tokens: Prompt=2754, Cand=528, Total=4724[2025-12-18 19:12:09] Tokens: Prompt=2754, Cand=528, Total=4724
-
-[2025-12-18 19:12:09] Raw Text Length: 635 chars[2025-12-18 19:12:09] Raw Text Length: 635 chars
-
-[2025-12-18 19:12:09] --- Raw Response Preview ---
-1
-00:00:00,800 --> 00:00:02,080
-魂氣或靈感呢?
-
-2
-00:00:02,800 --> 00:00:07,080
-平常的話,自己尋找魂氣的話,
-我會帶上耳機,然後播播自己喜歡的音樂。
-
-3
-00:00:07,480 --> 00:00:14,080
-靈感呢,就像魂氣一樣,不是抓得越緊,
-就越能夠找到,而是當靜下心來時,
-它就會自己回來的。
-
-4
-00:00:14,720 --> 00:00:21,080
-我會寫日記或聽音樂,把感覺轉換成文字,
-重新找回創作和熱情。
-
-5
-00:00:21,480 --> 00:00:22,080
-非常好。
-
-6
-00:00:22,480 --> 00:00:27,580
-想請問兩位同學,你們讀完詩魂這本書,
-你會最想跟你們的好朋友推薦哪一部分?
-
-7
-00:00:27,780 --> 00:00:28,380
-為什麼呢?
-
-8
-00:00:28,780 --> 00:00:32,780
-我會想要推薦柳宗元他第一次進入詩井,
-發現詩魂的那一段。
-
-9
-00:00:33,180 --> 00:00:35,580
-這一段呢,既...
---- End Preview ---[2025-12-18 19:12:09] --- Raw Response Preview ---
-1
-00:00:00,800 --> 00:00:02,080
-魂氣或靈感呢?
-
-2
-00:00:02,800 --> 00:00:07,080
-平常的話,自己尋找魂氣的話,
-我會帶上耳機,然後播播自己喜歡的音樂。
-
-3
-00:00:07,480 --> 00:00:14,080
-靈感呢,就像魂氣一樣,不是抓得越緊,
-就越能夠找到,而是當靜下心來時,
-它就會自己回來的。
-
-4
-00:00:14,720 --> 00:00:21,080
-我會寫日記或聽音樂,把感覺轉換成文字,
-重新找回創作和熱情。
-
-5
-00:00:21,480 --> 00:00:22,080
-非常好。
-
-6
-00:00:22,480 --> 00:00:27,580
-想請問兩位同學,你們讀完詩魂這本書,
-你會最想跟你們的好朋友推薦哪一部分?
-
-7
-00:00:27,780 --> 00:00:28,380
-為什麼呢?
-
-8
-00:00:28,780 --> 00:00:32,780
-我會想要推薦柳宗元他第一次進入詩井,
-發現詩魂的那一段。
-
-9
-00:00:33,180 --> 00:00:35,580
-這一段呢,既...
---- End Preview ---
-
-[2025-12-18 19:12:09] Saved temp SRT chunk to: temp/temp_part7.srt[2025-12-18 19:12:09] Saved temp SRT chunk to: temp/temp_part7.srt
-
-[2025-12-18 19:12:09] Merging chunk into context: temp/temp_part7.srt[2025-12-18 19:12:09] Merging chunk into context: temp/temp_part7.srt
-
-[2025-12-18 19:12:09] Updated temp/final_context.srt with new chunk data. Last counter: 101[2025-12-18 19:12:09] Updated temp/final_context.srt with new chunk data. Last counter: 101
-
-Waiting 0.1 second before processing next chunk...Waiting 0.1 second before processing next chunk...
-
-[2025-12-18 19:12:09] Processing Part 9/11: temp_part8.mp3 (Offset: 480000ms)[2025-12-18 19:12:09] Processing Part 9/11: temp_part8.mp3 (Offset: 480000ms)
-
-Uploaded file 'temp_part8.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/92ypka90s5xtUploaded file 'temp_part8.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/92ypka90s5xt
-
-Waiting for file processing...Waiting for file processing...
-
-...all files ready...all files ready
-
-[2025-12-18 19:12:24] Generation Complete | Finish Reason: STOP[2025-12-18 19:12:24] Generation Complete | Finish Reason: STOP
-
-[2025-12-18 19:12:25] Is Correction: No[2025-12-18 19:12:25] Is Correction: No
-
-[2025-12-18 19:12:25] Tokens: Prompt=2754, Cand=458, Total=5181[2025-12-18 19:12:25] Tokens: Prompt=2754, Cand=458, Total=5181
-
-[2025-12-18 19:12:25] Raw Text Length: 573 chars[2025-12-18 19:12:25] Raw Text Length: 573 chars
-
-[2025-12-18 19:12:25] --- Raw Response Preview ---
-1
-00:00:00,800 --> 00:00:06,000
-努力在文字裡尋找回自己的信念與希望。
-
-2
-00:00:06,500 --> 00:00:12,000
-那這本書有沒有讓你們對寫作啊,或是創作,
-或是詩有新的想法呢?
-
-3
-00:00:12,500 --> 00:00:17,000
-我開始了解到創作,它其實可以像是冒險一樣,
-
-4
-00:00:17,000 --> 00:00:23,500
-字字句句皆有生命,可以將主,可以將讀者帶入其中,
-就是一個非常強的表現感。
-
-5
-00:00:24,000 --> 00:00:30,500
-我發現寫詩不一定要華麗的詞,而是要真實的表達
-心裡的感覺。
-
-6
-00:00:31,500 --> 00:00:36,500
-沒錯,今天呢我們和兩位802同學一起走進了詩魂的世界。
-
-7
-00:00:36,500 --> 00:00:44,000
-其實讀書也不只是背文字,更重要的是用心去感受,
-去想像,去體驗每個畫面,就像剛剛同學有提到的,
-
-8
-00:00:44,500 --> 00:00:54,000
-當我們勇敢面對挑戰,投入自己的感受,甚至...
---- End Preview ---[2025-12-18 19:12:25] --- Raw Response Preview ---
-1
-00:00:00,800 --> 00:00:06,000
-努力在文字裡尋找回自己的信念與希望。
-
-2
-00:00:06,500 --> 00:00:12,000
-那這本書有沒有讓你們對寫作啊,或是創作,
-或是詩有新的想法呢?
-
-3
-00:00:12,500 --> 00:00:17,000
-我開始了解到創作,它其實可以像是冒險一樣,
-
-4
-00:00:17,000 --> 00:00:23,500
-字字句句皆有生命,可以將主,可以將讀者帶入其中,
-就是一個非常強的表現感。
-
-5
-00:00:24,000 --> 00:00:30,500
-我發現寫詩不一定要華麗的詞,而是要真實的表達
-心裡的感覺。
-
-6
-00:00:31,500 --> 00:00:36,500
-沒錯,今天呢我們和兩位802同學一起走進了詩魂的世界。
-
-7
-00:00:36,500 --> 00:00:44,000
-其實讀書也不只是背文字,更重要的是用心去感受,
-去想像,去體驗每個畫面,就像剛剛同學有提到的,
-
-8
-00:00:44,500 --> 00:00:54,000
-當我們勇敢面對挑戰,投入自己的感受,甚至...
---- End Preview ---
-
-[2025-12-18 19:12:25] Saved temp SRT chunk to: temp/temp_part8.srt[2025-12-18 19:12:25] Saved temp SRT chunk to: temp/temp_part8.srt
-
-[2025-12-18 19:12:25] Merging chunk into context: temp/temp_part8.srt[2025-12-18 19:12:25] Merging chunk into context: temp/temp_part8.srt
-
-[2025-12-18 19:12:25] Updated temp/final_context.srt with new chunk data. Last counter: 110[2025-12-18 19:12:25] Updated temp/final_context.srt with new chunk data. Last counter: 110
-
-Waiting 0.1 second before processing next chunk...Waiting 0.1 second before processing next chunk...
-
-[2025-12-18 19:12:25] Processing Part 10/11: temp_part9.mp3 (Offset: 540000ms)[2025-12-18 19:12:25] Processing Part 10/11: temp_part9.mp3 (Offset: 540000ms)
-
-Uploaded file 'temp_part9.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/6ysf7zklrai4Uploaded file 'temp_part9.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/6ysf7zklrai4
-
-Waiting for file processing...Waiting for file processing...
-
-...all files ready...all files ready
-
-[2025-12-18 19:12:39] Generation Complete | Finish Reason: STOP[2025-12-18 19:12:39] Generation Complete | Finish Reason: STOP
-
-[2025-12-18 19:12:39] Is Correction: No[2025-12-18 19:12:39] Is Correction: No
-
-[2025-12-18 19:12:39] Tokens: Prompt=2454, Cand=588, Total=4544[2025-12-18 19:12:39] Tokens: Prompt=2454, Cand=588, Total=4544
-
-[2025-12-18 19:12:39] Raw Text Length: 706 chars[2025-12-18 19:12:39] Raw Text Length: 706 chars
-
-[2025-12-18 19:12:39] --- Raw Response Preview ---
-1
-00:00:00,000 --> 00:00:01,300
-找到自己的詩魂,
-
-2
-00:00:01,300 --> 00:00:06,700
-把文字變成畫面,變成感受,開啟屬於自己的奇幻旅程。
-
-3
-00:00:06,700 --> 00:00:09,400
-感謝兩位同學的精彩分享。
-
-4
-00:00:09,400 --> 00:00:12,800
-今天的建華愛月趴就到這邊結束了。
-
-5
-00:00:12,800 --> 00:00:14,300
-我是紫喬老師。
-
-6
-00:00:14,600 --> 00:00:15,600
+00:00:02,200 --> 00:00:03,000
 我是玄府。
 
-7
-00:00:15,800 --> 00:00:16,800
-我是黃柔妃。
-
-8
-00:00:17,000 --> 00:00:19,400
-感謝大家,期待下次再見。
-
-9
-00:00:25,500 --> 00:00:27,800
-謝謝大家收聽今天的節目。
-
-10
-00:00:28,200 --> 00:00:33,500
-若您喜歡今天的內容,歡迎訂閱建華愛月趴頻道,
-
-11
-00:00:33,500 --> 00:00:36,000
-並...
---- End Preview ---[2025-12-18 19:12:39] --- Raw Response Preview ---
-1
-00:00:00,000 --> 00:00:01,300
-找到自己的詩魂,
-
-2
-00:00:01,300 --> 00:00:06,700
-把文字變成畫面,變成感受,開啟屬於自己的奇幻旅程。
-
 3
-00:00:06,700 --> 00:00:09,400
-感謝兩位同學的精彩分享。
+00:00:03,200 --> 00:00:04,100
+我是黃柔匪。
 
 4
-00:00:09,400 --> 00:00:12,800
-今天的建華愛月趴就到這邊結束了。
-
-5
-00:00:12,800 --> 00:00:14,300
-我是紫喬老師。
-
-6
-00:00:14,600 --> 00:00:15,600
-我是玄府。
-
-7
-00:00:15,800 --> 00:00:16,800
-我是黃柔妃。
-
-8
-00:00:17,000 --> 00:00:19,400
+00:00:04,200 --> 00:00:06,100
 感謝大家,期待下次再見。
 
-9
-00:00:25,500 --> 00:00:27,800
+5
+00:00:10,500 --> 00:00:13,100
 謝謝大家收聽今天的節目。
 
+6
+00:00:13,300 --> 00:00:15,100
+若您喜歡今天的內容,
+
+7
+00:00:15,100 --> 00:00:18,100
+歡迎訂閱建華愛樂趴頻道,
+
+8
+00:00:18,300 --> 00:00:21,000
+並推薦給您身旁的親友。
+
+9
+00:00:21,200 --> 00:00:25,000
+邀請大家給我們五星評論支持,
+
 10
-00:00:28,200 --> 00:00:33,500
-若您喜歡今天的內容,歡迎訂閱建華愛月趴頻道,
+00:00:25,200 --> 00:00:27,000
+有任何想法與意見,
 
 11
-00:00:33,500 --> 00:00:36,000
-並...
+00:00:27,000 --> 00:00:29,000
+也請留言告訴我們。
+
+12
+00:00:29,200...
 --- End Preview ---
-
-[2025-12-18 19:12:39] Saved temp SRT chunk to: temp/temp_part9.srt[2025-12-18 19:12:39] Saved temp SRT chunk to: temp/temp_part9.srt
-
-[2025-12-18 19:12:39] Merging chunk into context: temp/temp_part9.srt[2025-12-18 19:12:39] Merging chunk into context: temp/temp_part9.srt
-
-[2025-12-18 19:12:39] Updated temp/final_context.srt with new chunk data. Last counter: 125[2025-12-18 19:12:39] Updated temp/final_context.srt with new chunk data. Last counter: 125
-
-Waiting 0.1 second before processing next chunk...Waiting 0.1 second before processing next chunk...
-
-[2025-12-18 19:12:39] Processing Part 11/11: temp_part10.mp3 (Offset: 590595ms)[2025-12-18 19:12:39] Processing Part 11/11: temp_part10.mp3 (Offset: 590595ms)
-
-Uploaded file 'temp_part10.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/uhymtrlz3ym0Uploaded file 'temp_part10.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/uhymtrlz3ym0
-
-Waiting for file processing...Waiting for file processing...
-
-...all files ready...all files ready
-
-[2025-12-18 19:12:48] Generation Complete | Finish Reason: STOP[2025-12-18 19:12:48] Generation Complete | Finish Reason: STOP
-
-[2025-12-18 19:12:48] Is Correction: No[2025-12-18 19:12:48] Is Correction: No
-
-[2025-12-18 19:12:48] Tokens: Prompt=918, Cand=34, Total=1297[2025-12-18 19:12:48] Tokens: Prompt=918, Cand=34, Total=1297
-
-[2025-12-18 19:12:48] Raw Text Length: 37 chars[2025-12-18 19:12:48] Raw Text Length: 37 chars
-
-[2025-12-18 19:12:48] --- Raw Response Preview ---
-1
-00:00:00,000 --> 00:00:02,000
-[喧鬧聲]...
---- End Preview ---[2025-12-18 19:12:48] --- Raw Response Preview ---
-1
-00:00:00,000 --> 00:00:02,000
-[喧鬧聲]...
---- End Preview ---
-
-[2025-12-18 19:12:48] Saved temp SRT chunk to: temp/temp_part10.srt[2025-12-18 19:12:48] Saved temp SRT chunk to: temp/temp_part10.srt
-
-[2025-12-18 19:12:48] Merging chunk into context: temp/temp_part10.srt[2025-12-18 19:12:48] Merging chunk into context: temp/temp_part10.srt
-
-[2025-12-18 19:12:48] Updated temp/final_context.srt with new chunk data. Last counter: 126[2025-12-18 19:12:48] Updated temp/final_context.srt with new chunk data. Last counter: 126
-
-[2025-12-18 19:12:48] Transcription process finished successfully.[2025-12-18 19:12:48] Transcription process finished successfully.
-
-[2025-12-18 20:14:18] ------------------------------ NEW SESSION ------------------------------[2025-12-18 20:14:18] ------------------------------ NEW SESSION ------------------------------[2025-12-18 20:14:18] ------------------------------ NEW SESSION ------------------------------
-
-
-[2025-12-18 20:14:18] Processing File: temp_【建華愛閱趴】建華Podcast EP.37《詩魂》🎧💫  Podcast Episode 37- [ 詩魂 ] - 建華國中影音頻道｜CHJH Media Channel (youtube) (1).mp3[2025-12-18 20:14:18] Processing File: temp_【建華愛閱趴】建華Podcast EP.37《詩魂》🎧💫  Podcast Episode 37- [ 詩魂 ] - 建華國中影音頻道｜CHJH Media Channel (youtube) (1).mp3[2025-12-18 20:14:18] Processing File: temp_【建華愛閱趴】建華Podcast EP.37《詩魂》🎧💫  Podcast Episode 37- [ 詩魂 ] - 建華國中影音頻道｜CHJH Media Channel (youtube) (1).mp3
-
-
-[2025-12-18 20:14:18] Model: models/gemini-flash-latest[2025-12-18 20:14:18] Model: models/gemini-flash-latest[2025-12-18 20:14:18] Model: models/gemini-flash-latest
-
-
+[2025-12-19 19:26:36] Saved temp SRT chunk to: temp/temp_part4.srt
+[2025-12-19 19:26:36] Organized SRT format for temp/temp_part4.srt. Total blocks: 13
+[2025-12-19 19:26:36] Merging chunk into context: temp/temp_part4.srt
+[2025-12-19 19:26:36]   > Start Offset parsed: 00:09:12,780 -> 552780ms
+[2025-12-19 19:26:36]   > Raw body length: 577 chars. Preview: 1 00:00:00,800 --> 00:00:02,100 了,我是紫霞老師。  2 00:00...
+[2025-12-19 19:26:36]   > Current counter sequence starts at: 131
+[2025-12-19 19:26:36]   > Shifting content with offset 552780ms...
+[2025-12-19 19:26:36] shift_srt_content(): Found 13 matches in SRT content
+[2025-12-19 19:26:36] shift_srt_content(): Section 1 removing index line: 2
+[2025-12-19 19:26:36] shift_srt_content(): Section 2 removing index line: 3
+[2025-12-19 19:26:36] shift_srt_content(): Section 3 removing index line: 4
+[2025-12-19 19:26:36] shift_srt_content(): Section 4 removing index line: 5
+[2025-12-19 19:26:36] shift_srt_content(): Section 5 removing index line: 6
+[2025-12-19 19:26:36] shift_srt_content(): Section 6 removing index line: 7
+[2025-12-19 19:26:36] shift_srt_content(): Section 7 removing index line: 8
+[2025-12-19 19:26:36] shift_srt_content(): Section 8 removing index line: 9
+[2025-12-19 19:26:36] shift_srt_content(): Section 9 removing index line: 10
+[2025-12-19 19:26:36] shift_srt_content(): Section 10 removing index line: 11
+[2025-12-19 19:26:36] shift_srt_content(): Section 11 removing index line: 12
+[2025-12-19 19:26:36] shift_srt_content(): Section 12 removing index line: 13
+[2025-12-19 19:26:36] Updated temp/final_context.srt with new chunk data. Last counter: 143
+[2025-12-19 19:26:36] Transcription process finished successfully.
