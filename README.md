@@ -7,7 +7,7 @@ A Streamlit-based application that extracts audio from video files and uses Goog
 - **Video & Audio Support**: Upload MP4, MOV, AVI, MP3, WAV, and more.
 - **Accurate Transcriptions**: Powered by Google Gemini 1.5/Pro models.
 - **Smart Timestamping**: 
-  - Automatically splits long videos into 10-minute chunks to maintain timestamp accuracy.
+  - Automatically splits long videos into chunks to maintain timestamp accuracy.
   - Fixes common "drift" issues associated with long-context LLM transcriptions.
 - **SRT Export**: Generated subtitles are formatted as standard SRT files ready for download.
 - **Interactive UI**: Preview video and subtitles directly in the browser.

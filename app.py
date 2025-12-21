@@ -1,6 +1,7 @@
 import streamlit as st
 import os
 import time
+import tempfile
 from dotenv import load_dotenv
 from transcriber import extract_audio, transcribe_audio, cleanup_files, list_available_models
 import config
@@ -75,10 +76,11 @@ if uploaded_file is not None:
                         status_text.text(f"⏳ {message}")
                 
                 try:
-                    # Save uploaded file temporarily
-                    temp_path = f"temp_{uploaded_file.name}"
-                    with open(temp_path, "wb") as f:
-                        f.write(uploaded_file.getbuffer())
+                    # Save uploaded file temporarily using tempfile to avoid collisions
+                    suffix = os.path.splitext(uploaded_file.name)[1]
+                    with tempfile.NamedTemporaryFile(delete=False, suffix=suffix) as tmp_file:
+                        tmp_file.write(uploaded_file.getbuffer())
+                        temp_path = tmp_file.name
                     
                     audio_path = None
                     files_to_cleanup = [temp_path]
