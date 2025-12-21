@@ -2,12 +2,14 @@ import os, pathlib
 import sys
 import google.generativeai as genai
 from moviepy.editor import VideoFileClip, AudioFileClip
-import json
 import time
 import re
-import math
 import config
 import numpy as np
+
+# Define Log File Path Globally
+current_dir = os.path.dirname(os.path.abspath(__file__))
+LOG_FILE_PATH = os.path.join(current_dir, "transcription_debug.log")
 
 # Redirect stdout and stderr to both terminal and log file
 class DualWriter:
@@ -16,17 +18,21 @@ class DualWriter:
         self.original_stream = original_stream
 
     def write(self, message):
+        # Write to terminal
         try:
-            # Write to original stream first
             self.original_stream.write(message)
-            self.original_stream.flush()
-            
-            # Write to log file if enabled
-            if config.SAVE_LOG:
+        except Exception:
+            pass # Streamlit or other environment might have issues with original stream
+        
+        # Write to log file
+        if config.SAVE_LOG:
+            try:
                 with open(self.file_path, "a", encoding="utf-8") as f:
                     f.write(message)
-        except Exception:
-            pass 
+                    f.flush()
+                    os.fsync(f.fileno())
+            except Exception as e:
+                pass 
 
     def flush(self):
         try:
@@ -35,13 +41,42 @@ class DualWriter:
             pass
 
 if not hasattr(sys, "_dual_writer_setup"):
-    log_file = "transcription_debug.log"
     # Ensure we don't wrap if it's already a DualWriter (extra safety)
     if not isinstance(sys.stdout, DualWriter):
-        sys.stdout = DualWriter(log_file, sys.stdout)
+        sys.stdout = DualWriter(LOG_FILE_PATH, sys.stdout)
     if not isinstance(sys.stderr, DualWriter):
-        sys.stderr = DualWriter(log_file, sys.stderr)
+        sys.stderr = DualWriter(LOG_FILE_PATH, sys.stderr)
     sys._dual_writer_setup = True
+
+def write_log(message):
+    """ Writes a message to the debug log with timestamp. Explicitly writes to file to avoid stdout capture issues. """
+    timestamp = time.strftime('%Y-%m-%d %H:%M:%S')
+    formatted_message = f"[{timestamp}] {message}"
+    
+    # 1. Explicitly write to file (Always ensure this happens)
+    if config.SAVE_LOG:
+        try:
+            with open(LOG_FILE_PATH, "a", encoding="utf-8") as f:
+                f.write(formatted_message + "\n")
+                f.flush()
+                # os.fsync(f.fileno()) 
+        except Exception as e:
+            # Fallback print if file write fails
+            print(f"Logging failed: {e}")
+
+    # 2. Print to console
+    # If sys.stdout is our DualWriter, printing will trigger a SECOND file write.
+    # So we bypass DualWriter and write to strict stdout if we detect it.
+    if isinstance(sys.stdout, DualWriter):
+        try:
+            sys.stdout.original_stream.write(formatted_message + "\n")
+            sys.stdout.original_stream.flush()
+        except Exception:
+            # If original stream fails, try standard print
+            print(formatted_message)
+    else:
+        # Streamlit or other environment: use standard print
+        print(formatted_message)
 
 def extract_audio(video_path, audio_path="temp/temp_audio.mp3"):
     """Extracts audio from a video file."""
@@ -51,27 +86,27 @@ def extract_audio(video_path, audio_path="temp/temp_audio.mp3"):
         video.audio.write_audiofile(audio_path, codec='mp3')
         return audio_path
     except Exception as e:
-        print(f"Error extracting audio: {e}")
+        write_log(f"Error extracting audio: {e}")
         return None
 
 def upload_to_gemini(path, mime_type="audio/mp3"):
     """Uploads the file to Gemini."""
     file = genai.upload_file(path, mime_type=mime_type)
-    print(f"Uploaded file '{file.display_name}' as: {file.uri}")
+    write_log(f"Uploaded file '{file.display_name}' as: {file.uri}")
     return file
 
 def wait_for_files_active(files):
     """Waits for the uploaded files to be processed."""
-    print("Waiting for file processing...")
+    write_log("Waiting for file processing...")
     for name in (file.name for file in files):
         file = genai.get_file(name)
         while file.state.name == "PROCESSING":
-            print(".", end="", flush=True)
+            write_log(".", end="", flush=True)
             time.sleep(2)
             file = genai.get_file(name)
         if file.state.name != "ACTIVE":
             raise Exception(f"File {file.name} failed to process")
-    print("...all files ready")
+    write_log("...all files ready")
 
 def list_available_models(api_key):
     """Lists available models that support content generation."""
@@ -86,8 +121,12 @@ def list_available_models(api_key):
         return [f"Error listing models: {str(e)}"]
 
 def time_to_ms(time_str):
-    """Converts SRT timestamp "HH:MM:SS,mmm" or "MM:SS,mmm" (or dot separated) to milliseconds."""
+    """Converts SRT timestamp "HH:MM:SS,mmm" or just "milliseconds" to integer milliseconds."""
     try:
+        time_str = str(time_str).strip()
+        if time_str.isdigit():
+            return int(time_str)
+
         time_str = time_str.replace('.', ',')
         if time_str.count(':') == 3: # 處理像 01:02:03:500 的情況
             last_colon = time_str.rfind(':')
@@ -215,11 +254,14 @@ def shift_srt_content(srt_content, offset_ms, counter_start=1):
     else:
         return "\n".join(output).strip(), curr - 1
 
-def find_split_point(audio_clip, target_time, search_window=15):
+def find_split_point(audio_clip, target_time_ms, search_window_ms=15000):
     try:
-        # Define search range
-        start_search = max(0, target_time - search_window)
-        end_search = min(audio_clip.duration, target_time + search_window)
+        # Define search range (convert ms to sec for moviepy)
+        target_time_sec = target_time_ms / 1000.0
+        search_window_sec = search_window_ms / 1000.0
+        
+        start_search = max(0, target_time_sec - search_window_sec)
+        end_search = min(audio_clip.duration, target_time_sec + search_window_sec)
         
         # Extract audio segment for analysis
         sub = audio_clip.subclip(start_search, end_search)
@@ -236,12 +278,12 @@ def find_split_point(audio_clip, target_time, search_window=15):
         # Convert index back to time relative to start_search
         best_time_relative = min_vol_idx / sub.fps
         
-        best_time = start_search + best_time_relative
-        return best_time
+        best_time_sec = start_search + best_time_relative
+        return int(best_time_sec * 1000)
         
     except Exception as e:
-        print(f"Warning: Silence detection failed ({e}), using exact time.")
-        return target_time
+        write_log(f"Warning: Silence detection failed ({e}), using exact time.")
+        return target_time_ms
 
 def find_split_point_gemini(api_key, audio_clip, status_callback=None):
     temp_clip_path = "temp/temp_split_search.mp3"
@@ -254,7 +296,7 @@ def find_split_point_gemini(api_key, audio_clip, status_callback=None):
         
         # Upload
         if status_callback:
-            print("Uploading search window to Gemini for split analysis...")
+            write_log("Uploading search window to Gemini for split analysis...")
             
         file = genai.upload_file(temp_clip_path, mime_type="audio/mp3")
         
@@ -272,27 +314,27 @@ def find_split_point_gemini(api_key, audio_clip, status_callback=None):
         
         response = model.generate_content([file, prompt])
         
-        # Clean up
-        # genai.delete_file(file.name) 
-        
         # Parse response
         text = response.text.strip()
-        # Extract number
+        # Extract number (Gemini returns milliseconds as per prompt)
         match = re.search(r"(\d+(\.\d+)?)", text)
         if match:
-             return float(match.group(1))
+             # Already in ms
+             return int(float(match.group(1)))
         
-        return audio_clip.duration / 2
+        return int(audio_clip.duration * 1000 / 2)
 
     except Exception as e:
-        print(f"Gemini split detection failed: {e}. Falling back to center.")
-        return audio_clip.duration / 2
+        write_log(f"Gemini split detection failed: {e}. Falling back to center.")
+        return int(audio_clip.duration * 1000 / 2)
     finally:
         if os.path.exists(temp_clip_path):
             os.remove(temp_clip_path)
 
-def split_audio(audio_path, chunk_duration_sec=config.CHUNK_DURATION_SEC, status_callback=None, api_key=None):
+def split_audio(audio_path, chunk_duration_ms=config.CHUNK_DURATION_SEC*1000, status_callback=None, api_key=None):
     audio = AudioFileClip(audio_path)
+    audio_duration_ms = int(audio.duration * 1000)
+    
     temp_dir = pathlib.Path("temp")
     temp_dir.mkdir(exist_ok=True)
 
@@ -300,62 +342,69 @@ def split_audio(audio_path, chunk_duration_sec=config.CHUNK_DURATION_SEC, status
     [f.unlink() for f in temp_dir.glob("*") if f.resolve() != pathlib.Path(audio_path).resolve()]
 
     # 2. 計算切割點 (0.8x ~ 1.2x duration 區間搜尋)
-    split_points, curr = [], 0.0
+    split_points_ms, curr_ms = [], 0
 
-    while curr < audio.duration:
+    while curr_ms < audio_duration_ms:
         # 下一個理想切割點區間：[curr + 0.8*dur, curr + 1.2*dur]
-        win_start = curr + (chunk_duration_sec * 0.8)
-        win_end = curr + (chunk_duration_sec * 1.2)
+        win_start_ms = int(curr_ms + (chunk_duration_ms * 0.8))
+        win_end_ms = int(curr_ms + (chunk_duration_ms * 1.2))
         
         # 如果最短切割點已經超過總長度，直接切到最後
-        if win_start >= audio.duration:
-            actual_end = audio.duration
+        if win_start_ms >= audio_duration_ms:
+            actual_end_ms = audio_duration_ms
         else:
             # 確保區間不超過總長度
-            win_end = min(audio.duration, win_end)
+            win_end_ms = min(audio_duration_ms, win_end_ms)
+            
+            # Convert to seconds for subclip
+            win_start_sec = win_start_ms / 1000.0
+            win_end_sec = win_end_ms / 1000.0
             
             # 搜尋該區間
             if api_key and config.USE_GEMINI_SPLIT:
-                found_relative = find_split_point_gemini(api_key, audio.subclip(win_start, win_end), status_callback)
-                actual_end = win_start + found_relative
+                found_relative_ms = find_split_point_gemini(api_key, audio.subclip(win_start_sec, win_end_sec), status_callback)
+                actual_end_ms = win_start_ms + found_relative_ms
             else:
-                actual_end = find_split_point(audio, (win_start + win_end) / 2, (win_end - win_start) / 2)
+                mid_point_ms = (win_start_ms + win_end_ms) // 2
+                # Pass mid_point in MS
+                actual_end_ms = find_split_point(audio, mid_point_ms, (win_end_ms - win_start_ms) // 2)
         
         # 安全機制：確保有前進，且不要切出極短片段 (除非是最後一段)
-        if actual_end <= curr + 1.0: 
-            actual_end = min(curr + chunk_duration_sec, audio.duration)
+        if actual_end_ms <= curr_ms + 1000: 
+            actual_end_ms = min(curr_ms + chunk_duration_ms, audio_duration_ms)
             
-        split_points.append(actual_end)
-        curr = actual_end
+        split_points_ms.append(actual_end_ms)
+        curr_ms = actual_end_ms
 
     # 3. 執行切割與記錄
     chunks = []
-    prev_start = 0.0
-    log_data = [f"Total: {audio.duration}\nTarget: {chunk_duration_sec}\n" + "-"*20]
+    prev_start_ms = 0
+    log_data = [f"Total MS: {audio_duration_ms}\nTarget MS: {chunk_duration_ms}\n" + "-"*20]
 
-    for idx, end_t in enumerate(split_points):
-        if status_callback: status_callback(f"Part {idx+1}/{len(split_points)}...")
+    for idx, end_t_ms in enumerate(split_points_ms):
+        if status_callback: status_callback(f"Part {idx+1}/{len(split_points_ms)}...")
+        
+        prev_start_sec = prev_start_ms / 1000.0
+        end_t_sec = end_t_ms / 1000.0
         
         # Use "temp_partX.mp3" naming pattern
         p = temp_dir / f"temp_part{idx}.mp3"
-        audio.subclip(prev_start, end_t).write_audiofile(str(p), codec='mp3', verbose=False, logger=None)
+        audio.subclip(prev_start_sec, end_t_sec).write_audiofile(str(p), codec='mp3', verbose=False, logger=None)
         
-        chunks.append({"path": str(p), "start_time_ms": int(prev_start * 1000), "duration_sec": end_t - prev_start})
-        log_data.append(f"Chunk {idx+1} End: {end_t:.2f}")
-        prev_start = end_t
+        # Store metadata in MS
+        chunks.append({"path": str(p), "start_time_ms": prev_start_ms, "duration_ms": end_t_ms - prev_start_ms})
+        log_data.append(f"Chunk {idx+1} End: {end_t_ms}ms")
+        prev_start_ms = end_t_ms
 
     (temp_dir / "split_points.txt").write_text("\n".join(log_data))
     audio.close()
     return chunks
 
-def write_log(message):
-    """ Writes a message to the debug log with timestamp (via print + stdout redirection). """
-    print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] {message}")
-
-def organize_srt_format(file_path):
+def organize_srt_format(file_path, output_path=None):
     """
     Reads a temporary SRT file, standardizes its format, and re-writes it.
     This function handles the 'Start Offset' header specially.
+    If output_path is provided, writes to that file; otherwise overwrites file_path.
     """
     path = pathlib.Path(file_path)
     if not path.exists():
@@ -375,10 +424,9 @@ def organize_srt_format(file_path):
         
         raw_body = "\n".join(body_lines).strip()
         
-        # Use (?:\d{1,2}:){1,2} to allow "MM:SS" or "HH:MM:SS"
-        # Use [.,:]\d{1,3} to allow dot, comma, or colon before milliseconds
+        # Use regex that matches EITHER standard HH:MM:SS,mmm OR raw integer string
         timestamp_pattern = re.compile(
-            r'((?:\d{1,2}:){1,2}\d{1,2}(?:[.,:]\d{1,3})?)\s-->\s((?:\d{1,2}:){1,2}\d{1,2}(?:[.,:]\d{1,3})?)'
+            r'(\d+(?::\d{1,2})*(?:[.,]\d{1,3})?)\s-->\s(\d+(?::\d{1,2})*(?:[.,]\d{1,3})?)'
         )
         
         matches = list(timestamp_pattern.finditer(raw_body))
@@ -428,9 +476,12 @@ def organize_srt_format(file_path):
             
         final_content = "\n".join(new_content_parts).strip()
         
+        # Determine write target
+        target_path = pathlib.Path(output_path) if output_path else path
+        
         # Ensure one newline at end? standardize to no newline at very end
-        path.write_text(final_content, encoding="utf-8")
-        write_log(f"Organized SRT format for {file_path}. Total blocks: {len(blocks)}")
+        target_path.write_text(final_content, encoding="utf-8")
+        write_log(f"Organized SRT format from {file_path} to {target_path}. Total blocks: {len(blocks)}")
         
     except Exception as e:
         write_log(f"Error in organize_srt_format for {file_path}: {e}")
@@ -441,7 +492,10 @@ def merge_srt_parts(new_chunks_info, status_callback=None):
     # Iterate through the new chunks to merge
     for i, chunk in enumerate(new_chunks_info):
         chunk_path = chunk['path']
-        chunk_stem = pathlib.Path(chunk_path).stem
+        # The path here might be the fake mp3 path we created to trick stem logic, e.g. .../temp_modified_partX.mp3
+        chunk_stem = pathlib.Path(chunk_path).stem # temp_modified_partX
+        
+        # We expect the SRT to be at .../temp_modified_partX.srt
         temp_srt_path = pathlib.Path(chunk_path).parent / f"{chunk_stem}.srt"
         
         if not temp_srt_path.exists():
@@ -474,10 +528,6 @@ def merge_srt_parts(new_chunks_info, status_callback=None):
             else:
                 write_log(f"  > No 'Start Offset' found in header. Treating file as raw SRT.")
 
-            write_log(f"  > Raw body length: {len(raw_body)} chars. Preview: {raw_body[:50].replace(chr(10), ' ')}...")
-            if not raw_body.strip():
-                write_log(f"  > Warning: Raw body extracted is empty.")
-
             # 2. Determine starting counter
             current_counter = 1
             existing_content = ""
@@ -496,6 +546,8 @@ def merge_srt_parts(new_chunks_info, status_callback=None):
             write_log(f"  > Current counter sequence starts at: {current_counter}")
 
             # 3. Process the new chunk (Shift & Renumber)
+            # IMPORTANT: The content in temp_modified matches is ALREADY Standard Format. 
+            # shift_srt_content handles Standard Format -> MS shift -> Standard Format.
             write_log(f"  > Shifting content with offset {offset_ms}ms...")
             part_srt, last_counter = shift_srt_content(raw_body, offset_ms, counter_start=current_counter)
             
@@ -510,10 +562,6 @@ def merge_srt_parts(new_chunks_info, status_callback=None):
                 write_log(f"Updated {final_srt_path} with new chunk data. Last counter: {last_counter}")
             else:
                 write_log("Warning: No valid SRT content found in chunk to merge.")
-                if not raw_body: 
-                    write_log("  > Reason: Input raw_body was empty.")
-                else: 
-                    write_log("  > Reason: shift_srt_content returned None or empty string (regex match failed?).")
 
         except Exception as e:
             write_log(f"Failed to merge chunk {temp_srt_path}: {e}")
@@ -559,7 +607,8 @@ def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, 
                 status_callback(f"Audio is long ({int(duration_sec)}s), preparing to split...")
             
             write_log(f"Audio duration {duration_sec}s > {SPLIT_THRESHOLD_SEC}s. Splitting...")
-            chunks = split_audio(audio_path, chunk_duration_sec=SPLIT_THRESHOLD_SEC, status_callback=status_callback, api_key=api_key)
+            # CALL WITH MS
+            chunks = split_audio(audio_path, chunk_duration_ms=SPLIT_THRESHOLD_SEC*1000, status_callback=status_callback, api_key=api_key)
             chunks_to_process = chunks
         except Exception as e:
             write_log(f"CRITICAL SPLITTING ERROR: {e}")
@@ -568,11 +617,13 @@ def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, 
             write_log(traceback.format_exc())
             raise e
     else:
-        chunks_to_process = [{"path": audio_path, "start_time_ms": 0, "duration_sec": duration_sec}]
+        # Fallback to single chunk with MS duration
+        chunks_to_process = [{"path": audio_path, "start_time_ms": 0, "duration_ms": int(duration_sec * 1000)}]
 
     if status_callback and chunks_to_process:
         last_chunk = chunks_to_process[-1]
-        last_duration_min = last_chunk.get("duration_sec", 0) / 60
+        # Use duration_ms
+        last_duration_min = last_chunk.get("duration_ms", 0) / 60000
         status_callback(f"INFO: Last audio chunk duration: {last_duration_min:.2f} minutes")
         # Small sleep to let the user see the message
         time.sleep(1)
@@ -636,7 +687,7 @@ def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, 
                     if "429" in str(e) or "Resource exhausted" in str(e):
                         if attempt < max_retries - 1:
                             wait_time = 20 * (attempt + 1)
-                            print(f"Warning: Resource exhausted (429). Retrying in {wait_time}s...")
+                            write_log(f"Warning: Resource exhausted (429). Retrying in {wait_time}s...")
                             
                             write_log(f"RATE LIMIT HIT | Part: {i+1} | Attempt: {attempt+1}")
                             write_log(f"Waiting {wait_time}s due to error: {e}")
@@ -653,7 +704,7 @@ def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, 
             if response and response.text:
                 # Basic check: does it contain at least one timestamp arrow?
                 if "-->" not in response.text:
-                    print(f"Warning: Part {i+1} response missing timestamps. Requesting immediate correction from Gemini...")
+                    write_log(f"Warning: Part {i+1} response missing timestamps. Requesting immediate correction from Gemini...")
                     write_log(f"WARNING: Invalid SRT format (no timestamps) for Part {i+1}. Requesting correction.")
 
                     if status_callback:
@@ -669,11 +720,9 @@ def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, 
                         response = chat.send_message(correction_prompt)
                         # We trust the retry fixed it. We could loop this but let's do one strong correction.
                         if "-->" not in response.text:
-                             print(f"Error: Model failed to fix timestamps even after correction.")
-                             write_log("ERROR: Correction failed. Still no timestamps.")
+                            write_log(f"Error: Model failed to fix timestamps even after correction.")
                     except Exception as e:
-                        print(f"Failed to send correction request: {e}")
-                        write_log(f"ERROR Sending correction request: {e}")
+                        write_log(f"Failed to send correction request: {e}")
 
             # --- DEBUG LOGGING for Result ---
             finish_reason = "Unknown"
@@ -699,40 +748,50 @@ def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, 
                 raw_srt = response.text
                 raw_srt = raw_srt.replace("```srt", "").replace("```", "").strip()
             except Exception as e:
-                 print(f"Error accessing response.text: {e}")
                  write_log(f"Error accessing response.text: {e}")
                  # Check blocked
                  if response.prompt_feedback:
-                     print(f"Prompt Feedback: {response.prompt_feedback}")
                      write_log(f"Prompt Feedback: {response.prompt_feedback}")
             
             if raw_srt:
                 # Save temp part SRT with offset info locally
                 try:
-                    offset_str = ms_to_time(chunk_offset_ms)
+                    offset_str = str(chunk_offset_ms)
                     chunk_stem = pathlib.Path(chunk_path).stem  # e.g. temp_part0
-                    temp_srt_filename = f"{chunk_stem}.srt"
                     
-                    # Save in the same directory as the temp audio (temp/)
-                    temp_srt_path = pathlib.Path(chunk_path).parent / temp_srt_filename
+                    # 1. Save Raw (temp_raw_partX.srt)
+                    temp_raw_filename = f"temp_raw_{chunk_stem.replace('temp_', '')}.srt" 
+                    temp_raw_path = pathlib.Path(chunk_path).parent / temp_raw_filename
                     
-                    with open(temp_srt_path, "w", encoding="utf-8") as f:
+                    with open(temp_raw_path, "w", encoding="utf-8") as f:
                         f.write(f"Start Offset: {offset_str}\n\n{raw_srt}")
                         
-                    write_log(f"Saved temp SRT chunk to: {temp_srt_path}")
+                    write_log(f"Saved RAW temp SRT chunk to: {temp_raw_path}")
                     
-                    # Organize/Clean SRT format before merging
-                    organize_srt_format(temp_srt_path)
+                    # 2. Organize to Modified (temp_modified_partX.srt)
+                    temp_modified_filename = f"temp_modified_{chunk_stem.replace('temp_', '')}.srt" 
+                    temp_modified_path = pathlib.Path(chunk_path).parent / temp_modified_filename
+                    
+                    # Organize/Clean SRT format from RAW to MODIFIED
+                    write_log(f"Organizing {temp_raw_path} -> {temp_modified_path}")
+                    organize_srt_format(str(temp_raw_path), output_path=str(temp_modified_path))
 
                     # === IMMEDIATE INCREMENTAL MERGE ===
-                    # Call merge immediately with just this chunk
-                    merge_srt_parts([chunk], status_callback=status_callback)
+                    # Call merge immediately with just this chunk's Modified version
+                    # We create a pseudo-chunk info that points to the modified file's stem equivalent
+                    # merge_srt_parts expects 'path' -> gets parent & stem -> finds .srt
+                    # So we construct a path that looks like ".../temp_modified_part0.mp3"
+                    modified_chunk_info = chunk.copy()
+                    modified_chunk_info['path'] = str(pathlib.Path(chunk_path).parent / f"temp_modified_{chunk_stem.replace('temp_', '')}.mp3")
+                    
+                    merge_srt_parts([modified_chunk_info], status_callback=status_callback)
                     
                 except Exception as e:
                     write_log(f"Failed to save/merge temp SRT chunk: {e}")
+                    import traceback
+                    write_log(traceback.format_exc())
 
             else:
-                 print(f"Warning: Empty response for part {i+1}")
                  write_log(f"Warning: Empty response for part {i+1}")
             
             # (No cleanup here, we need the files)
@@ -740,7 +799,7 @@ def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, 
             
             # Rate limiting cooldown
             if i < len(chunks_to_process) - 1:
-                print("Waiting 0.1 second before processing next chunk...")
+                write_log("Waiting 0.1 second before processing next chunk...")
                 time.sleep(0.1)
 
         # --- FINAL READ ---
@@ -771,13 +830,13 @@ def cleanup_files(file_paths):
                 os.remove(path)
                 cleaned_dirs.add(os.path.dirname(path))
             except Exception as e:
-                print(f"Error removing {path}: {e}")
+                write_log(f"Error removing {path}: {e}")
     
     # Try to remove empty directories
     for d in cleaned_dirs:
         if os.path.exists(d) and not os.listdir(d):
             try:
                 os.rmdir(d)
-                print(f"Removed empty directory: {d}")
+                write_log(f"Removed empty directory: {d}")
             except OSError:
                 pass # Directory not empty
