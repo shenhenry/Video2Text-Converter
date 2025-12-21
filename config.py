@@ -14,10 +14,10 @@ PREFERRED_MODELS = [
 
 # Audio Processing Settings
 # Duration in seconds for each audio chunk
-CHUNK_DURATION_SEC = 120
+CHUNK_DURATION_SEC = 60
 
 # Threshold to trigger splitting. If audio is shorter than this, it won't be split.
-SPLIT_THRESHOLD_SEC = 120
+SPLIT_THRESHOLD_SEC = 60
 
 # Split Method
 # If True, use Gemini to find the optimal split point (more accurate but slower).
@@ -73,13 +73,12 @@ Rules:
    - DO NOT use HH:MM:SS,mmm format. Use raw milliseconds.
    - Timestamps must strictly correspond to the exact time the text is spoken in the audio segment.
 3. SEGMENTATION RULES (CRITICAL):
-   - Basic Rule: Split by punctuation. Each subtitle block contains one segment of text.
-   - Merge Condition: If consecutive segments have a combined length of 15 characters or less, you CAN merge them into one subtitle block. But if the combined length exceeds 15 characters, you MUST split them into separate subtitle blocks.
-    - example: 
-        "有山水,有詩人,有情感。" -> "有山水，有詩人，有情感。" (can merge into 1 block)
-        "那讀完詩文後,你們第一個想到的感受是什麼呢?" -> "那讀完詩文後，" + "你們第一個想到的感受是什麼呢?" (saperate into 2 blocks)
-   - Formatting Constraint: Do NOT use newlines within a single subtitle block. The text for each block must be relatively short and on a single line.
-   - Forced Split: When you encounter a period ("."), "。" (Chinese period), question mark ("?"), or exclamation mark ("!"), you MUST obtain a new timestamp and start a new subtitle block immediately. DO NOT continue in the same block.
+   - Strict Split Rule: You MUST start a new subtitle block immediately upon encountering any of these punctuation marks: ",", ".", "!", "?", ":", ";", "，", "。", "！", "？", "：", "；". Do NOT combine text across these punctuation marks into the same block.
+   - Exception (Enumeration): The ONLY punctuation mark that allows merging is the enumeration comma "、". If segments are separated by "、", you may keep them in the same block IF AND ONLY IF the total length of the block remains 15 characters or less.
+     - Example (Merge allowed): "蘋果、香蕉、梨子" (Short enough -> 1 block)
+     - Example (Must split): "這是一個非常非常長的列舉項目一、這是一個非常非常長的列舉項目二" (Too long -> Split at "、")
+   - Formatting Constraint: Do NOT use newlines within a single subtitle block.
+   - General Length Limit: Even without punctuation, try to keep blocks under 15 characters.
 4. Do not include any markdown code blocks, just the raw SRT content.
 5. LANGUAGE STRICTNESS:
    - If the audio is in Chinese, you MUST transcribe in Traditional Chinese (繁體中文). Do NOT use Simplified Chinese.

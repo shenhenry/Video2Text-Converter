@@ -51,32 +51,10 @@ if not hasattr(sys, "_dual_writer_setup"):
 def write_log(message):
     """ Writes a message to the debug log with timestamp. Explicitly writes to file to avoid stdout capture issues. """
     timestamp = time.strftime('%Y-%m-%d %H:%M:%S')
-    formatted_message = f"[{timestamp}] {message}"
+    formatted_message = f"[{timestamp}] {message}\n"
     
-    # 1. Explicitly write to file (Always ensure this happens)
-    if config.SAVE_LOG:
-        try:
-            with open(LOG_FILE_PATH, "a", encoding="utf-8") as f:
-                f.write(formatted_message + "\n")
-                f.flush()
-                # os.fsync(f.fileno()) 
-        except Exception as e:
-            # Fallback print if file write fails
-            print(f"Logging failed: {e}")
-
-    # 2. Print to console
-    # If sys.stdout is our DualWriter, printing will trigger a SECOND file write.
-    # So we bypass DualWriter and write to strict stdout if we detect it.
-    if isinstance(sys.stdout, DualWriter):
-        try:
-            sys.stdout.original_stream.write(formatted_message + "\n")
-            sys.stdout.original_stream.flush()
-        except Exception:
-            # If original stream fails, try standard print
-            print(formatted_message)
-    else:
-        # Streamlit or other environment: use standard print
-        print(formatted_message)
+    sys.stdout.write(formatted_message)
+    sys.stdout.flush()
 
 def extract_audio(video_path, audio_path="temp/temp_audio.mp3"):
     """Extracts audio from a video file."""
