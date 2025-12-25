@@ -1,0 +1,1863 @@
+[2025-12-25 18:08:48] ------------------------------ NEW SESSION ------------------------------
+[2025-12-25 18:08:49] Processing File: /var/folders/rf/1xp7_gj95vl0c_x1qxw940qc0000gn/T/tmpml21atua.m4a
+[2025-12-25 18:08:49] Model: models/gemini-flash-latest
+[2025-12-25 18:08:49] Audio duration 481.26s > 60s. Splitting...
+[2025-12-25 18:08:50] Uploading search window to Gemini for split analysis...
+[2025-12-25 18:09:04] Uploading search window to Gemini for split analysis...
+[2025-12-25 18:09:14] Uploading search window to Gemini for split analysis...
+[2025-12-25 18:09:22] Uploading search window to Gemini for split analysis...
+[2025-12-25 18:09:36] Uploading search window to Gemini for split analysis...
+[2025-12-25 18:09:43] Uploading search window to Gemini for split analysis...
+[2025-12-25 18:09:53] Uploading search window to Gemini for split analysis...
+[2025-12-25 18:10:07] Uploading search window to Gemini for split analysis...
+[2025-12-25 18:10:26] Processing Part 1/9: temp_part0.mp3 (Offset: 0ms)
+[2025-12-25 18:10:28] Uploaded file 'temp_part0.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/tfca7lf4lk0h
+[2025-12-25 18:10:28] Waiting for file processing...
+[2025-12-25 18:10:29] ...all files ready
+[2025-12-25 18:10:44] Generation Complete | Finish Reason: STOP
+[2025-12-25 18:10:44] Is Correction: No
+[2025-12-25 18:10:44] Tokens: Prompt=2725, Cand=638, Total=6405
+[2025-12-25 18:10:44] Raw Text Length: 842 chars
+[2025-12-25 18:10:44] --- Raw Response Preview ---
+1
+0 --> 1000
+嗨,大家好,
+
+2
+1000 --> 3000
+歡迎收聽建華愛月趴,
+
+3
+3000 --> 5000
+我是今天的主持人宜真老師。
+
+4
+5000 --> 7000
+今天我們要討論的主題跟法律有關,
+
+5
+7000 --> 10000
+同學們上公民課的時候啊,
+
+6
+10000 --> 11000
+應該都知道,
+
+7
+11000 --> 14000
+懂得法律嘗試就知道如何保護自己。
+
+8
+15000 --> 16000
+剛好最近
+
+9
+16000 --> 19000
+七年級的同學正在閱讀一本班書叫做
+
+10
+19000 --> 21000
+只是開玩笑,
+
+11
+21000 --> 22000
+竟然變被告。
+
+12
+22000 --> 24000
+原來法律也管這些。
+
+13
+24000 --> 26000
+很高興邀請到三位特別來賓,
+
+14
+26000 --> 29000
+七零八的同學,彥如、心雲跟宇喬,
+
+15
+29000 --> 32000
+要跟我們一起分享,看完這本書以後,
+
+16
+32000 --> 36000
+針對網路社群平台上,可能會遇到的陷阱,
+
+...
+--- End Preview ---
+[2025-12-25 18:10:44] Saved RAW temp SRT chunk to: temp/temp_raw_part0.srt
+[2025-12-25 18:10:44] Organizing temp/temp_raw_part0.srt -> temp/temp_modified_part0.srt
+[2025-12-25 18:10:44] Organized SRT format from temp/temp_raw_part0.srt to temp/temp_modified_part0.srt. Total blocks: 28
+[2025-12-25 18:10:44] Merging chunk into context: temp/temp_modified_part0.srt
+[2025-12-25 18:10:44]   > Start Offset parsed: 0 -> 0ms
+[2025-12-25 18:10:44]   > Current counter sequence starts at: 1
+[2025-12-25 18:10:44]   > Shifting content with offset 0ms...
+[2025-12-25 18:10:44] shift_srt_content(): Found 28 matches in SRT content
+[2025-12-25 18:10:44] shift_srt_content(): Section 1 removing index line: 2
+[2025-12-25 18:10:44] shift_srt_content(): Section 2 removing index line: 3
+[2025-12-25 18:10:44] shift_srt_content(): Section 3 removing index line: 4
+[2025-12-25 18:10:44] shift_srt_content(): Section 4 removing index line: 5
+[2025-12-25 18:10:44] shift_srt_content(): Section 5 removing index line: 6
+[2025-12-25 18:10:44] shift_srt_content(): Section 6 removing index line: 7
+[2025-12-25 18:10:44] shift_srt_content(): Section 7 removing index line: 8
+[2025-12-25 18:10:44] shift_srt_content(): Section 8 removing index line: 9
+[2025-12-25 18:10:44] shift_srt_content(): Section 9 removing index line: 10
+[2025-12-25 18:10:44] shift_srt_content(): Section 10 removing index line: 11
+[2025-12-25 18:10:44] shift_srt_content(): Section 11 removing index line: 12
+[2025-12-25 18:10:44] shift_srt_content(): Section 12 removing index line: 13
+[2025-12-25 18:10:44] shift_srt_content(): Section 13 removing index line: 14
+[2025-12-25 18:10:44] shift_srt_content(): Section 14 removing index line: 15
+[2025-12-25 18:10:44] shift_srt_content(): Section 15 removing index line: 16
+[2025-12-25 18:10:44] shift_srt_content(): Section 16 removing index line: 17
+[2025-12-25 18:10:44] shift_srt_content(): Section 17 removing index line: 18
+[2025-12-25 18:10:44] shift_srt_content(): Section 18 removing index line: 19
+[2025-12-25 18:10:44] shift_srt_content(): Section 19 removing index line: 20
+[2025-12-25 18:10:44] shift_srt_content(): Section 20 removing index line: 21
+[2025-12-25 18:10:44] shift_srt_content(): Section 21 removing index line: 22
+[2025-12-25 18:10:44] shift_srt_content(): Section 22 removing index line: 23
+[2025-12-25 18:10:44] shift_srt_content(): Section 23 removing index line: 24
+[2025-12-25 18:10:44] shift_srt_content(): Section 24 removing index line: 25
+[2025-12-25 18:10:44] shift_srt_content(): Section 25 removing index line: 26
+[2025-12-25 18:10:44] shift_srt_content(): Section 26 removing index line: 27
+[2025-12-25 18:10:44] shift_srt_content(): Section 27 removing index line: 28
+[2025-12-25 18:10:44] Updated temp/final_context.srt with new chunk data. Last counter: 28
+[2025-12-25 18:10:44] Waiting 0.1 second before processing next chunk...
+[2025-12-25 18:10:44] Processing Part 2/9: temp_part1.mp3 (Offset: 54000ms)
+[2025-12-25 18:10:47] Uploaded file 'temp_part1.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/nqvq16lvrjwd
+[2025-12-25 18:10:47] Waiting for file processing...
+[2025-12-25 18:10:48] ...all files ready
+[2025-12-25 18:11:01] Generation Complete | Finish Reason: STOP
+[2025-12-25 18:11:01] Is Correction: No
+[2025-12-25 18:11:01] Tokens: Prompt=3011, Cand=615, Total=5845
+[2025-12-25 18:11:01] Raw Text Length: 827 chars
+[2025-12-25 18:11:01] --- Raw Response Preview ---
+1
+0 --> 800
+平台呢?
+
+2
+1000 --> 3800
+嗯,我平常較少使用社群平台,
+
+3
+3800 --> 6500
+但含暑假用最多的應該是IG。
+
+4
+7000 --> 8500
+我平常較常使用IG,
+
+5
+8500 --> 11800
+喜歡在裡面看同學們的現實動態。
+
+6
+12000 --> 16000
+嗯,聽起來大家也都會去關注同學一些生活的經驗,很好。
+
+7
+16000 --> 17000
+那
+
+8
+17500 --> 20000
+我平常使用的平台也是IG,
+
+9
+20000 --> 23000
+但是只有週末的時候才會上網。
+
+10
+23500 --> 24000
+OK,好,
+
+11
+24000 --> 26500
+大家都 很會管理自己的時間,
+
+12
+26500 --> 27000
+好,那
+
+13
+27500 --> 29500
+再來想要問問大家呢,
+
+14
+29500 --> 31500
+讀完這本書後呢,
+
+15
+31500 --> 34000
+發現這本書裡面啊,有很多案例,
+
+16
+34000 --> 36000
+好,尤其是關於網路詐騙、
+
+17
+36000...
+--- End Preview ---
+[2025-12-25 18:11:01] Saved RAW temp SRT chunk to: temp/temp_raw_part1.srt
+[2025-12-25 18:11:01] Organizing temp/temp_raw_part1.srt -> temp/temp_modified_part1.srt
+[2025-12-25 18:11:01] Organized SRT format from temp/temp_raw_part1.srt to temp/temp_modified_part1.srt. Total blocks: 26
+[2025-12-25 18:11:01] Merging chunk into context: temp/temp_modified_part1.srt
+[2025-12-25 18:11:01]   > Start Offset parsed: 54000 -> 54000ms
+[2025-12-25 18:11:01]   > Current counter sequence starts at: 29
+[2025-12-25 18:11:01]   > Shifting content with offset 54000ms...
+[2025-12-25 18:11:01] shift_srt_content(): Found 26 matches in SRT content
+[2025-12-25 18:11:01] shift_srt_content(): Section 1 removing index line: 2
+[2025-12-25 18:11:01] shift_srt_content(): Section 2 removing index line: 3
+[2025-12-25 18:11:01] shift_srt_content(): Section 3 removing index line: 4
+[2025-12-25 18:11:01] shift_srt_content(): Section 4 removing index line: 5
+[2025-12-25 18:11:01] shift_srt_content(): Section 5 removing index line: 6
+[2025-12-25 18:11:01] shift_srt_content(): Section 6 removing index line: 7
+[2025-12-25 18:11:01] shift_srt_content(): Section 7 removing index line: 8
+[2025-12-25 18:11:01] shift_srt_content(): Section 8 removing index line: 9
+[2025-12-25 18:11:01] shift_srt_content(): Section 9 removing index line: 10
+[2025-12-25 18:11:01] shift_srt_content(): Section 10 removing index line: 11
+[2025-12-25 18:11:01] shift_srt_content(): Section 11 removing index line: 12
+[2025-12-25 18:11:01] shift_srt_content(): Section 12 removing index line: 13
+[2025-12-25 18:11:01] shift_srt_content(): Section 13 removing index line: 14
+[2025-12-25 18:11:01] shift_srt_content(): Section 14 removing index line: 15
+[2025-12-25 18:11:01] shift_srt_content(): Section 15 removing index line: 16
+[2025-12-25 18:11:01] shift_srt_content(): Section 16 removing index line: 17
+[2025-12-25 18:11:01] shift_srt_content(): Section 17 removing index line: 18
+[2025-12-25 18:11:01] shift_srt_content(): Section 18 removing index line: 19
+[2025-12-25 18:11:01] shift_srt_content(): Section 19 removing index line: 20
+[2025-12-25 18:11:01] shift_srt_content(): Section 20 removing index line: 21
+[2025-12-25 18:11:01] shift_srt_content(): Section 21 removing index line: 22
+[2025-12-25 18:11:01] shift_srt_content(): Section 22 removing index line: 23
+[2025-12-25 18:11:01] shift_srt_content(): Section 23 removing index line: 24
+[2025-12-25 18:11:01] shift_srt_content(): Section 24 removing index line: 25
+[2025-12-25 18:11:01] shift_srt_content(): Section 25 removing index line: 26
+[2025-12-25 18:11:01] Updated temp/final_context.srt with new chunk data. Last counter: 54
+[2025-12-25 18:11:01] Waiting 0.1 second before processing next chunk...
+[2025-12-25 18:11:01] Processing Part 3/9: temp_part2.mp3 (Offset: 116930ms)
+[2025-12-25 18:11:04] Uploaded file 'temp_part2.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/e0ggbmacrhbq
+[2025-12-25 18:11:04] Waiting for file processing...
+[2025-12-25 18:11:05] ...all files ready
+[2025-12-25 18:11:15] Generation Complete | Finish Reason: STOP
+[2025-12-25 18:11:15] Is Correction: No
+[2025-12-25 18:11:15] Tokens: Prompt=3003, Cand=568, Total=4816
+[2025-12-25 18:11:15] Raw Text Length: 747 chars
+[2025-12-25 18:11:15] --- Raw Response Preview ---
+1
+0 --> 3300
+想過福利那麼多的話，那是由誰提供呢？
+
+2
+3300 --> 3500
+對，
+
+3
+3500 --> 10000
+因為現在很多一些打工的資訊都有說，我們的薪水很高哦，歡迎大家來。
+
+4
+10000 --> 17000
+可是問題是這麼高的待遇，會吸引到這麼多的人，那為什麼他還會缺人呢？
+
+5
+17000 --> 23000
+這不免讓人家覺得奇怪，是不是可能是詐騙的陷阱，對不對？
+
+6
+23000 --> 24000
+好，
+
+7
+24000 --> 24800
+那燕如呢？
+
+8
+24800 --> 28000
+我最印象深刻的是有關網路詐騙的文章。
+
+9
+28000 --> 34000
+當我們在網路上購物時，有可能會被賣家打的廣告所誤導。
+
+10
+34000 --> 38000
+而購買後才發現和想像中的不一樣。
+
+11
+38000 --> 40000
+哦，真的的確是。
+
+12
+40000 --> 44000
+有時候我們在網路上看到一件漂亮的衣服，
+
+13
+44000 --> 47000
+結果買了之後發現，
+
+14
+47000 --> 49000
+它的顏色怎麼會有色差...
+--- End Preview ---
+[2025-12-25 18:11:15] Saved RAW temp SRT chunk to: temp/temp_raw_part2.srt
+[2025-12-25 18:11:15] Organizing temp/temp_raw_part2.srt -> temp/temp_modified_part2.srt
+[2025-12-25 18:11:15] Organized SRT format from temp/temp_raw_part2.srt to temp/temp_modified_part2.srt. Total blocks: 22
+[2025-12-25 18:11:15] Merging chunk into context: temp/temp_modified_part2.srt
+[2025-12-25 18:11:15]   > Start Offset parsed: 116930 -> 116930ms
+[2025-12-25 18:11:15]   > Current counter sequence starts at: 55
+[2025-12-25 18:11:15]   > Shifting content with offset 116930ms...
+[2025-12-25 18:11:15] shift_srt_content(): Found 22 matches in SRT content
+[2025-12-25 18:11:15] shift_srt_content(): Section 1 removing index line: 2
+[2025-12-25 18:11:15] shift_srt_content(): Section 2 removing index line: 3
+[2025-12-25 18:11:15] shift_srt_content(): Section 3 removing index line: 4
+[2025-12-25 18:11:15] shift_srt_content(): Section 4 removing index line: 5
+[2025-12-25 18:11:15] shift_srt_content(): Section 5 removing index line: 6
+[2025-12-25 18:11:15] shift_srt_content(): Section 6 removing index line: 7
+[2025-12-25 18:11:15] shift_srt_content(): Section 7 removing index line: 8
+[2025-12-25 18:11:15] shift_srt_content(): Section 8 removing index line: 9
+[2025-12-25 18:11:15] shift_srt_content(): Section 9 removing index line: 10
+[2025-12-25 18:11:15] shift_srt_content(): Section 10 removing index line: 11
+[2025-12-25 18:11:15] shift_srt_content(): Section 11 removing index line: 12
+[2025-12-25 18:11:15] shift_srt_content(): Section 12 removing index line: 13
+[2025-12-25 18:11:15] shift_srt_content(): Section 13 removing index line: 14
+[2025-12-25 18:11:15] shift_srt_content(): Section 14 removing index line: 15
+[2025-12-25 18:11:15] shift_srt_content(): Section 15 removing index line: 16
+[2025-12-25 18:11:15] shift_srt_content(): Section 16 removing index line: 17
+[2025-12-25 18:11:15] shift_srt_content(): Section 17 removing index line: 18
+[2025-12-25 18:11:15] shift_srt_content(): Section 18 removing index line: 19
+[2025-12-25 18:11:15] shift_srt_content(): Section 19 removing index line: 20
+[2025-12-25 18:11:15] shift_srt_content(): Section 20 removing index line: 21
+[2025-12-25 18:11:15] shift_srt_content(): Section 21 removing index line: 22
+[2025-12-25 18:11:15] Updated temp/final_context.srt with new chunk data. Last counter: 76
+[2025-12-25 18:11:15] Waiting 0.1 second before processing next chunk...
+[2025-12-25 18:11:15] Processing Part 4/9: temp_part3.mp3 (Offset: 179630ms)
+[2025-12-25 18:11:17] Uploaded file 'temp_part3.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/qyz7e9wt7fsi
+[2025-12-25 18:11:17] Waiting for file processing...
+[2025-12-25 18:11:17] ...all files ready
+[2025-12-25 18:11:32] Generation Complete | Finish Reason: STOP
+[2025-12-25 18:11:32] Is Correction: No
+[2025-12-25 18:11:32] Tokens: Prompt=3088, Cand=797, Total=5964
+[2025-12-25 18:11:32] Raw Text Length: 1039 chars
+[2025-12-25 18:11:32] --- Raw Response Preview ---
+1
+0 --> 2000
+有什麼跟我們分享的地方?
+
+2
+2000 --> 5400
+我印象深刻的是一位小男孩
+
+3
+5400 --> 6300
+課金玩遊戲,
+
+4
+6300 --> 7700
+賣完賬號
+
+5
+8300 --> 10000
+換原本的密碼
+
+6
+10000 --> 11200
+登錄回去,
+
+7
+11200 --> 13900
+是會有道德和法律的問題。
+
+8
+14400 --> 15100
+哦,對,
+
+9
+15400 --> 17000
+這種網路遊戲
+
+10
+17000 --> 18800
+課金交易的議題
+
+11
+18800 --> 20400
+也是常常會發生。
+
+12
+20600 --> 22800
+有時候我們在網路交易的時候,
+
+13
+22800 --> 25500
+不知道自己不小心已經踩到紅線了,
+
+14
+25700 --> 26400
+然後呢,
+
+15
+26400 --> 27600
+就可能要負擔
+
+16
+27600 --> 29200
+賠償法律的問題。
+
+17
+29600 --> 30000
+好,
+
+18
+30200 --> 32700
+謝謝大家分享自己的經驗跟看...
+--- End Preview ---
+[2025-12-25 18:11:32] Saved RAW temp SRT chunk to: temp/temp_raw_part3.srt
+[2025-12-25 18:11:32] Organizing temp/temp_raw_part3.srt -> temp/temp_modified_part3.srt
+[2025-12-25 18:11:32] Organized SRT format from temp/temp_raw_part3.srt to temp/temp_modified_part3.srt. Total blocks: 36
+[2025-12-25 18:11:32] Merging chunk into context: temp/temp_modified_part3.srt
+[2025-12-25 18:11:32]   > Start Offset parsed: 179630 -> 179630ms
+[2025-12-25 18:11:32]   > Current counter sequence starts at: 77
+[2025-12-25 18:11:32]   > Shifting content with offset 179630ms...
+[2025-12-25 18:11:32] shift_srt_content(): Found 36 matches in SRT content
+[2025-12-25 18:11:32] shift_srt_content(): Section 1 removing index line: 2
+[2025-12-25 18:11:32] shift_srt_content(): Section 2 removing index line: 3
+[2025-12-25 18:11:32] shift_srt_content(): Section 3 removing index line: 4
+[2025-12-25 18:11:32] shift_srt_content(): Section 4 removing index line: 5
+[2025-12-25 18:11:32] shift_srt_content(): Section 5 removing index line: 6
+[2025-12-25 18:11:32] shift_srt_content(): Section 6 removing index line: 7
+[2025-12-25 18:11:32] shift_srt_content(): Section 7 removing index line: 8
+[2025-12-25 18:11:32] shift_srt_content(): Section 8 removing index line: 9
+[2025-12-25 18:11:32] shift_srt_content(): Section 9 removing index line: 10
+[2025-12-25 18:11:32] shift_srt_content(): Section 10 removing index line: 11
+[2025-12-25 18:11:32] shift_srt_content(): Section 11 removing index line: 12
+[2025-12-25 18:11:32] shift_srt_content(): Section 12 removing index line: 13
+[2025-12-25 18:11:32] shift_srt_content(): Section 13 removing index line: 14
+[2025-12-25 18:11:32] shift_srt_content(): Section 14 removing index line: 15
+[2025-12-25 18:11:32] shift_srt_content(): Section 15 removing index line: 16
+[2025-12-25 18:11:32] shift_srt_content(): Section 16 removing index line: 17
+[2025-12-25 18:11:32] shift_srt_content(): Section 17 removing index line: 18
+[2025-12-25 18:11:32] shift_srt_content(): Section 18 removing index line: 19
+[2025-12-25 18:11:32] shift_srt_content(): Section 19 removing index line: 20
+[2025-12-25 18:11:32] shift_srt_content(): Section 20 removing index line: 21
+[2025-12-25 18:11:32] shift_srt_content(): Section 21 removing index line: 22
+[2025-12-25 18:11:32] shift_srt_content(): Section 22 removing index line: 23
+[2025-12-25 18:11:32] shift_srt_content(): Section 23 removing index line: 24
+[2025-12-25 18:11:32] shift_srt_content(): Section 24 removing index line: 25
+[2025-12-25 18:11:32] shift_srt_content(): Section 25 removing index line: 26
+[2025-12-25 18:11:32] shift_srt_content(): Section 26 removing index line: 27
+[2025-12-25 18:11:32] shift_srt_content(): Section 27 removing index line: 28
+[2025-12-25 18:11:32] shift_srt_content(): Section 28 removing index line: 29
+[2025-12-25 18:11:32] shift_srt_content(): Section 29 removing index line: 30
+[2025-12-25 18:11:32] shift_srt_content(): Section 30 removing index line: 31
+[2025-12-25 18:11:32] shift_srt_content(): Section 31 removing index line: 32
+[2025-12-25 18:11:32] shift_srt_content(): Section 32 removing index line: 33
+[2025-12-25 18:11:32] shift_srt_content(): Section 33 removing index line: 34
+[2025-12-25 18:11:32] shift_srt_content(): Section 34 removing index line: 35
+[2025-12-25 18:11:32] shift_srt_content(): Section 35 removing index line: 36
+[2025-12-25 18:11:32] Updated temp/final_context.srt with new chunk data. Last counter: 112
+[2025-12-25 18:11:32] Waiting 0.1 second before processing next chunk...
+[2025-12-25 18:11:32] Processing Part 5/9: temp_part4.mp3 (Offset: 244970ms)
+[2025-12-25 18:11:35] Uploaded file 'temp_part4.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/zu2jm089wvs2
+[2025-12-25 18:11:35] Waiting for file processing...
+[2025-12-25 18:11:35] ...all files ready
+[2025-12-25 18:11:50] Generation Complete | Finish Reason: STOP
+[2025-12-25 18:11:50] Is Correction: No
+[2025-12-25 18:11:50] Tokens: Prompt=3031, Cand=735, Total=6403
+[2025-12-25 18:11:50] Raw Text Length: 951 chars
+[2025-12-25 18:11:50] --- Raw Response Preview ---
+1
+0 --> 900
+對不對?
+
+2
+900 --> 1800
+那燕如呢?
+
+3
+1800 --> 3800
+我會詢問家長或老師。
+
+4
+3800 --> 4380
+哦,對。
+
+5
+4380 --> 6380
+其實這有時候我們不知道真假,
+
+6
+6380 --> 11500
+也可以去詢問專業的家長或是老師來幫你一起來判斷解決。
+
+7
+11500 --> 12500
+好,那新雲。
+
+8
+12500 --> 14000
+我會看評論區,
+
+9
+14000 --> 17800
+大多數人會直接打在評論區說,
+
+10
+17800 --> 18800
+這是假的。
+
+11
+18800 --> 19500
+哦,對。
+
+12
+19500 --> 22000
+有時候我們看到一些網路的報導,
+
+13
+22000 --> 23500
+標題非常聳動,
+
+14
+23500 --> 25500
+但是點進去一看發現,
+
+15
+25500 --> 27000
+怎麼跟現實差很多?
+
+16
+27000 --> 27800
+其實呢,
+
+17
+27800 --> 30800
+我們也可以先看看評論區的網友怎麼說,
+
+18
+308...
+--- End Preview ---
+[2025-12-25 18:11:50] Saved RAW temp SRT chunk to: temp/temp_raw_part4.srt
+[2025-12-25 18:11:50] Organizing temp/temp_raw_part4.srt -> temp/temp_modified_part4.srt
+[2025-12-25 18:11:50] Organized SRT format from temp/temp_raw_part4.srt to temp/temp_modified_part4.srt. Total blocks: 32
+[2025-12-25 18:11:50] Merging chunk into context: temp/temp_modified_part4.srt
+[2025-12-25 18:11:50]   > Start Offset parsed: 244970 -> 244970ms
+[2025-12-25 18:11:50]   > Current counter sequence starts at: 113
+[2025-12-25 18:11:50]   > Shifting content with offset 244970ms...
+[2025-12-25 18:11:50] shift_srt_content(): Found 32 matches in SRT content
+[2025-12-25 18:11:50] shift_srt_content(): Section 1 removing index line: 2
+[2025-12-25 18:11:50] shift_srt_content(): Section 2 removing index line: 3
+[2025-12-25 18:11:50] shift_srt_content(): Section 3 removing index line: 4
+[2025-12-25 18:11:50] shift_srt_content(): Section 4 removing index line: 5
+[2025-12-25 18:11:50] shift_srt_content(): Section 5 removing index line: 6
+[2025-12-25 18:11:50] shift_srt_content(): Section 6 removing index line: 7
+[2025-12-25 18:11:50] shift_srt_content(): Section 7 removing index line: 8
+[2025-12-25 18:11:50] shift_srt_content(): Section 8 removing index line: 9
+[2025-12-25 18:11:50] shift_srt_content(): Section 9 removing index line: 10
+[2025-12-25 18:11:50] shift_srt_content(): Section 10 removing index line: 11
+[2025-12-25 18:11:50] shift_srt_content(): Section 11 removing index line: 12
+[2025-12-25 18:11:50] shift_srt_content(): Section 12 removing index line: 13
+[2025-12-25 18:11:50] shift_srt_content(): Section 13 removing index line: 14
+[2025-12-25 18:11:50] shift_srt_content(): Section 14 removing index line: 15
+[2025-12-25 18:11:50] shift_srt_content(): Section 15 removing index line: 16
+[2025-12-25 18:11:50] shift_srt_content(): Section 16 removing index line: 17
+[2025-12-25 18:11:50] shift_srt_content(): Section 17 removing index line: 18
+[2025-12-25 18:11:50] shift_srt_content(): Section 18 removing index line: 19
+[2025-12-25 18:11:50] shift_srt_content(): Section 19 removing index line: 20
+[2025-12-25 18:11:50] shift_srt_content(): Section 20 removing index line: 21
+[2025-12-25 18:11:50] shift_srt_content(): Section 21 removing index line: 22
+[2025-12-25 18:11:50] shift_srt_content(): Section 22 removing index line: 23
+[2025-12-25 18:11:50] shift_srt_content(): Section 23 removing index line: 24
+[2025-12-25 18:11:50] shift_srt_content(): Section 24 removing index line: 25
+[2025-12-25 18:11:50] shift_srt_content(): Section 25 removing index line: 26
+[2025-12-25 18:11:50] shift_srt_content(): Section 26 removing index line: 27
+[2025-12-25 18:11:50] shift_srt_content(): Section 27 removing index line: 28
+[2025-12-25 18:11:50] shift_srt_content(): Section 28 removing index line: 29
+[2025-12-25 18:11:50] shift_srt_content(): Section 29 removing index line: 30
+[2025-12-25 18:11:50] shift_srt_content(): Section 30 removing index line: 31
+[2025-12-25 18:11:50] shift_srt_content(): Section 31 removing index line: 32
+[2025-12-25 18:11:50] Updated temp/final_context.srt with new chunk data. Last counter: 144
+[2025-12-25 18:11:50] Waiting 0.1 second before processing next chunk...
+[2025-12-25 18:11:50] Processing Part 6/9: temp_part5.mp3 (Offset: 308540ms)
+[2025-12-25 18:11:53] Uploaded file 'temp_part5.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/tr96miroxcz8
+[2025-12-25 18:11:53] Waiting for file processing...
+[2025-12-25 18:11:53] ...all files ready
+[2025-12-25 18:12:07] Generation Complete | Finish Reason: STOP
+[2025-12-25 18:12:07] Is Correction: No
+[2025-12-25 18:12:07] Tokens: Prompt=2728, Cand=607, Total=5874
+[2025-12-25 18:12:07] Raw Text Length: 799 chars
+[2025-12-25 18:12:07] --- Raw Response Preview ---
+1
+0 --> 500
+應該要注意哪些地方
+
+2
+500 --> 940
+避免自己
+
+3
+940 --> 1490
+不小心
+
+4
+1490 --> 2000
+違法了呢?
+
+5
+5200 --> 6500
+假如你在公開場合
+
+6
+6500 --> 9100
+包含網路辱罵他人,
+
+7
+9100 --> 12200
+有可能會觸犯到公然侮辱罪。
+
+8
+12200 --> 13200
+而如果你在
+
+9
+14800 --> 17300
+未經過他人同意時,
+
+10
+17300 --> 19800
+亂傳他人的照片,
+
+11
+19800 --> 22000
+有可能會侵害到肖像權。
+
+12
+22000 --> 22900
+沒錯,
+
+13
+22900 --> 24800
+這個真的是我們青少年
+
+14
+24800 --> 26300
+常會發生的現象。
+
+15
+26300 --> 28800
+有些同學覺得在網路場合
+
+16
+28800 --> 30900
+開個玩笑應該沒有問題,
+
+17
+30900 --> 33500
+但是其實網路也是一個公開的場合。
+
+18
+33500 --> 35000
+在公開的場合呢,
+
+...
+--- End Preview ---
+[2025-12-25 18:12:07] Saved RAW temp SRT chunk to: temp/temp_raw_part5.srt
+[2025-12-25 18:12:07] Organizing temp/temp_raw_part5.srt -> temp/temp_modified_part5.srt
+[2025-12-25 18:12:07] Organized SRT format from temp/temp_raw_part5.srt to temp/temp_modified_part5.srt. Total blocks: 28
+[2025-12-25 18:12:07] Merging chunk into context: temp/temp_modified_part5.srt
+[2025-12-25 18:12:07]   > Start Offset parsed: 308540 -> 308540ms
+[2025-12-25 18:12:07]   > Current counter sequence starts at: 145
+[2025-12-25 18:12:07]   > Shifting content with offset 308540ms...
+[2025-12-25 18:12:07] shift_srt_content(): Found 28 matches in SRT content
+[2025-12-25 18:12:07] shift_srt_content(): Section 1 removing index line: 2
+[2025-12-25 18:12:07] shift_srt_content(): Section 2 removing index line: 3
+[2025-12-25 18:12:07] shift_srt_content(): Section 3 removing index line: 4
+[2025-12-25 18:12:07] shift_srt_content(): Section 4 removing index line: 5
+[2025-12-25 18:12:07] shift_srt_content(): Section 5 removing index line: 6
+[2025-12-25 18:12:07] shift_srt_content(): Section 6 removing index line: 7
+[2025-12-25 18:12:07] shift_srt_content(): Section 7 removing index line: 8
+[2025-12-25 18:12:07] shift_srt_content(): Section 8 removing index line: 9
+[2025-12-25 18:12:07] shift_srt_content(): Section 9 removing index line: 10
+[2025-12-25 18:12:07] shift_srt_content(): Section 10 removing index line: 11
+[2025-12-25 18:12:07] shift_srt_content(): Section 11 removing index line: 12
+[2025-12-25 18:12:07] shift_srt_content(): Section 12 removing index line: 13
+[2025-12-25 18:12:07] shift_srt_content(): Section 13 removing index line: 14
+[2025-12-25 18:12:07] shift_srt_content(): Section 14 removing index line: 15
+[2025-12-25 18:12:07] shift_srt_content(): Section 15 removing index line: 16
+[2025-12-25 18:12:07] shift_srt_content(): Section 16 removing index line: 17
+[2025-12-25 18:12:07] shift_srt_content(): Section 17 removing index line: 18
+[2025-12-25 18:12:07] shift_srt_content(): Section 18 removing index line: 19
+[2025-12-25 18:12:07] shift_srt_content(): Section 19 removing index line: 20
+[2025-12-25 18:12:07] shift_srt_content(): Section 20 removing index line: 21
+[2025-12-25 18:12:07] shift_srt_content(): Section 21 removing index line: 22
+[2025-12-25 18:12:07] shift_srt_content(): Section 22 removing index line: 23
+[2025-12-25 18:12:07] shift_srt_content(): Section 23 removing index line: 24
+[2025-12-25 18:12:07] shift_srt_content(): Section 24 removing index line: 25
+[2025-12-25 18:12:07] shift_srt_content(): Section 25 removing index line: 26
+[2025-12-25 18:12:07] shift_srt_content(): Section 26 removing index line: 27
+[2025-12-25 18:12:07] shift_srt_content(): Section 27 removing index line: 28
+[2025-12-25 18:12:07] Updated temp/final_context.srt with new chunk data. Last counter: 172
+[2025-12-25 18:12:07] Waiting 0.1 second before processing next chunk...
+[2025-12-25 18:12:07] Processing Part 7/9: temp_part6.mp3 (Offset: 362630ms)
+[2025-12-25 18:12:10] Uploaded file 'temp_part6.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/d9335fzm9pyt
+[2025-12-25 18:12:10] Waiting for file processing...
+[2025-12-25 18:12:10] ...all files ready
+[2025-12-25 18:12:20] Generation Complete | Finish Reason: STOP
+[2025-12-25 18:12:20] Is Correction: No
+[2025-12-25 18:12:20] Tokens: Prompt=3222, Cand=498, Total=4971
+[2025-12-25 18:12:20] Raw Text Length: 692 chars
+[2025-12-25 18:12:20] --- Raw Response Preview ---
+1
+0 --> 1960
+聽了以後也可以受益良多。
+
+2
+1960 --> 2680
+好。
+
+3
+2680 --> 7080
+那再來就是呢,其實很多現象發現,
+
+4
+7080 --> 10080
+我們很依賴網路的世界。
+
+5
+10080 --> 13680
+除了要學習怎麼避免自己觸犯法律之外,
+
+6
+13680 --> 17680
+可能也要去關注一些網路成癮的問題。
+
+7
+17680 --> 20380
+例如啊,個人時間要怎麼管理?
+
+8
+20380 --> 24680
+除了網路之外,有沒有其他可以排解壓力的方法呢?
+
+9
+24680 --> 30680
+那我想听聽看大家有沒有對於同學在使用網路的話,給他們一些建議呢?
+
+10
+31300 --> 34200
+其實不只有上網才能排解壓力,
+
+11
+34200 --> 39500
+可以多嘗試其他事情,會發現放下手機也不是很難。
+
+12
+40000 --> 41400
+嗯,好,非常好。
+
+13
+41400 --> 45000
+那宇喬平常會怎麼樣排解自己的壓力呢?
+
+14
+47400 --> 53800
+嗯,如果你要做重要的事情或是考試時,可...
+--- End Preview ---
+[2025-12-25 18:12:20] Saved RAW temp SRT chunk to: temp/temp_raw_part6.srt
+[2025-12-25 18:12:20] Organizing temp/temp_raw_part6.srt -> temp/temp_modified_part6.srt
+[2025-12-25 18:12:20] Organized SRT format from temp/temp_raw_part6.srt to temp/temp_modified_part6.srt. Total blocks: 19
+[2025-12-25 18:12:20] Merging chunk into context: temp/temp_modified_part6.srt
+[2025-12-25 18:12:20]   > Start Offset parsed: 362630 -> 362630ms
+[2025-12-25 18:12:20]   > Current counter sequence starts at: 173
+[2025-12-25 18:12:20]   > Shifting content with offset 362630ms...
+[2025-12-25 18:12:20] shift_srt_content(): Found 19 matches in SRT content
+[2025-12-25 18:12:20] shift_srt_content(): Section 1 removing index line: 2
+[2025-12-25 18:12:20] shift_srt_content(): Section 2 removing index line: 3
+[2025-12-25 18:12:20] shift_srt_content(): Section 3 removing index line: 4
+[2025-12-25 18:12:20] shift_srt_content(): Section 4 removing index line: 5
+[2025-12-25 18:12:20] shift_srt_content(): Section 5 removing index line: 6
+[2025-12-25 18:12:20] shift_srt_content(): Section 6 removing index line: 7
+[2025-12-25 18:12:20] shift_srt_content(): Section 7 removing index line: 8
+[2025-12-25 18:12:20] shift_srt_content(): Section 8 removing index line: 9
+[2025-12-25 18:12:20] shift_srt_content(): Section 9 removing index line: 10
+[2025-12-25 18:12:20] shift_srt_content(): Section 10 removing index line: 11
+[2025-12-25 18:12:20] shift_srt_content(): Section 11 removing index line: 12
+[2025-12-25 18:12:20] shift_srt_content(): Section 12 removing index line: 13
+[2025-12-25 18:12:20] shift_srt_content(): Section 13 removing index line: 14
+[2025-12-25 18:12:20] shift_srt_content(): Section 14 removing index line: 15
+[2025-12-25 18:12:20] shift_srt_content(): Section 15 removing index line: 16
+[2025-12-25 18:12:20] shift_srt_content(): Section 16 removing index line: 17
+[2025-12-25 18:12:20] shift_srt_content(): Section 17 removing index line: 18
+[2025-12-25 18:12:20] shift_srt_content(): Section 18 removing index line: 19
+[2025-12-25 18:12:20] Updated temp/final_context.srt with new chunk data. Last counter: 191
+[2025-12-25 18:12:20] Waiting 0.1 second before processing next chunk...
+[2025-12-25 18:12:20] Processing Part 8/9: temp_part7.mp3 (Offset: 432180ms)
+[2025-12-25 18:12:23] Uploaded file 'temp_part7.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/d3aaeavcrumx
+[2025-12-25 18:12:23] Waiting for file processing...
+[2025-12-25 18:12:23] ...all files ready
+[2025-12-25 18:12:36] Generation Complete | Finish Reason: STOP
+[2025-12-25 18:12:36] Is Correction: No
+[2025-12-25 18:12:36] Tokens: Prompt=2550, Cand=500, Total=5462
+[2025-12-25 18:12:36] Raw Text Length: 671 chars
+[2025-12-25 18:12:36] --- Raw Response Preview ---
+1
+0 --> 990
+少年研究指出
+
+2
+1300 --> 4700
+過早或是長時間的使用手機跟網路
+
+3
+5000 --> 7200
+注意力會下降30%
+
+4
+7400 --> 8800
+尤其在國中階段
+
+5
+8800 --> 11200
+大腦正在快速發展的時期。
+
+6
+11500 --> 15600
+如果我們可以利用一些休閒的時間出去走走運動
+
+7
+16000 --> 17000
+看看課外書
+
+8
+17400 --> 17700
+好
+
+9
+17700 --> 19700
+然後自己善用好時間學習
+
+10
+19700 --> 21800
+更有利於身心的健康。
+
+11
+22100 --> 22300
+好
+
+12
+22300 --> 26700
+那很高興呢,大家都學到了很多基本法律的嘗試
+
+13
+27000 --> 28000
+懂得保護自己
+
+14
+28000 --> 29900
+也是學習尊重他人
+
+15
+29900 --> 31800
+找到生活的平衡點
+
+16
+31800 --> 34800
+才能身心健康的享受生活。
+
+17
+35400 --> 36600
+那聽完了之後
+
+18
+366...
+--- End Preview ---
+[2025-12-25 18:12:36] Saved RAW temp SRT chunk to: temp/temp_raw_part7.srt
+[2025-12-25 18:12:36] Organizing temp/temp_raw_part7.srt -> temp/temp_modified_part7.srt
+[2025-12-25 18:12:36] Organized SRT format from temp/temp_raw_part7.srt to temp/temp_modified_part7.srt. Total blocks: 23
+[2025-12-25 18:12:36] Merging chunk into context: temp/temp_modified_part7.srt
+[2025-12-25 18:12:36]   > Start Offset parsed: 432180 -> 432180ms
+[2025-12-25 18:12:36]   > Current counter sequence starts at: 192
+[2025-12-25 18:12:36]   > Shifting content with offset 432180ms...
+[2025-12-25 18:12:36] shift_srt_content(): Found 23 matches in SRT content
+[2025-12-25 18:12:36] shift_srt_content(): Section 1 removing index line: 2
+[2025-12-25 18:12:36] shift_srt_content(): Section 2 removing index line: 3
+[2025-12-25 18:12:36] shift_srt_content(): Section 3 removing index line: 4
+[2025-12-25 18:12:36] shift_srt_content(): Section 4 removing index line: 5
+[2025-12-25 18:12:36] shift_srt_content(): Section 5 removing index line: 6
+[2025-12-25 18:12:36] shift_srt_content(): Section 6 removing index line: 7
+[2025-12-25 18:12:36] shift_srt_content(): Section 7 removing index line: 8
+[2025-12-25 18:12:36] shift_srt_content(): Section 8 removing index line: 9
+[2025-12-25 18:12:36] shift_srt_content(): Section 9 removing index line: 10
+[2025-12-25 18:12:36] shift_srt_content(): Section 10 removing index line: 11
+[2025-12-25 18:12:36] shift_srt_content(): Section 11 removing index line: 12
+[2025-12-25 18:12:36] shift_srt_content(): Section 12 removing index line: 13
+[2025-12-25 18:12:36] shift_srt_content(): Section 13 removing index line: 14
+[2025-12-25 18:12:36] shift_srt_content(): Section 14 removing index line: 15
+[2025-12-25 18:12:36] shift_srt_content(): Section 15 removing index line: 16
+[2025-12-25 18:12:36] shift_srt_content(): Section 16 removing index line: 17
+[2025-12-25 18:12:36] shift_srt_content(): Section 17 removing index line: 18
+[2025-12-25 18:12:36] shift_srt_content(): Section 18 removing index line: 19
+[2025-12-25 18:12:36] shift_srt_content(): Section 19 removing index line: 20
+[2025-12-25 18:12:36] shift_srt_content(): Section 20 removing index line: 21
+[2025-12-25 18:12:36] shift_srt_content(): Section 21 removing index line: 22
+[2025-12-25 18:12:36] shift_srt_content(): Section 22 removing index line: 23
+[2025-12-25 18:12:36] Updated temp/final_context.srt with new chunk data. Last counter: 214
+[2025-12-25 18:12:36] Waiting 0.1 second before processing next chunk...
+[2025-12-25 18:12:36] Processing Part 9/9: temp_part8.mp3 (Offset: 480728ms)
+[2025-12-25 18:12:39] Uploaded file 'temp_part8.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/9rzb34sws6iu
+[2025-12-25 18:12:39] Waiting for file processing...
+[2025-12-25 18:12:40] ...all files ready
+[2025-12-25 18:12:48] Generation Complete | Finish Reason: STOP
+[2025-12-25 18:12:48] Is Correction: No
+[2025-12-25 18:12:48] Tokens: Prompt=1014, Cand=30, Total=2154
+[2025-12-25 18:12:48] Raw Text Length: 42 chars
+[2025-12-25 18:12:48] --- Raw Response Preview ---
+1
+0 --> 1000
+大家好，
+
+2
+1000 --> 3000
+這是一個測試。...
+--- End Preview ---
+[2025-12-25 18:12:48] Saved RAW temp SRT chunk to: temp/temp_raw_part8.srt
+[2025-12-25 18:12:48] Organizing temp/temp_raw_part8.srt -> temp/temp_modified_part8.srt
+[2025-12-25 18:12:48] Organized SRT format from temp/temp_raw_part8.srt to temp/temp_modified_part8.srt. Total blocks: 2
+[2025-12-25 18:12:48] Merging chunk into context: temp/temp_modified_part8.srt
+[2025-12-25 18:12:48]   > Start Offset parsed: 480728 -> 480728ms
+[2025-12-25 18:12:48]   > Current counter sequence starts at: 215
+[2025-12-25 18:12:48]   > Shifting content with offset 480728ms...
+[2025-12-25 18:12:48] shift_srt_content(): Found 2 matches in SRT content
+[2025-12-25 18:12:48] shift_srt_content(): Section 1 removing index line: 2
+[2025-12-25 18:12:48] Updated temp/final_context.srt with new chunk data. Last counter: 216
+[2025-12-25 18:12:48] Transcription process finished successfully.
+[2025-12-25 18:52:25] ------------------------------ NEW SESSION ------------------------------
+[2025-12-25 18:52:25] Processing File: /var/folders/rf/1xp7_gj95vl0c_x1qxw940qc0000gn/T/tmp3dln3tfg.m4a
+[2025-12-25 18:52:25] Model: models/gemini-flash-latest
+[2025-12-25 18:53:28] Audio duration 481.26s > 60s. Splitting...
+[2025-12-25 18:53:29] Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
+[2025-12-25 18:53:29] Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
+[2025-12-25 18:53:29] Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
+[2025-12-25 18:53:29] Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
+[2025-12-25 18:53:29] Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
+[2025-12-25 18:53:29] Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
+[2025-12-25 18:53:29] Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
+[2025-12-25 18:53:29] Warning: Silence detection failed (arrays to stack must be passed as a "sequence" type such as list or tuple.), using exact time.
+[2025-12-25 18:53:39] Processing Part 1/9: temp_part0.mp3 (Offset: 0ms)
+[2025-12-25 18:53:43] Uploaded file 'temp_part0.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/ua6u869p7r94
+[2025-12-25 18:53:43] Waiting for file processing...
+[2025-12-25 18:53:43] ...all files ready
+[2025-12-25 18:53:59] Generation Complete | Finish Reason: STOP
+[2025-12-25 18:53:59] Is Correction: No
+[2025-12-25 18:53:59] Tokens: Prompt=2916, Cand=674, Total=6571
+[2025-12-25 18:53:59] Raw Text Length: 892 chars
+[2025-12-25 18:53:59] --- Raw Response Preview ---
+1
+0 --> 580
+嗨,大家好,
+
+2
+580 --> 3200
+歡迎收聽建華愛月趴,
+
+3
+3200 --> 4900
+我是今天的主持人宜真老師。
+
+4
+5000 --> 7800
+今天我們要討論的主題跟法律有關,
+
+5
+7800 --> 10000
+同學們上公民課的時候啊,
+
+6
+10000 --> 10700
+應該都知道,
+
+7
+10700 --> 12800
+懂得法律嘗試就知道
+
+8
+12800 --> 14800
+如何保護自己。
+
+9
+15000 --> 17200
+剛好最近青年節的同學
+
+10
+17200 --> 18800
+正在閱讀一本班書叫做
+
+11
+18800 --> 21800
+只是開玩笑竟然變被告,
+
+12
+22000 --> 23500
+原來法律也管這些。
+
+13
+24000 --> 26500
+很高興邀請到三位特別來賓,
+
+14
+26500 --> 29800
+708的同學燕如、新雲跟雨橋,
+
+15
+30000 --> 32300
+要跟我們一起分享,
+
+16
+32300 --> 33300
+看完這本書以後,
+
+17
+33300 --> 34800
+針對網路...
+--- End Preview ---
+[2025-12-25 18:53:59] Saved RAW temp SRT chunk to: temp/temp_raw_part0.srt
+[2025-12-25 18:53:59] Organizing temp/temp_raw_part0.srt -> temp/temp_modified_part0.srt
+[2025-12-25 18:53:59] Organized SRT format from temp/temp_raw_part0.srt to temp/temp_modified_part0.srt. Total blocks: 29
+[2025-12-25 18:53:59] Merging chunk into context: temp/temp_modified_part0.srt
+[2025-12-25 18:53:59]   > Start Offset parsed: 0 -> 0ms
+[2025-12-25 18:53:59]   > Current counter sequence starts at: 1
+[2025-12-25 18:53:59]   > Shifting content with offset 0ms...
+[2025-12-25 18:53:59] shift_srt_content(): Found 29 matches in SRT content
+[2025-12-25 18:53:59] shift_srt_content(): Section 1 removing index line: 2
+[2025-12-25 18:53:59] shift_srt_content(): Section 2 removing index line: 3
+[2025-12-25 18:53:59] shift_srt_content(): Section 3 removing index line: 4
+[2025-12-25 18:53:59] shift_srt_content(): Section 4 removing index line: 5
+[2025-12-25 18:53:59] shift_srt_content(): Section 5 removing index line: 6
+[2025-12-25 18:53:59] shift_srt_content(): Section 6 removing index line: 7
+[2025-12-25 18:53:59] shift_srt_content(): Section 7 removing index line: 8
+[2025-12-25 18:53:59] shift_srt_content(): Section 8 removing index line: 9
+[2025-12-25 18:53:59] shift_srt_content(): Section 9 removing index line: 10
+[2025-12-25 18:53:59] shift_srt_content(): Section 10 removing index line: 11
+[2025-12-25 18:53:59] shift_srt_content(): Section 11 removing index line: 12
+[2025-12-25 18:53:59] shift_srt_content(): Section 12 removing index line: 13
+[2025-12-25 18:53:59] shift_srt_content(): Section 13 removing index line: 14
+[2025-12-25 18:53:59] shift_srt_content(): Section 14 removing index line: 15
+[2025-12-25 18:53:59] shift_srt_content(): Section 15 removing index line: 16
+[2025-12-25 18:53:59] shift_srt_content(): Section 16 removing index line: 17
+[2025-12-25 18:53:59] shift_srt_content(): Section 17 removing index line: 18
+[2025-12-25 18:53:59] shift_srt_content(): Section 18 removing index line: 19
+[2025-12-25 18:53:59] shift_srt_content(): Section 19 removing index line: 20
+[2025-12-25 18:53:59] shift_srt_content(): Section 20 removing index line: 21
+[2025-12-25 18:53:59] shift_srt_content(): Section 21 removing index line: 22
+[2025-12-25 18:53:59] shift_srt_content(): Section 22 removing index line: 23
+[2025-12-25 18:53:59] shift_srt_content(): Section 23 removing index line: 24
+[2025-12-25 18:53:59] shift_srt_content(): Section 24 removing index line: 25
+[2025-12-25 18:53:59] shift_srt_content(): Section 25 removing index line: 26
+[2025-12-25 18:53:59] shift_srt_content(): Section 26 removing index line: 27
+[2025-12-25 18:53:59] shift_srt_content(): Section 27 removing index line: 28
+[2025-12-25 18:53:59] shift_srt_content(): Section 28 removing index line: 29
+[2025-12-25 18:53:59] Updated temp/final_context.srt with new chunk data. Last counter: 29
+[2025-12-25 18:53:59] Waiting 0.1 second before processing next chunk...
+[2025-12-25 18:53:59] Processing Part 2/9: temp_part1.mp3 (Offset: 60000ms)
+[2025-12-25 18:54:02] Uploaded file 'temp_part1.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/i3zhpwtj5pgb
+[2025-12-25 18:54:02] Waiting for file processing...
+[2025-12-25 18:54:02] ...all files ready
+[2025-12-25 18:54:13] Generation Complete | Finish Reason: STOP
+[2025-12-25 18:54:13] Is Correction: No
+[2025-12-25 18:54:13] Tokens: Prompt=2916, Cand=643, Total=5349
+[2025-12-25 18:54:13] Raw Text Length: 857 chars
+[2025-12-25 18:54:13] --- Raw Response Preview ---
+1
+0 --> 2900
+我平常較常使用IG,
+
+2
+2900 --> 6900
+喜歡在裡面看同學們的現實動態。
+
+3
+6900 --> 11200
+嗯,聽起來大家也都會去關注同學一些生活的經驗,
+
+4
+11200 --> 11700
+很好。
+
+5
+11700 --> 12100
+那
+
+6
+12100 --> 15000
+我平常使用的平台也是IG,
+
+7
+15000 --> 18200
+但是只有週末的時候才會上網。
+
+8
+18200 --> 20900
+OK,好,大家都
+
+9
+20900 --> 23000
+很會管理自己的時間,
+
+10
+23000 --> 24000
+吼,
+
+11
+24000 --> 26000
+那
+
+12
+26000 --> 30000
+再來想要問問大家呢,
+
+13
+30000 --> 32000
+讀過這本書後呢,
+
+14
+32000 --> 37000
+發現這本書裡面啊,有很多案例,
+
+15
+37000 --> 38000
+吼,
+
+16
+38000 --> 41000
+尤其是關於網路詐騙、
+
+17
+41000 --> 43000
+網路交友,
+
+18
+43000 -...
+--- End Preview ---
+[2025-12-25 18:54:13] Saved RAW temp SRT chunk to: temp/temp_raw_part1.srt
+[2025-12-25 18:54:13] Organizing temp/temp_raw_part1.srt -> temp/temp_modified_part1.srt
+[2025-12-25 18:54:13] Organized SRT format from temp/temp_raw_part1.srt to temp/temp_modified_part1.srt. Total blocks: 28
+[2025-12-25 18:54:13] Merging chunk into context: temp/temp_modified_part1.srt
+[2025-12-25 18:54:13]   > Start Offset parsed: 60000 -> 60000ms
+[2025-12-25 18:54:13]   > Current counter sequence starts at: 30
+[2025-12-25 18:54:13]   > Shifting content with offset 60000ms...
+[2025-12-25 18:54:13] shift_srt_content(): Found 28 matches in SRT content
+[2025-12-25 18:54:13] shift_srt_content(): Section 1 removing index line: 2
+[2025-12-25 18:54:13] shift_srt_content(): Section 2 removing index line: 3
+[2025-12-25 18:54:13] shift_srt_content(): Section 3 removing index line: 4
+[2025-12-25 18:54:13] shift_srt_content(): Section 4 removing index line: 5
+[2025-12-25 18:54:13] shift_srt_content(): Section 5 removing index line: 6
+[2025-12-25 18:54:13] shift_srt_content(): Section 6 removing index line: 7
+[2025-12-25 18:54:13] shift_srt_content(): Section 7 removing index line: 8
+[2025-12-25 18:54:13] shift_srt_content(): Section 8 removing index line: 9
+[2025-12-25 18:54:13] shift_srt_content(): Section 9 removing index line: 10
+[2025-12-25 18:54:13] shift_srt_content(): Section 10 removing index line: 11
+[2025-12-25 18:54:13] shift_srt_content(): Section 11 removing index line: 12
+[2025-12-25 18:54:13] shift_srt_content(): Section 12 removing index line: 13
+[2025-12-25 18:54:13] shift_srt_content(): Section 13 removing index line: 14
+[2025-12-25 18:54:13] shift_srt_content(): Section 14 removing index line: 15
+[2025-12-25 18:54:13] shift_srt_content(): Section 15 removing index line: 16
+[2025-12-25 18:54:13] shift_srt_content(): Section 16 removing index line: 17
+[2025-12-25 18:54:13] shift_srt_content(): Section 17 removing index line: 18
+[2025-12-25 18:54:13] shift_srt_content(): Section 18 removing index line: 19
+[2025-12-25 18:54:13] shift_srt_content(): Section 19 removing index line: 20
+[2025-12-25 18:54:13] shift_srt_content(): Section 20 removing index line: 21
+[2025-12-25 18:54:13] shift_srt_content(): Section 21 removing index line: 22
+[2025-12-25 18:54:13] shift_srt_content(): Section 22 removing index line: 23
+[2025-12-25 18:54:13] shift_srt_content(): Section 23 removing index line: 24
+[2025-12-25 18:54:13] shift_srt_content(): Section 24 removing index line: 25
+[2025-12-25 18:54:13] shift_srt_content(): Section 25 removing index line: 26
+[2025-12-25 18:54:13] shift_srt_content(): Section 26 removing index line: 27
+[2025-12-25 18:54:13] shift_srt_content(): Section 27 removing index line: 28
+[2025-12-25 18:54:13] Updated temp/final_context.srt with new chunk data. Last counter: 57
+[2025-12-25 18:54:13] Waiting 0.1 second before processing next chunk...
+[2025-12-25 18:54:13] Processing Part 3/9: temp_part2.mp3 (Offset: 120000ms)
+[2025-12-25 18:54:17] Uploaded file 'temp_part2.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/b0pv17lyax8i
+[2025-12-25 18:54:17] Waiting for file processing...
+[2025-12-25 18:54:17] ...all files ready
+[2025-12-25 18:54:31] Generation Complete | Finish Reason: STOP
+[2025-12-25 18:54:31] Is Correction: No
+[2025-12-25 18:54:31] Tokens: Prompt=2916, Cand=671, Total=5809
+[2025-12-25 18:54:31] Raw Text Length: 876 chars
+[2025-12-25 18:54:31] --- Raw Response Preview ---
+1
+0 --> 1000
+誰提供呢?
+
+2
+1000 --> 4000
+對,因為現在很多一些打工的資訊都有
+
+3
+4000 --> 7000
+說,我們的薪水很高哦,
+
+4
+7000 --> 8000
+歡迎大家來,
+
+5
+8000 --> 11000
+可是問題是這麼高的待遇,
+
+6
+11000 --> 13000
+會吸引到這麼多的人,
+
+7
+13000 --> 15000
+那為什麼他還會缺人呢?
+
+8
+15000 --> 17000
+這不免讓人家覺得奇怪,
+
+9
+17000 --> 20000
+是不是可能是詐騙的陷阱,對不對?
+
+10
+20000 --> 21000
+好,
+
+11
+21000 --> 22000
+那燕如呢?
+
+12
+22000 --> 25000
+我最印象深刻的是有關網路詐騙的文章,
+
+13
+25000 --> 27000
+當我們在網路上購物時,
+
+14
+27000 --> 31000
+有可能會被賣家打的廣告所誤導。
+
+15
+31000 --> 34000
+而購買後才發現和想像中的不一樣。
+
+16
+34000 --> 35000
+真的的確是,
+
+17
+35000 --> ...
+--- End Preview ---
+[2025-12-25 18:54:31] Saved RAW temp SRT chunk to: temp/temp_raw_part2.srt
+[2025-12-25 18:54:31] Organizing temp/temp_raw_part2.srt -> temp/temp_modified_part2.srt
+[2025-12-25 18:54:31] Organized SRT format from temp/temp_raw_part2.srt to temp/temp_modified_part2.srt. Total blocks: 29
+[2025-12-25 18:54:31] Merging chunk into context: temp/temp_modified_part2.srt
+[2025-12-25 18:54:31]   > Start Offset parsed: 120000 -> 120000ms
+[2025-12-25 18:54:31]   > Current counter sequence starts at: 58
+[2025-12-25 18:54:31]   > Shifting content with offset 120000ms...
+[2025-12-25 18:54:31] shift_srt_content(): Found 29 matches in SRT content
+[2025-12-25 18:54:31] shift_srt_content(): Section 1 removing index line: 2
+[2025-12-25 18:54:31] shift_srt_content(): Section 2 removing index line: 3
+[2025-12-25 18:54:31] shift_srt_content(): Section 3 removing index line: 4
+[2025-12-25 18:54:31] shift_srt_content(): Section 4 removing index line: 5
+[2025-12-25 18:54:31] shift_srt_content(): Section 5 removing index line: 6
+[2025-12-25 18:54:31] shift_srt_content(): Section 6 removing index line: 7
+[2025-12-25 18:54:31] shift_srt_content(): Section 7 removing index line: 8
+[2025-12-25 18:54:31] shift_srt_content(): Section 8 removing index line: 9
+[2025-12-25 18:54:31] shift_srt_content(): Section 9 removing index line: 10
+[2025-12-25 18:54:31] shift_srt_content(): Section 10 removing index line: 11
+[2025-12-25 18:54:31] shift_srt_content(): Section 11 removing index line: 12
+[2025-12-25 18:54:31] shift_srt_content(): Section 12 removing index line: 13
+[2025-12-25 18:54:31] shift_srt_content(): Section 13 removing index line: 14
+[2025-12-25 18:54:31] shift_srt_content(): Section 14 removing index line: 15
+[2025-12-25 18:54:31] shift_srt_content(): Section 15 removing index line: 16
+[2025-12-25 18:54:31] shift_srt_content(): Section 16 removing index line: 17
+[2025-12-25 18:54:31] shift_srt_content(): Section 17 removing index line: 18
+[2025-12-25 18:54:31] shift_srt_content(): Section 18 removing index line: 19
+[2025-12-25 18:54:31] shift_srt_content(): Section 19 removing index line: 20
+[2025-12-25 18:54:31] shift_srt_content(): Section 20 removing index line: 21
+[2025-12-25 18:54:31] shift_srt_content(): Section 21 removing index line: 22
+[2025-12-25 18:54:31] shift_srt_content(): Section 22 removing index line: 23
+[2025-12-25 18:54:31] shift_srt_content(): Section 23 removing index line: 24
+[2025-12-25 18:54:31] shift_srt_content(): Section 24 removing index line: 25
+[2025-12-25 18:54:31] shift_srt_content(): Section 25 removing index line: 26
+[2025-12-25 18:54:31] shift_srt_content(): Section 26 removing index line: 27
+[2025-12-25 18:54:31] shift_srt_content(): Section 27 removing index line: 28
+[2025-12-25 18:54:31] shift_srt_content(): Section 28 removing index line: 29
+[2025-12-25 18:54:31] Updated temp/final_context.srt with new chunk data. Last counter: 86
+[2025-12-25 18:54:31] Waiting 0.1 second before processing next chunk...
+[2025-12-25 18:54:31] Processing Part 4/9: temp_part3.mp3 (Offset: 180000ms)
+[2025-12-25 18:54:35] Uploaded file 'temp_part3.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/atirpfwxwj49
+[2025-12-25 18:54:35] Waiting for file processing...
+[2025-12-25 18:54:35] ...all files ready
+[2025-12-25 18:54:49] Generation Complete | Finish Reason: STOP
+[2025-12-25 18:54:49] Is Correction: No
+[2025-12-25 18:54:49] Tokens: Prompt=2916, Cand=651, Total=5824
+[2025-12-25 18:54:49] Raw Text Length: 854 chars
+[2025-12-25 18:54:49] --- Raw Response Preview ---
+1
+0 --> 1400
+我們跟我們分享的地方。
+
+2
+2000 --> 4000
+我印象深刻的是一位小男孩,
+
+3
+4000 --> 6000
+課金玩遊戲,
+
+4
+6000 --> 7000
+賣完賬號,
+
+5
+7000 --> 10000
+哼,原本的密碼,
+
+6
+10000 --> 11000
+登錄回去,
+
+7
+11000 --> 13800
+是會有道德和法律的問題。
+
+8
+14300 --> 14800
+哦,對,
+
+9
+15000 --> 18500
+這種網路遊戲課金交易的議題,
+
+10
+18500 --> 19800
+也是常常會發生。
+
+11
+20000 --> 22000
+有時候我們在網路交易的時候,
+
+12
+22000 --> 25000
+不知道自己不小心已經踩到紅線了,
+
+13
+25000 --> 25800
+然後呢,
+
+14
+26000 --> 28800
+就可能要負擔賠償法律的問題。
+
+15
+29000 --> 32000
+好,謝謝大家分享自己的經驗跟看法。
+
+16
+32000 --> 33000
+其實網路呢,
+
+17
+33000 --> 35800
+對現在人來說非常的...
+--- End Preview ---
+[2025-12-25 18:54:49] Saved RAW temp SRT chunk to: temp/temp_raw_part3.srt
+[2025-12-25 18:54:49] Organizing temp/temp_raw_part3.srt -> temp/temp_modified_part3.srt
+[2025-12-25 18:54:49] Organized SRT format from temp/temp_raw_part3.srt to temp/temp_modified_part3.srt. Total blocks: 28
+[2025-12-25 18:54:49] Merging chunk into context: temp/temp_modified_part3.srt
+[2025-12-25 18:54:49]   > Start Offset parsed: 180000 -> 180000ms
+[2025-12-25 18:54:49]   > Current counter sequence starts at: 87
+[2025-12-25 18:54:49]   > Shifting content with offset 180000ms...
+[2025-12-25 18:54:49] shift_srt_content(): Found 28 matches in SRT content
+[2025-12-25 18:54:49] shift_srt_content(): Section 1 removing index line: 2
+[2025-12-25 18:54:49] shift_srt_content(): Section 2 removing index line: 3
+[2025-12-25 18:54:49] shift_srt_content(): Section 3 removing index line: 4
+[2025-12-25 18:54:49] shift_srt_content(): Section 4 removing index line: 5
+[2025-12-25 18:54:49] shift_srt_content(): Section 5 removing index line: 6
+[2025-12-25 18:54:49] shift_srt_content(): Section 6 removing index line: 7
+[2025-12-25 18:54:49] shift_srt_content(): Section 7 removing index line: 8
+[2025-12-25 18:54:49] shift_srt_content(): Section 8 removing index line: 9
+[2025-12-25 18:54:49] shift_srt_content(): Section 9 removing index line: 10
+[2025-12-25 18:54:49] shift_srt_content(): Section 10 removing index line: 11
+[2025-12-25 18:54:49] shift_srt_content(): Section 11 removing index line: 12
+[2025-12-25 18:54:49] shift_srt_content(): Section 12 removing index line: 13
+[2025-12-25 18:54:49] shift_srt_content(): Section 13 removing index line: 14
+[2025-12-25 18:54:49] shift_srt_content(): Section 14 removing index line: 15
+[2025-12-25 18:54:49] shift_srt_content(): Section 15 removing index line: 16
+[2025-12-25 18:54:49] shift_srt_content(): Section 16 removing index line: 17
+[2025-12-25 18:54:49] shift_srt_content(): Section 17 removing index line: 18
+[2025-12-25 18:54:49] shift_srt_content(): Section 18 removing index line: 19
+[2025-12-25 18:54:49] shift_srt_content(): Section 19 removing index line: 20
+[2025-12-25 18:54:49] shift_srt_content(): Section 20 removing index line: 21
+[2025-12-25 18:54:49] shift_srt_content(): Section 21 removing index line: 22
+[2025-12-25 18:54:49] shift_srt_content(): Section 22 removing index line: 23
+[2025-12-25 18:54:49] shift_srt_content(): Section 23 removing index line: 24
+[2025-12-25 18:54:49] shift_srt_content(): Section 24 removing index line: 25
+[2025-12-25 18:54:49] shift_srt_content(): Section 25 removing index line: 26
+[2025-12-25 18:54:49] shift_srt_content(): Section 26 removing index line: 27
+[2025-12-25 18:54:49] shift_srt_content(): Section 27 removing index line: 28
+[2025-12-25 18:54:49] Updated temp/final_context.srt with new chunk data. Last counter: 114
+[2025-12-25 18:54:49] Waiting 0.1 second before processing next chunk...
+[2025-12-25 18:54:49] Processing Part 5/9: temp_part4.mp3 (Offset: 240000ms)
+[2025-12-25 18:54:52] Uploaded file 'temp_part4.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/aul531d9hwkg
+[2025-12-25 18:54:52] Waiting for file processing...
+[2025-12-25 18:54:52] ...all files ready
+[2025-12-25 18:55:08] Generation Complete | Finish Reason: STOP
+[2025-12-25 18:55:08] Is Correction: No
+[2025-12-25 18:55:08] Tokens: Prompt=2916, Cand=716, Total=6320
+[2025-12-25 18:55:08] Raw Text Length: 921 chars
+[2025-12-25 18:55:08] --- Raw Response Preview ---
+1
+0 --> 3000
+的,
+
+2
+3000 --> 6000
+就可以趕快先跟他封鎖,
+
+3
+6000 --> 10000
+不要讓他繼續來騷擾你,對不對?
+
+4
+10000 --> 11000
+那燕如呢?
+
+5
+11000 --> 13000
+我會詢問家長或老師。
+
+6
+13000 --> 14000
+哦,對,
+
+7
+14000 --> 18000
+其實這有時候我們不知道真假,
+
+8
+18000 --> 25000
+也可以去詢問專業的家長或是老師來幫你一起來判斷解決。
+
+9
+25000 --> 26000
+好,那
+
+10
+26000 --> 27000
+欣雲。
+
+11
+27000 --> 30000
+我會看評論區,
+
+12
+30000 --> 37000
+大多數人會直接打在評論區說,
+
+13
+37000 --> 39000
+這是假的。
+
+14
+39000 --> 40000
+哦,對,
+
+15
+40000 --> 44000
+有時候我們看到一些網路的報導,
+
+16
+44000 --> 47000
+標題非常聳動,
+
+17
+47000 --> 52000
+但是點進去一看發現,怎麼跟現實差很...
+--- End Preview ---
+[2025-12-25 18:55:08] Saved RAW temp SRT chunk to: temp/temp_raw_part4.srt
+[2025-12-25 18:55:08] Organizing temp/temp_raw_part4.srt -> temp/temp_modified_part4.srt
+[2025-12-25 18:55:08] Organized SRT format from temp/temp_raw_part4.srt to temp/temp_modified_part4.srt. Total blocks: 31
+[2025-12-25 18:55:08] Merging chunk into context: temp/temp_modified_part4.srt
+[2025-12-25 18:55:08]   > Start Offset parsed: 240000 -> 240000ms
+[2025-12-25 18:55:08]   > Current counter sequence starts at: 115
+[2025-12-25 18:55:08]   > Shifting content with offset 240000ms...
+[2025-12-25 18:55:08] shift_srt_content(): Found 31 matches in SRT content
+[2025-12-25 18:55:08] shift_srt_content(): Section 1 removing index line: 2
+[2025-12-25 18:55:08] shift_srt_content(): Section 2 removing index line: 3
+[2025-12-25 18:55:08] shift_srt_content(): Section 3 removing index line: 4
+[2025-12-25 18:55:08] shift_srt_content(): Section 4 removing index line: 5
+[2025-12-25 18:55:08] shift_srt_content(): Section 5 removing index line: 6
+[2025-12-25 18:55:08] shift_srt_content(): Section 6 removing index line: 7
+[2025-12-25 18:55:08] shift_srt_content(): Section 7 removing index line: 8
+[2025-12-25 18:55:08] shift_srt_content(): Section 8 removing index line: 9
+[2025-12-25 18:55:08] shift_srt_content(): Section 9 removing index line: 10
+[2025-12-25 18:55:08] shift_srt_content(): Section 10 removing index line: 11
+[2025-12-25 18:55:08] shift_srt_content(): Section 11 removing index line: 12
+[2025-12-25 18:55:08] shift_srt_content(): Section 12 removing index line: 13
+[2025-12-25 18:55:08] shift_srt_content(): Section 13 removing index line: 14
+[2025-12-25 18:55:08] shift_srt_content(): Section 14 removing index line: 15
+[2025-12-25 18:55:08] shift_srt_content(): Section 15 removing index line: 16
+[2025-12-25 18:55:08] shift_srt_content(): Section 16 removing index line: 17
+[2025-12-25 18:55:08] shift_srt_content(): Section 17 removing index line: 18
+[2025-12-25 18:55:08] shift_srt_content(): Section 18 removing index line: 19
+[2025-12-25 18:55:08] shift_srt_content(): Section 19 removing index line: 20
+[2025-12-25 18:55:08] shift_srt_content(): Section 20 removing index line: 21
+[2025-12-25 18:55:08] shift_srt_content(): Section 21 removing index line: 22
+[2025-12-25 18:55:08] shift_srt_content(): Section 22 removing index line: 23
+[2025-12-25 18:55:08] shift_srt_content(): Section 23 removing index line: 24
+[2025-12-25 18:55:08] shift_srt_content(): Section 24 removing index line: 25
+[2025-12-25 18:55:08] shift_srt_content(): Section 25 removing index line: 26
+[2025-12-25 18:55:08] shift_srt_content(): Section 26 removing index line: 27
+[2025-12-25 18:55:08] shift_srt_content(): Section 27 removing index line: 28
+[2025-12-25 18:55:08] shift_srt_content(): Section 28 removing index line: 29
+[2025-12-25 18:55:08] shift_srt_content(): Section 29 removing index line: 30
+[2025-12-25 18:55:08] shift_srt_content(): Section 30 removing index line: 31
+[2025-12-25 18:55:08] Updated temp/final_context.srt with new chunk data. Last counter: 145
+[2025-12-25 18:55:08] Waiting 0.1 second before processing next chunk...
+[2025-12-25 18:55:08] Processing Part 6/9: temp_part5.mp3 (Offset: 300000ms)
+[2025-12-25 18:55:11] Uploaded file 'temp_part5.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/joopmtkxjys4
+[2025-12-25 18:55:11] Waiting for file processing...
+[2025-12-25 18:55:12] ...all files ready
+[2025-12-25 18:55:26] Generation Complete | Finish Reason: STOP
+[2025-12-25 18:55:26] Is Correction: No
+[2025-12-25 18:55:26] Tokens: Prompt=2916, Cand=437, Total=5566
+[2025-12-25 18:55:26] Raw Text Length: 587 chars
+[2025-12-25 18:55:26] --- Raw Response Preview ---
+1
+0 --> 1000
+到紅線。
+
+2
+1000 --> 1300
+好。
+
+3
+2000 --> 10300
+那想要請問一下同學,你們覺得身為一個國中生,在使用網路平台的時候,應該要注意哪些地方?
+
+4
+10300 --> 13600
+避免自己不小心違法了呢?
+
+5
+14200 --> 20800
+假如你在公開場合包含網路辱罵他人,有可能會觸犯到公然侮辱罪。
+
+6
+21300 --> 30800
+而如果你在未經過他人同意時,亂傳他人的照片,有可能會侵害到肖像權。
+
+7
+31200 --> 34800
+沒錯,這個真的是我們青少年常會發生的現象。
+
+8
+35000 --> 39000
+有些同學覺得在網路場合開個玩笑應該沒有問題,
+
+9
+39000 --> 41700
+但是其實網路也是一個公開的場合。
+
+10
+42000 --> 44900
+在公開的場合呢,針對特定人,
+
+11
+44900 --> 48900
+有一些負面辱罵的言語,其實就構成公然侮辱罪了。
+
+12
+49400 --> 51700
+再來呢,還有一些照片啊,
+
+13
+51700 --> 53900
+有些同學覺得只是開玩笑亂傳,...
+--- End Preview ---
+[2025-12-25 18:55:26] Saved RAW temp SRT chunk to: temp/temp_raw_part5.srt
+[2025-12-25 18:55:26] Organizing temp/temp_raw_part5.srt -> temp/temp_modified_part5.srt
+[2025-12-25 18:55:26] Organized SRT format from temp/temp_raw_part5.srt to temp/temp_modified_part5.srt. Total blocks: 16
+[2025-12-25 18:55:26] Merging chunk into context: temp/temp_modified_part5.srt
+[2025-12-25 18:55:26]   > Start Offset parsed: 300000 -> 300000ms
+[2025-12-25 18:55:26]   > Current counter sequence starts at: 146
+[2025-12-25 18:55:26]   > Shifting content with offset 300000ms...
+[2025-12-25 18:55:26] shift_srt_content(): Found 16 matches in SRT content
+[2025-12-25 18:55:26] shift_srt_content(): Section 1 removing index line: 2
+[2025-12-25 18:55:26] shift_srt_content(): Section 2 removing index line: 3
+[2025-12-25 18:55:26] shift_srt_content(): Section 3 removing index line: 4
+[2025-12-25 18:55:26] shift_srt_content(): Section 4 removing index line: 5
+[2025-12-25 18:55:26] shift_srt_content(): Section 5 removing index line: 6
+[2025-12-25 18:55:26] shift_srt_content(): Section 6 removing index line: 7
+[2025-12-25 18:55:26] shift_srt_content(): Section 7 removing index line: 8
+[2025-12-25 18:55:26] shift_srt_content(): Section 8 removing index line: 9
+[2025-12-25 18:55:26] shift_srt_content(): Section 9 removing index line: 10
+[2025-12-25 18:55:26] shift_srt_content(): Section 10 removing index line: 11
+[2025-12-25 18:55:26] shift_srt_content(): Section 11 removing index line: 12
+[2025-12-25 18:55:26] shift_srt_content(): Section 12 removing index line: 13
+[2025-12-25 18:55:26] shift_srt_content(): Section 13 removing index line: 14
+[2025-12-25 18:55:26] shift_srt_content(): Section 14 removing index line: 15
+[2025-12-25 18:55:26] shift_srt_content(): Section 15 removing index line: 16
+[2025-12-25 18:55:26] Updated temp/final_context.srt with new chunk data. Last counter: 161
+[2025-12-25 18:55:26] Waiting 0.1 second before processing next chunk...
+[2025-12-25 18:55:26] Processing Part 7/9: temp_part6.mp3 (Offset: 360000ms)
+[2025-12-25 18:55:29] Uploaded file 'temp_part6.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/qk3na49bi8wv
+[2025-12-25 18:55:29] Waiting for file processing...
+[2025-12-25 18:55:29] ...all files ready
+[2025-12-25 18:55:46] Generation Complete | Finish Reason: STOP
+[2025-12-25 18:55:46] Is Correction: No
+[2025-12-25 18:55:46] Tokens: Prompt=2916, Cand=534, Total=6665
+[2025-12-25 18:55:46] Raw Text Length: 726 chars
+[2025-12-25 18:55:46] --- Raw Response Preview ---
+1
+0 --> 1000
+謝謝大家的分享,
+
+2
+1000 --> 4500
+希望各位觀眾聽了以後也可以受益良多。
+
+3
+4500 --> 7000
+好,那再來就是呢,
+
+4
+7000 --> 9800
+其實很多現象發現,
+
+5
+9800 --> 12500
+我們很依賴網路的世界,
+
+6
+12500 --> 16500
+除了要學習怎麼避免自己觸犯法律之外,
+
+7
+16500 --> 20000
+可能也要去關注一些網路成癮的問題,
+
+8
+20000 --> 20800
+例如啊,
+
+9
+20800 --> 22800
+個人時間要怎麼管理,
+
+10
+22800 --> 24500
+除了網路之外,
+
+11
+24500 --> 27400
+有沒有其他可以排解壓力的方法呢?
+
+12
+27400 --> 32000
+那我想听聽看大家有沒有對於同學在使用網路的話,
+
+13
+32000 --> 33000
+給他們一些建議呢?
+
+14
+33800 --> 36800
+其實不只有上網才能排解壓力,
+
+15
+36800 --> 39500
+可以多嘗試其他事情,
+
+16
+39500 --> 41900
+會發現放...
+--- End Preview ---
+[2025-12-25 18:55:46] Saved RAW temp SRT chunk to: temp/temp_raw_part6.srt
+[2025-12-25 18:55:46] Organizing temp/temp_raw_part6.srt -> temp/temp_modified_part6.srt
+[2025-12-25 18:55:46] Organized SRT format from temp/temp_raw_part6.srt to temp/temp_modified_part6.srt. Total blocks: 23
+[2025-12-25 18:55:46] Merging chunk into context: temp/temp_modified_part6.srt
+[2025-12-25 18:55:46]   > Start Offset parsed: 360000 -> 360000ms
+[2025-12-25 18:55:46]   > Current counter sequence starts at: 162
+[2025-12-25 18:55:46]   > Shifting content with offset 360000ms...
+[2025-12-25 18:55:46] shift_srt_content(): Found 23 matches in SRT content
+[2025-12-25 18:55:46] shift_srt_content(): Section 1 removing index line: 2
+[2025-12-25 18:55:46] shift_srt_content(): Section 2 removing index line: 3
+[2025-12-25 18:55:46] shift_srt_content(): Section 3 removing index line: 4
+[2025-12-25 18:55:46] shift_srt_content(): Section 4 removing index line: 5
+[2025-12-25 18:55:46] shift_srt_content(): Section 5 removing index line: 6
+[2025-12-25 18:55:46] shift_srt_content(): Section 6 removing index line: 7
+[2025-12-25 18:55:46] shift_srt_content(): Section 7 removing index line: 8
+[2025-12-25 18:55:46] shift_srt_content(): Section 8 removing index line: 9
+[2025-12-25 18:55:46] shift_srt_content(): Section 9 removing index line: 10
+[2025-12-25 18:55:46] shift_srt_content(): Section 10 removing index line: 11
+[2025-12-25 18:55:46] shift_srt_content(): Section 11 removing index line: 12
+[2025-12-25 18:55:46] shift_srt_content(): Section 12 removing index line: 13
+[2025-12-25 18:55:46] shift_srt_content(): Section 13 removing index line: 14
+[2025-12-25 18:55:46] shift_srt_content(): Section 14 removing index line: 15
+[2025-12-25 18:55:46] shift_srt_content(): Section 15 removing index line: 16
+[2025-12-25 18:55:46] shift_srt_content(): Section 16 removing index line: 17
+[2025-12-25 18:55:46] shift_srt_content(): Section 17 removing index line: 18
+[2025-12-25 18:55:46] shift_srt_content(): Section 18 removing index line: 19
+[2025-12-25 18:55:46] shift_srt_content(): Section 19 removing index line: 20
+[2025-12-25 18:55:46] shift_srt_content(): Section 20 removing index line: 21
+[2025-12-25 18:55:46] shift_srt_content(): Section 21 removing index line: 22
+[2025-12-25 18:55:46] shift_srt_content(): Section 22 removing index line: 23
+[2025-12-25 18:55:46] Updated temp/final_context.srt with new chunk data. Last counter: 184
+[2025-12-25 18:55:46] Waiting 0.1 second before processing next chunk...
+[2025-12-25 18:55:46] Processing Part 8/9: temp_part7.mp3 (Offset: 420000ms)
+[2025-12-25 18:55:49] Uploaded file 'temp_part7.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/djah3xyqefzu
+[2025-12-25 18:55:49] Waiting for file processing...
+[2025-12-25 18:55:49] ...all files ready
+[2025-12-25 18:56:00] Generation Complete | Finish Reason: STOP
+[2025-12-25 18:56:00] Is Correction: No
+[2025-12-25 18:56:00] Tokens: Prompt=2745, Cand=551, Total=5117
+[2025-12-25 18:56:00] Raw Text Length: 746 chars
+[2025-12-25 18:56:00] --- Raw Response Preview ---
+1
+0 --> 1500
+OK, 真的非常感謝,
+
+2
+1500 --> 4500
+今天真的很謝謝燕如心運跟雨橋的分享。
+
+3
+4500 --> 9000
+網路其實可以很方便讓我們可以聯繫或是分享資訊,
+
+4
+9000 --> 12500
+但是其實根據美國青少年研究指出,
+
+5
+12500 --> 16500
+過早或是長時間的使用手機跟網路,
+
+6
+16500 --> 19000
+注意力會下降30%,
+
+7
+19000 --> 21000
+尤其在國中階段,
+
+8
+21000 --> 24000
+大腦正在快速發展的時期,
+
+9
+24000 --> 27000
+如果我們可以利用一些休閒的時間,
+
+10
+27000 --> 29000
+出去走走運動,
+
+11
+29000 --> 31000
+看看課外書,
+
+12
+31000 --> 31500
+好,
+
+13
+31500 --> 34500
+然後自己善用好時間學習,
+
+14
+34500 --> 37500
+更有利於身心的健康。
+
+15
+37500 --> 38000
+好,
+
+16
+38000 --> 39000
+那很高興呢,
+
+17
+39000...
+--- End Preview ---
+[2025-12-25 18:56:00] Saved RAW temp SRT chunk to: temp/temp_raw_part7.srt
+[2025-12-25 18:56:00] Organizing temp/temp_raw_part7.srt -> temp/temp_modified_part7.srt
+[2025-12-25 18:56:00] Organized SRT format from temp/temp_raw_part7.srt to temp/temp_modified_part7.srt. Total blocks: 24
+[2025-12-25 18:56:00] Merging chunk into context: temp/temp_modified_part7.srt
+[2025-12-25 18:56:00]   > Start Offset parsed: 420000 -> 420000ms
+[2025-12-25 18:56:00]   > Current counter sequence starts at: 185
+[2025-12-25 18:56:00]   > Shifting content with offset 420000ms...
+[2025-12-25 18:56:00] shift_srt_content(): Found 24 matches in SRT content
+[2025-12-25 18:56:00] shift_srt_content(): Section 1 removing index line: 2
+[2025-12-25 18:56:00] shift_srt_content(): Section 2 removing index line: 3
+[2025-12-25 18:56:00] shift_srt_content(): Section 3 removing index line: 4
+[2025-12-25 18:56:00] shift_srt_content(): Section 4 removing index line: 5
+[2025-12-25 18:56:00] shift_srt_content(): Section 5 removing index line: 6
+[2025-12-25 18:56:00] shift_srt_content(): Section 6 removing index line: 7
+[2025-12-25 18:56:00] shift_srt_content(): Section 7 removing index line: 8
+[2025-12-25 18:56:00] shift_srt_content(): Section 8 removing index line: 9
+[2025-12-25 18:56:00] shift_srt_content(): Section 9 removing index line: 10
+[2025-12-25 18:56:00] shift_srt_content(): Section 10 removing index line: 11
+[2025-12-25 18:56:00] shift_srt_content(): Section 11 removing index line: 12
+[2025-12-25 18:56:00] shift_srt_content(): Section 12 removing index line: 13
+[2025-12-25 18:56:00] shift_srt_content(): Section 13 removing index line: 14
+[2025-12-25 18:56:00] shift_srt_content(): Section 14 removing index line: 15
+[2025-12-25 18:56:00] shift_srt_content(): Section 15 removing index line: 16
+[2025-12-25 18:56:00] shift_srt_content(): Section 16 removing index line: 17
+[2025-12-25 18:56:00] shift_srt_content(): Section 17 removing index line: 18
+[2025-12-25 18:56:00] shift_srt_content(): Section 18 removing index line: 19
+[2025-12-25 18:56:00] shift_srt_content(): Section 19 removing index line: 20
+[2025-12-25 18:56:00] shift_srt_content(): Section 20 removing index line: 21
+[2025-12-25 18:56:00] shift_srt_content(): Section 21 removing index line: 22
+[2025-12-25 18:56:00] shift_srt_content(): Section 22 removing index line: 23
+[2025-12-25 18:56:00] shift_srt_content(): Section 23 removing index line: 24
+[2025-12-25 18:56:00] Updated temp/final_context.srt with new chunk data. Last counter: 208
+[2025-12-25 18:56:00] Waiting 0.1 second before processing next chunk...
+[2025-12-25 18:56:00] Processing Part 9/9: temp_part8.mp3 (Offset: 474630ms)
+[2025-12-25 18:56:03] Uploaded file 'temp_part8.mp3' as: https://generativelanguage.googleapis.com/v1beta/files/9hlx8b3za0xq
+[2025-12-25 18:56:03] Waiting for file processing...
+[2025-12-25 18:56:03] ...all files ready
+[2025-12-25 18:56:15] Generation Complete | Finish Reason: STOP
+[2025-12-25 18:56:15] Is Correction: No
+[2025-12-25 18:56:15] Tokens: Prompt=1209, Cand=85, Total=3053
+[2025-12-25 18:56:15] Raw Text Length: 110 chars
+[2025-12-25 18:56:15] --- Raw Response Preview ---
+1
+0 --> 1380
+我是宜真老師
+
+2
+1380 --> 3400
+這裡是建華愛樂趴
+
+3
+3400 --> 5400
+我們下次再見囉
+
+4
+5400 --> 6200
+拜拜
+
+5
+6200 --> 7300
+拜拜...
+--- End Preview ---
+[2025-12-25 18:56:15] Saved RAW temp SRT chunk to: temp/temp_raw_part8.srt
+[2025-12-25 18:56:15] Organizing temp/temp_raw_part8.srt -> temp/temp_modified_part8.srt
+[2025-12-25 18:56:15] Organized SRT format from temp/temp_raw_part8.srt to temp/temp_modified_part8.srt. Total blocks: 5
+[2025-12-25 18:56:15] Merging chunk into context: temp/temp_modified_part8.srt
+[2025-12-25 18:56:15]   > Start Offset parsed: 474630 -> 474630ms
+[2025-12-25 18:56:15]   > Current counter sequence starts at: 209
+[2025-12-25 18:56:15]   > Shifting content with offset 474630ms...
+[2025-12-25 18:56:15] shift_srt_content(): Found 5 matches in SRT content
+[2025-12-25 18:56:15] shift_srt_content(): Section 1 removing index line: 2
+[2025-12-25 18:56:15] shift_srt_content(): Section 2 removing index line: 3
+[2025-12-25 18:56:15] shift_srt_content(): Section 3 removing index line: 4
+[2025-12-25 18:56:15] shift_srt_content(): Section 4 removing index line: 5
+[2025-12-25 18:56:15] Updated temp/final_context.srt with new chunk data. Last counter: 213
+[2025-12-25 18:56:15] Transcription process finished successfully.

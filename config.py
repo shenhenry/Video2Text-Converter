@@ -22,7 +22,7 @@ SPLIT_THRESHOLD_SEC = 60
 # Split Method
 # If True, use Gemini to find the optimal split point (more accurate but slower).
 # If False, use simple silence detection (RMS).
-USE_GEMINI_SPLIT = True
+USE_GEMINI_SPLIT = False
 
 # Prompt for finding the best split point in an audio clip
 SPLIT_POINT_PROMPT = (
