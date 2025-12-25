@@ -234,32 +234,52 @@ def shift_srt_content(srt_content, offset_ms, counter_start=1):
 
 def find_split_point(audio_clip, target_time_ms, search_window_ms=15000):
     try:
-        # Define search range (convert ms to sec for moviepy)
+        # 1. Get explicit fps (default 44100)
+        fps = getattr(audio_clip, 'fps', 44100)
+        if fps <= 0: fps = 44100
+        
         target_time_sec = target_time_ms / 1000.0
         search_window_sec = search_window_ms / 1000.0
         
         start_search = max(0, target_time_sec - search_window_sec)
         end_search = min(audio_clip.duration, target_time_sec + search_window_sec)
         
-        # Extract audio segment for analysis
+        # Safety check: if search window is too small, return target point to avoid moviepy processing empty array
+        if end_search - start_search < 0.01:
+            return target_time_ms
+        
+        # 2. Extract subclip
         sub = audio_clip.subclip(start_search, end_search)
         
-        # Get audio array (fps is usually 44100)
-        audio_array = sub.to_soundarray() 
+        # 3. Critical fix: explicitly specify fps to avoid moviepy internal calculation error
+        # And wrap this line with try-except, because this is the most likely to throw "arrays to stack" error
+        try:
+            audio_array = sub.to_soundarray(fps=fps)
+        except ValueError:
+            # If still fails, it might be due to a corrupted or empty clip
+            return target_time_ms
+
+        if audio_array.size == 0:
+            return target_time_ms
+
+        # 4. Handle dimensions (prevent single/double channel issues)
+        if audio_array.ndim > 1:
+            # For double channel, take square root of mean (RMS concept)
+            volume = np.sqrt(np.mean(audio_array**2, axis=1))
+        else:
+            volume = np.abs(audio_array)
         
-        # Calculate volume envelope (RMS)
-        volume = np.sqrt(np.mean(audio_array**2, axis=1))
-        
-        # We want to find a valley. 
+        # 5. Find minimum volume index
         min_vol_idx = np.argmin(volume)
         
-        # Convert index back to time relative to start_search
-        best_time_relative = min_vol_idx / sub.fps
-        
+        # Convert to time
+        best_time_relative = min_vol_idx / fps
         best_time_sec = start_search + best_time_relative
+        
         return int(best_time_sec * 1000)
         
     except Exception as e:
+        # This will catch the "arrays to stack" error encountered
         write_log(f"Warning: Silence detection failed ({e}), using exact time.")
         return target_time_ms
 
