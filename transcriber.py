@@ -4,8 +4,10 @@ import google.generativeai as genai
 from moviepy.editor import VideoFileClip, AudioFileClip
 import time
 import re
-import config
 import numpy as np
+import librosa
+import soundfile
+import config
 
 # Define Log File Path Globally
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -56,19 +58,20 @@ def write_log(message):
     sys.stdout.write(formatted_message)
     sys.stdout.flush()
 
-def extract_audio(video_path, audio_path="temp/temp_audio.mp3"):
+def extract_audio(video_path, audio_path="temp/temp_audio.wav"):
     """Extracts audio from a video file."""
     try:
         os.makedirs(os.path.dirname(audio_path), exist_ok=True)
         video = VideoFileClip(video_path)
-        video.audio.write_audiofile(audio_path, codec='mp3')
+        # Use wav (pcm_s16le) and explicit fps to ensure CBR (linear time-sample relationship)
+        # pcm_s16le is inherently CBR as it is uncompressed raw PCM.
+        video.audio.write_audiofile(audio_path, codec='pcm_s16le', fps=44100)
         return audio_path
     except Exception as e:
         write_log(f"Error extracting audio: {e}")
         return None
 
-def upload_to_gemini(path, mime_type="audio/mp3"):
-    """Uploads the file to Gemini."""
+def upload_to_gemini(path, mime_type="audio/wav"):
     file = genai.upload_file(path, mime_type=mime_type)
     write_log(f"Uploaded file '{file.display_name}' as: {file.uri}")
     return file
@@ -232,62 +235,55 @@ def shift_srt_content(srt_content, offset_ms, counter_start=1):
     else:
         return "\n".join(output).strip(), curr - 1
 
-def find_split_point(audio_clip, target_time_ms, search_window_ms=15000):
+def load_audio_segment(audio_path):
     try:
-        # 1. Get explicit fps (default 44100)
-        fps = getattr(audio_clip, 'fps', 44100)
-        if fps <= 0: fps = 44100
-        
-        target_time_sec = target_time_ms / 1000.0
-        search_window_sec = search_window_ms / 1000.0
-        
-        start_search = max(0, target_time_sec - search_window_sec)
-        end_search = min(audio_clip.duration, target_time_sec + search_window_sec)
-        
-        # Safety check: if search window is too small, return target point to avoid moviepy processing empty array
-        if end_search - start_search < 0.01:
-            return target_time_ms
-        
-        # 2. Extract subclip
-        sub = audio_clip.subclip(start_search, end_search)
-        
-        # 3. Critical fix: explicitly specify fps to avoid moviepy internal calculation error
-        # And wrap this line with try-except, because this is the most likely to throw "arrays to stack" error
-        try:
-            audio_array = sub.to_soundarray(fps=fps)
-        except ValueError:
-            # If still fails, it might be due to a corrupted or empty clip
-            return target_time_ms
+        data, samplerate = librosa.load(audio_path, sr=None, mono=True)
+        write_log(f"Audio loaded via librosa: {len(data)} samples @ {samplerate}Hz")
+        return data, samplerate
+    except Exception as e:
+        write_log(f"Audio load failed (librosa): {e}")
+        return None
 
-        if audio_array.size == 0:
-            return target_time_ms
+def find_split_point(audio_data_tuple, win_start_ms, win_end_ms, sliding_window_ms=config.SLIDING_WINDOW_MS):
+    try:
+        if audio_data_tuple is None or win_start_ms is None or win_end_ms is None:
+            write_log(f"find_split_point(): audio_data_tuple or win_start_ms or win_end_ms is None.")
+            return (win_start_ms + win_end_ms) // 2 if (win_start_ms is not None and win_end_ms is not None) else 0
+        data, fs = audio_data_tuple
+        
+        write_log(f"find_split_point(): win_start_ms {win_start_ms}ms, win_end_ms {win_end_ms}ms")
+        start_idx = max(0, int(win_start_ms * fs // 1000))
+        end_idx = min(len(data), int(win_end_ms * fs // 1000))
+        search_slice = data[start_idx:end_idx]
+        if search_slice.size == 0:
+            write_log(f"find_split_point(): search_slice is empty.")
+            return (win_start_ms + win_end_ms) // 2
 
-        # 4. Handle dimensions (prevent single/double channel issues)
-        if audio_array.ndim > 1:
-            # For double channel, take square root of mean (RMS concept)
-            volume = np.sqrt(np.mean(audio_array**2, axis=1))
-        else:
-            volume = np.abs(audio_array)
+        window_samples = int(sliding_window_ms * fs // 1000)
+        if window_samples > search_slice.size:
+            window_samples = search_slice.size
+
+        volume = search_slice**2
+        energy_sliding = np.convolve(volume, np.ones(window_samples), mode='valid')
+        min_energy = np.min(energy_sliding)
+        min_indices = np.where(energy_sliding == min_energy)[0]
+        min_idx = int(np.median(min_indices))
         
-        # 5. Find minimum volume index
-        min_vol_idx = np.argmin(volume)
+        best_time_relative_ms = ((min_idx + window_samples // 2) / fs) * 1000
+        best_time_ms = (start_idx / fs * 1000) + best_time_relative_ms
         
-        # Convert to time
-        best_time_relative = min_vol_idx / fps
-        best_time_sec = start_search + best_time_relative
-        
-        return int(best_time_sec * 1000)
+        write_log(f"Sliding window split found at {int(best_time_ms)}ms (Window: {sliding_window_ms}ms)")
+        return int(best_time_ms)
         
     except Exception as e:
-        # This will catch the "arrays to stack" error encountered
-        write_log(f"Warning: Silence detection failed ({e}), using exact time.")
-        return target_time_ms
+        write_log(f"Warning: Sliding window detection failed ({e}), using exact time.")
+        return (win_start_ms + win_end_ms) // 2
 
 def find_split_point_gemini(api_key, audio_clip, status_callback=None):
-    temp_clip_path = "temp/temp_split_search.mp3"
+    temp_clip_path = "temp/temp_split_search.wav"
     try:
         # Write the search window clip to file
-        audio_clip.write_audiofile(temp_clip_path, codec='mp3', verbose=False, logger=None)
+        audio_clip.write_audiofile(temp_clip_path, codec='pcm_s16le', verbose=False, logger=None)
         
         # Configure GenAI
         genai.configure(api_key=api_key.strip())
@@ -296,7 +292,7 @@ def find_split_point_gemini(api_key, audio_clip, status_callback=None):
         if status_callback:
             write_log("Uploading search window to Gemini for split analysis...")
             
-        file = genai.upload_file(temp_clip_path, mime_type="audio/mp3")
+        file = genai.upload_file(temp_clip_path, mime_type="audio/wav")
         
         # Wait for processing
         while file.state.name == "PROCESSING":
@@ -333,48 +329,48 @@ def split_audio(audio_path, chunk_duration_ms=config.CHUNK_DURATION_SEC*1000, st
     audio = AudioFileClip(audio_path)
     audio_duration_ms = int(audio.duration * 1000)
     
+    try:
+        pydub_audio = librosa.load(audio_path, sr=None, mono=True)
+        write_log(f"Audio loaded via librosa: {len(pydub_audio[0])} samples @ {pydub_audio[1]}Hz")
+    except Exception as e:
+        write_log(f"Audio load failed (librosa): {e}")
+        pydub_audio = None
+
     temp_dir = pathlib.Path("temp")
     temp_dir.mkdir(exist_ok=True)
 
-    # 1. 快速清理
     [f.unlink() for f in temp_dir.glob("*") if f.resolve() != pathlib.Path(audio_path).resolve()]
 
-    # 2. 計算切割點 (0.8x ~ 1.2x duration 區間搜尋)
     split_points_ms, curr_ms = [], 0
 
     while curr_ms < audio_duration_ms:
-        # 下一個理想切割點區間：[curr + 0.8*dur, curr + 1.2*dur]
         win_start_ms = int(curr_ms + (chunk_duration_ms * 0.8))
         win_end_ms = int(curr_ms + (chunk_duration_ms * 1.2))
+        #write_log(f"split_audio(): win_start_ms {win_start_ms}ms, win_end_ms {win_end_ms}ms")
         
-        # 如果最短切割點已經超過總長度，直接切到最後
         if win_start_ms >= audio_duration_ms:
             actual_end_ms = audio_duration_ms
         else:
-            # 確保區間不超過總長度
             win_end_ms = min(audio_duration_ms, win_end_ms)
-            
-            # Convert to seconds for subclip
-            win_start_sec = win_start_ms / 1000.0
-            win_end_sec = win_end_ms / 1000.0
-            
-            # 搜尋該區間
+
             if api_key and config.USE_GEMINI_SPLIT:
+                win_start_sec = win_start_ms / 1000.0
+                win_end_sec = win_end_ms / 1000.0
                 found_relative_ms = find_split_point_gemini(api_key, audio.subclip(win_start_sec, win_end_sec), status_callback)
                 actual_end_ms = win_start_ms + found_relative_ms
             else:
-                mid_point_ms = (win_start_ms + win_end_ms) // 2
-                # Pass mid_point in MS
-                actual_end_ms = find_split_point(audio, mid_point_ms, (win_end_ms - win_start_ms) // 2)
+                if pydub_audio:
+                     actual_end_ms = find_split_point(pydub_audio, win_start_ms, win_end_ms)
+                else:
+                     actual_end_ms = (win_start_ms + win_end_ms) // 2
         
-        # 安全機制：確保有前進，且不要切出極短片段 (除非是最後一段)
         if actual_end_ms <= curr_ms + 1000: 
             actual_end_ms = min(curr_ms + chunk_duration_ms, audio_duration_ms)
             
         split_points_ms.append(actual_end_ms)
-        curr_ms = actual_end_ms
+        curr_ms += chunk_duration_ms
+        write_log(f"split_audio(): curr_ms becomes {curr_ms}ms")
 
-    # 3. 執行切割與記錄
     chunks = []
     prev_start_ms = 0
     log_data = [f"Total MS: {audio_duration_ms}\nTarget MS: {chunk_duration_ms}\n" + "-"*20]
@@ -385,9 +381,10 @@ def split_audio(audio_path, chunk_duration_ms=config.CHUNK_DURATION_SEC*1000, st
         prev_start_sec = prev_start_ms / 1000.0
         end_t_sec = end_t_ms / 1000.0
         
-        # Use "temp_partX.mp3" naming pattern
-        p = temp_dir / f"temp_part{idx}.mp3"
-        audio.subclip(prev_start_sec, end_t_sec).write_audiofile(str(p), codec='mp3', verbose=False, logger=None)
+        # Use "temp_partX.wav" naming pattern
+        p = temp_dir / f"temp_part{idx}.wav"
+        # Enforce CBR and fixed sample rate for chunks as well
+        audio.subclip(prev_start_sec, end_t_sec).write_audiofile(str(p), codec='pcm_s16le', fps=44100, verbose=False, logger=None)
         
         # Store metadata in MS
         chunks.append({"path": str(p), "start_time_ms": prev_start_ms, "duration_ms": end_t_ms - prev_start_ms})
@@ -399,11 +396,6 @@ def split_audio(audio_path, chunk_duration_ms=config.CHUNK_DURATION_SEC*1000, st
     return chunks
 
 def organize_srt_format(file_path, output_path=None):
-    """
-    Reads a temporary SRT file, standardizes its format, and re-writes it.
-    This function handles the 'Start Offset' header specially.
-    If output_path is provided, writes to that file; otherwise overwrites file_path.
-    """
     path = pathlib.Path(file_path)
     if not path.exists():
         return
@@ -411,12 +403,11 @@ def organize_srt_format(file_path, output_path=None):
     try:
         content = path.read_text(encoding="utf-8")
         lines = content.splitlines()
-        
         header = ""
         body_lines = lines
         
-        # Preserve Start Offset header
-        if lines and lines[0].startswith("Start Offset:"):
+        # Preserve Start time / End time header (or old Start Offset)
+        if lines and (lines[0].startswith("Start time:") or lines[0].startswith("Start Offset:")):
             header = lines[0]
             body_lines = lines[1:]
         
@@ -433,11 +424,36 @@ def organize_srt_format(file_path, output_path=None):
             write_log(f"organize_srt_format(): No timestamps found in {file_path}, skipping organization.")
             return
 
+        # Parse chunk limit from header to calculate duration
+        limit_ms = 0
+        if header.startswith("Start time:"):
+            try:
+                # Support both HH:MM:SS,mmm AND raw integer (ms)
+                start_match = re.search(r"Start time:\s*([0-9:.,]+)", header)
+                end_match = re.search(r"End time:\s*([0-9:.,]+)", header)
+                if start_match and end_match:
+                    s_str, e_str = start_match.group(1), end_match.group(1)
+                    s_val = time_to_ms(s_str) if ":" in s_str else int(s_str)
+                    e_val = time_to_ms(e_str) if ":" in e_str else int(e_str)
+                    limit_ms = e_val - s_val
+            except Exception as e:
+                write_log(f"organize_srt_format(): Error parsing limit: {e}")
+
         blocks = []
         for i, match in enumerate(matches):
-            # Convert to milliseconds first, then back to HH:MM:SS,mmm format
-            start_time = ms_to_time(time_to_ms(match.group(1)))
-            end_time = ms_to_time(time_to_ms(match.group(2)))
+            # 1. Parse raw ms values
+            s_ms = time_to_ms(match.group(1))
+            e_ms = time_to_ms(match.group(2))
+            
+            # 2. If last block, check if it exceeds chunk end time
+            if i == len(matches) - 1 and limit_ms > 0:
+                if e_ms > limit_ms:
+                    write_log(f"organize_srt_format(): Capping last block {e_ms}ms -> {limit_ms}ms")
+                    e_ms = limit_ms
+            
+            # 3. Convert to standardized strings
+            start_time_str = ms_to_time(s_ms)
+            end_time_str = ms_to_time(e_ms)
             
             # Content is after this match and before the next match
             start_idx = match.end()
@@ -458,7 +474,7 @@ def organize_srt_format(file_path, output_path=None):
                 clean_lines.append(line)
             
             text_content = "\n".join(clean_lines)
-            blocks.append((start_time, end_time, text_content))
+            blocks.append((start_time_str, end_time_str, text_content))
             
         # Reconstruct file content
         new_content_parts = []
@@ -512,19 +528,34 @@ def merge_srt_parts(new_chunks_info, status_callback=None):
             lines = content.split('\n')
             offset_ms = 0
             raw_body = content
-            if lines and lines[0].startswith("Start Offset:"):
-                offset_str = lines[0].replace("Start Offset:", "").strip()
-                try:
-                    offset_ms = time_to_ms(offset_str)
-                    write_log(f"  > Start Offset parsed: {offset_str} -> {offset_ms}ms")
-                except Exception as e:
-                    write_log(f"  > Error parsing offset '{offset_str}': {e}")
-
-                parts = content.split('\n\n', 1)
-                # Fallback logic to grab body if double newline isn't strictly there but offset line exists
-                raw_body = parts[1] if len(parts) > 1 else "\n".join(lines[2:]) if len(lines) > 2 else ""
-            else:
-                write_log(f"  > No 'Start Offset' found in header. Treating file as raw SRT.")
+            
+            if lines:
+                if lines[0].startswith("Start time:"):
+                    # Handle "Start time: HH:MM:SS,mmm" OR "Start time: 12345"
+                    match = re.search(r"Start time:\s*([0-9:.,]+)", lines[0])
+                    if match:
+                        val_str = match.group(1)
+                        offset_ms = time_to_ms(val_str) if ":" in val_str else int(val_str)
+                        write_log(f"  > Start time parsed: {val_str} -> {offset_ms}ms")
+                    
+                    parts = content.split('\n\n', 1)
+                    raw_body = parts[1] if len(parts) > 1 else "\n".join(lines[2:]) if len(lines) > 2 else ""
+                elif lines[0].startswith("Start Offset:"):
+                    offset_str = lines[0].replace("Start Offset:", "").strip()
+                    try:
+                        offset_ms = int(offset_str)
+                        write_log(f"  > Start Offset parsed: {offset_str}ms")
+                    except:
+                        try:
+                            offset_ms = time_to_ms(offset_str)
+                            write_log(f"  > Start Offset (time) parsed: {offset_str} -> {offset_ms}ms")
+                        except Exception as e:
+                            write_log(f"  > Error parsing offset '{offset_str}': {e}")
+                    
+                    parts = content.split('\n\n', 1)
+                    raw_body = parts[1] if len(parts) > 1 else "\n".join(lines[2:]) if len(lines) > 2 else ""
+                else:
+                    write_log(f"  > No recognized header found. Treating file as raw SRT.")
 
             # 2. Determine starting counter
             current_counter = 1
@@ -582,7 +613,7 @@ def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, 
     genai.configure(api_key=api_key.strip())
 
     # 1. Check duration and decide if splitting is needed
-    SPLIT_THRESHOLD_SEC = config.SPLIT_THRESHOLD_SEC
+    SPLIT_THRESHOLD_SEC = config.CHUNK_DURATION_SEC
     
     # Use moviepy to check duration quickly without full split yet
     try:
@@ -630,12 +661,6 @@ def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, 
     current_counter = 1
     
     try:
-        generation_config = config.GENERATION_CONFIG
-        
-        safety_settings = config.SAFETY_SETTINGS
-
-        system_instruction = config.SYSTEM_INSTRUCTION
-
         final_srt_parts = []
         current_counter = 1
         
@@ -643,6 +668,7 @@ def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, 
         for i, chunk in enumerate(chunks_to_process):
             chunk_path = chunk['path']
             chunk_name = os.path.basename(chunk_path)
+            chunk_stem = pathlib.Path(chunk_path).stem
             # Use the pre-calculated start time for this chunk as the offset
             chunk_offset_ms = chunk.get('start_time_ms', 0)
             
@@ -660,15 +686,15 @@ def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, 
             # 3. Generate
             model = genai.GenerativeModel(
                 model_name=model_name,
-                generation_config=generation_config,
-                safety_settings=safety_settings,
-                system_instruction=system_instruction
+                generation_config=config.GENERATION_CONFIG,
+                safety_settings=config.SAFETY_SETTINGS,
+                system_instruction=config.SYSTEM_INSTRUCTION
             )
             
             # Use chat session to allow for follow-up corrections
             chat = model.start_chat(history=[])
             
-            prompt_content = [audio_file, system_instruction]
+            prompt_content = [audio_file, config.SYSTEM_INSTRUCTION]
             
             response = None
             max_retries = config.MAX_RETRIES
@@ -754,15 +780,14 @@ def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, 
             if raw_srt:
                 # Save temp part SRT with offset info locally
                 try:
-                    offset_str = str(chunk_offset_ms)
-                    chunk_stem = pathlib.Path(chunk_path).stem  # e.g. temp_part0
+                    header_str = f"Start time: {chunk_offset_ms} End time: {chunk_offset_ms + chunk.get('duration_ms', 0)}"
                     
                     # 1. Save Raw (temp_raw_partX.srt)
                     temp_raw_filename = f"temp_raw_{chunk_stem.replace('temp_', '')}.srt" 
                     temp_raw_path = pathlib.Path(chunk_path).parent / temp_raw_filename
                     
                     with open(temp_raw_path, "w", encoding="utf-8") as f:
-                        f.write(f"Start Offset: {offset_str}\n\n{raw_srt}")
+                        f.write(f"{header_str}\n\n{raw_srt}")
                         
                     write_log(f"Saved RAW temp SRT chunk to: {temp_raw_path}")
                     
@@ -778,9 +803,9 @@ def transcribe_audio(api_key, audio_path, model_name=config.DEFAULT_MODEL_NAME, 
                     # Call merge immediately with just this chunk's Modified version
                     # We create a pseudo-chunk info that points to the modified file's stem equivalent
                     # merge_srt_parts expects 'path' -> gets parent & stem -> finds .srt
-                    # So we construct a path that looks like ".../temp_modified_part0.mp3"
+                    # So we construct a path that looks like ".../temp_modified_part0.wav"
                     modified_chunk_info = chunk.copy()
-                    modified_chunk_info['path'] = str(pathlib.Path(chunk_path).parent / f"temp_modified_{chunk_stem.replace('temp_', '')}.mp3")
+                    modified_chunk_info['path'] = str(pathlib.Path(chunk_path).parent / f"temp_modified_{chunk_stem.replace('temp_', '')}.wav")
                     
                     merge_srt_parts([modified_chunk_info], status_callback=status_callback)
                     

@@ -14,10 +14,10 @@ PREFERRED_MODELS = [
 
 # Audio Processing Settings
 # Duration in seconds for each audio chunk
-CHUNK_DURATION_SEC = 60
+CHUNK_DURATION_SEC = 10
 
-# Threshold to trigger splitting. If audio is shorter than this, it won't be split.
-SPLIT_THRESHOLD_SEC = 60
+# Sliding window size in milliseconds for silence detection
+SLIDING_WINDOW_MS = 200
 
 # Split Method
 # If True, use Gemini to find the optimal split point (more accurate but slower).
