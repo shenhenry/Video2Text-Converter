@@ -85,14 +85,10 @@ if uploaded_file is not None:
                     audio_path = None
                     files_to_cleanup = [temp_path]
                     
-                    if is_video:
-                        update_status("Extracting audio from video...")
-                        audio_path = extract_audio(temp_path)
-                        if audio_path:
-                            files_to_cleanup.append(audio_path)
-                    else:
-                        update_status("Processing audio file...")
-                        audio_path = temp_path # Direct use
+                    update_status("Preparing audio (converting to 44.1kHz WAV)...")
+                    audio_path = extract_audio(temp_path)
+                    if audio_path:
+                        files_to_cleanup.append(audio_path)
                     
                     if audio_path:
                         update_status(f"Transcribing with {selected_model}...")

@@ -3,3 +3,5 @@ moviepy<2.0
 google-generativeai
 python-dotenv
 numpy<2.0
+librosa
+soundfile

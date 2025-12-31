@@ -58,17 +58,18 @@ def write_log(message):
     sys.stdout.write(formatted_message)
     sys.stdout.flush()
 
-def extract_audio(video_path, audio_path="temp/temp_audio.wav"):
-    """Extracts audio from a video file."""
+def extract_audio(input_path, audio_path="temp/temp_audio.wav"):
+    """Extracts and converts audio to a standard WAV format (44.1kHz CBR)."""
     try:
         os.makedirs(os.path.dirname(audio_path), exist_ok=True)
-        video = VideoFileClip(video_path)
-        # Use wav (pcm_s16le) and explicit fps to ensure CBR (linear time-sample relationship)
-        # pcm_s16le is inherently CBR as it is uncompressed raw PCM.
-        video.audio.write_audiofile(audio_path, codec='pcm_s16le', fps=44100)
+        # AudioFileClip handles both video and audio files by extracting/loading the audio part
+        clip = AudioFileClip(input_path)
+        # Use pcm_s16le (WAV) to ensure CBR and explicit fps for fixed sample rate
+        clip.write_audiofile(audio_path, codec='pcm_s16le', fps=44100)
+        clip.close()
         return audio_path
     except Exception as e:
-        write_log(f"Error extracting audio: {e}")
+        write_log(f"Error extracting/converting audio: {e}")
         return None
 
 def upload_to_gemini(path, mime_type="audio/wav"):
@@ -237,7 +238,8 @@ def shift_srt_content(srt_content, offset_ms, counter_start=1):
 
 def load_audio_segment(audio_path):
     try:
-        data, samplerate = librosa.load(audio_path, sr=None, mono=True)
+        # Force sr=44100 for consistent sample-to-time mapping
+        data, samplerate = librosa.load(audio_path, sr=44100, mono=True)
         write_log(f"Audio loaded via librosa: {len(data)} samples @ {samplerate}Hz")
         return data, samplerate
     except Exception as e:
@@ -330,7 +332,8 @@ def split_audio(audio_path, chunk_duration_ms=config.CHUNK_DURATION_SEC*1000, st
     audio_duration_ms = int(audio.duration * 1000)
     
     try:
-        pydub_audio = librosa.load(audio_path, sr=None, mono=True)
+        # Force sr=44100 to match extraction and ensure precision
+        pydub_audio = librosa.load(audio_path, sr=44100, mono=True)
         write_log(f"Audio loaded via librosa: {len(pydub_audio[0])} samples @ {pydub_audio[1]}Hz")
     except Exception as e:
         write_log(f"Audio load failed (librosa): {e}")

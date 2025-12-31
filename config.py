@@ -14,7 +14,7 @@ PREFERRED_MODELS = [
 
 # Audio Processing Settings
 # Duration in seconds for each audio chunk
-CHUNK_DURATION_SEC = 10
+CHUNK_DURATION_SEC = 60
 
 # Sliding window size in milliseconds for silence detection
 SLIDING_WINDOW_MS = 200
@@ -56,7 +56,7 @@ SAFETY_SETTINGS = [
 ]
 
 # System Instruction for the Gemini Model
-SYSTEM_INSTRUCTION = """You are a professional subtitle creator. Generate a valid SRT file content for the audio provided.
+SYSTEM_INSTRUCTION = """You are a professional subtitle creator. Generate a valid SRT file content for the audio (.wav with sampling rate of 44100Hz) provided.
 Rules:
 1. The output must be strictly in SRT format, starting from 1 (should restrictly follow this format).
    - example:
